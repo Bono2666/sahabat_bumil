@@ -166,15 +166,18 @@ class _ViewArticleState extends State<ViewArticle> {
                                         lineHeight: LineHeight.rem(1.1875),
                                       ),
                                       'h1': Style(
-                                        color: Theme.of(context).backgroundColor,
+                                        color:
+                                            Theme.of(context).backgroundColor,
                                         fontSize: FontSize.rem(1.5),
                                         lineHeight: LineHeight.rem(1),
                                       ),
                                       'h2': Style(
-                                        color: Theme.of(context).backgroundColor,
+                                        color:
+                                            Theme.of(context).backgroundColor,
                                       ),
                                       'h3': Style(
-                                        textAlign: TextAlign.right,
+                                          textAlign: TextAlign.right,
+                                          fontFamily: 'Uthmanic'
                                       ),
                                       'li': Style(
                                         padding: EdgeInsets.only(left: 0),
@@ -183,7 +186,8 @@ class _ViewArticleState extends State<ViewArticle> {
                                         color: Theme.of(context).primaryColor,
                                       ),
                                     },
-                                    onLinkTap: (url, context, attributes, element) async {
+                                    onLinkTap: (url, context, attributes,
+                                        element) async {
                                       if (await canLaunch(url)) {
                                         await launch(
                                           url,
@@ -261,7 +265,8 @@ class _ViewArticleState extends State<ViewArticle> {
                                                       ),
                                                     ]),
                                                 child: Column(
-                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
                                                   children: [
                                                     ClipRRect(
                                                       borderRadius:
@@ -296,7 +301,8 @@ class _ViewArticleState extends State<ViewArticle> {
                                                             );
                                                           },
                                                         ),
-                                                        color: Theme.of(context).primaryColor,
+                                                        color: Theme.of(context)
+                                                            .primaryColor,
                                                       ),
                                                     ),
                                                     Padding(
@@ -321,8 +327,10 @@ class _ViewArticleState extends State<ViewArticle> {
                                                 ),
                                               ),
                                               onTap: () {
-                                                prefs.setArticleId(related[index].id);
-                                                Navigator.pushNamed(context, '/viewarticle');
+                                                prefs.setArticleId(
+                                                    related[index].id);
+                                                Navigator.pushNamed(
+                                                    context, '/viewarticle');
                                               },
                                             ),
                                           ),
@@ -382,15 +390,22 @@ class _ViewArticleState extends State<ViewArticle> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
-                              SizedBox(height: 13.0.w,),
+                              SizedBox(
+                                height: 13.0.w,
+                              ),
                               Padding(
-                                padding: EdgeInsets.only(right: 6.6.w,),
+                                padding: EdgeInsets.only(
+                                  right: 6.6.w,
+                                ),
                                 child: InkWell(
                                   onTap: () {
-                                    final box = context.findRenderObject() as RenderBox;
+                                    final box =
+                                        context.findRenderObject() as RenderBox;
                                     Share.share(
                                       document[0].get('share'),
-                                      sharePositionOrigin: box.localToGlobal(Offset.zero) & box.size,
+                                      sharePositionOrigin:
+                                          box.localToGlobal(Offset.zero) &
+                                              box.size,
                                     );
                                   },
                                   child: Stack(
@@ -409,7 +424,8 @@ class _ViewArticleState extends State<ViewArticle> {
                                             boxShadow: [
                                               BoxShadow(
                                                 blurRadius: 6.0,
-                                                color: Theme.of(context).shadowColor,
+                                                color: Theme.of(context)
+                                                    .shadowColor,
                                                 offset: Offset(0, 3),
                                               )
                                             ],
