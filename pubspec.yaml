@@ -85,6 +85,9 @@ flutter:
           weight: 500
         - asset: fonts/Ubuntu-B.ttf
           weight: 700
+    - family: Uthmanic
+      fonts:
+        - asset: fonts/UthmanicHafs.otf
   #       - asset: fonts/Schyler-Italic.ttf
   #         style: italic
   #
