@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Modify this file to customize your launch splash screen -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape>
+            <gradient
+                android:type="radial"
+                android:centerY="0.4"
+                android:gradientRadius="250dp"
+                android:startColor="#FFC5A0"
+                android:endColor="#FF8C42"/>
+        </shape>
+    </item>
+
+    <item
+        android:width="72dp"
+        android:height="216dp"
+        android:gravity="center">
+        <bitmap
+            android:src="@mipmap/logo" />
+    </item>
+
+    <item
+        android:gravity="bottom"
+        android:bottom="48dp">
+        <bitmap
+            android:gravity="center"
+            android:src="@mipmap/dari_sa"/>
+    </item>
+</layer-list>
