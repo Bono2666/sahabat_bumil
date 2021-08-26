@@ -26,7 +26,7 @@ class _MonitoringState extends State<Monitoring> {
   PageController pageController;
   List<QueryDocumentSnapshot> document, checkListData, listArticle;
   var db = ChecklistDb();
-  bool checked = false;
+  bool shuffle = true;
 
   @override
   void initState() {
@@ -47,6 +47,8 @@ class _MonitoringState extends State<Monitoring> {
     currentPage = (DateTime.now().difference(hpht).inDays);
     pageController = PageController(initialPage: currentPage);
     totalDays = (hpl.difference(hpht).inDays);
+
+
   }
 
   @override
@@ -761,7 +763,10 @@ class _MonitoringState extends State<Monitoring> {
                                 }
                                 if (snapshot.connectionState == ConnectionState.done) {
                                   listArticle = snapshot.data.docs;
-                                  listArticle.shuffle();
+                                  if (shuffle) {
+                                    listArticle.shuffle();
+                                    shuffle = false;
+                                  }
                                 }
                                 return ListView.builder(
                                   shrinkWrap: true,
@@ -880,7 +885,6 @@ class _MonitoringState extends State<Monitoring> {
                                 }
                                 if (snapshot.connectionState == ConnectionState.done) {
                                   checkListData = snapshot.data.docs;
-                                  print(checkListData.length.toString() + ' records');
                                   for (int i=0; i < checkListData.length; i++) {
                                     var checklist = new Checklist(
                                       cl_id: checkListData[i].id,
