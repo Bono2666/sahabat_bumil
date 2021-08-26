@@ -1006,7 +1006,7 @@ class _MonitoringState extends State<Monitoring> {
                                                                     );
                                                                   },
                                                                 ),
-                                                                color: Theme.of(context).primaryColor,
+                                                                color: Theme.of(context).primaryColorLight,
                                                               ),
                                                             ),
                                                             Positioned(

@@ -58,7 +58,7 @@ class _OnboardingState extends State<Onboarding>
                 Container(
                   height: 86.0.h,
                   decoration: BoxDecoration(
-                    color: Theme.of(context).backgroundColor,
+                    color: Theme.of(context).primaryColorLight,
                     borderRadius: BorderRadius.only(
                       bottomLeft: Radius.circular(58),
                       bottomRight: Radius.circular(58),
