@@ -26,12 +26,12 @@ class _MonitoringState extends State<Monitoring> {
   PageController pageController;
   List<QueryDocumentSnapshot> document, checkListData, listArticle;
   var db = ChecklistDb();
-  bool shuffle = true;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+
     DateTime hpht = DateTime(
         int.parse(prefs.getHPHT.substring(4,8)),
         int.parse(prefs.getHPHT.substring(2,4)),
@@ -47,8 +47,6 @@ class _MonitoringState extends State<Monitoring> {
     currentPage = (DateTime.now().difference(hpht).inDays);
     pageController = PageController(initialPage: currentPage);
     totalDays = (hpl.difference(hpht).inDays);
-
-
   }
 
   @override
@@ -763,10 +761,7 @@ class _MonitoringState extends State<Monitoring> {
                                 }
                                 if (snapshot.connectionState == ConnectionState.done) {
                                   listArticle = snapshot.data.docs;
-                                  if (shuffle) {
-                                    listArticle.shuffle();
-                                    shuffle = false;
-                                  }
+                                  listArticle.shuffle();
                                 }
                                 return ListView.builder(
                                   shrinkWrap: true,
@@ -896,184 +891,188 @@ class _MonitoringState extends State<Monitoring> {
                                     db.insert(checklist);
                                   }
                                 }
-                                return FutureBuilder(
-                                  future: db.list(document[currentPage].get('week')),
-                                  builder: (context, snapshot) {
-                                    if (!snapshot.hasData || snapshot.data == null || snapshot.hasError) {
-                                      return Shimmer.fromColors(
-                                        baseColor: Theme.of(context).accentColor,
-                                        highlightColor: Theme.of(context).highlightColor,
-                                        child: SingleChildScrollView(
-                                          physics: NeverScrollableScrollPhysics(),
-                                          scrollDirection: Axis.horizontal,
-                                          child: Row(
-                                            children: [
-                                              SizedBox(width: 6.6.w,),
-                                              Container(
-                                                width: 38.0.w,
-                                                height: 56.0.w,
-                                                decoration: BoxDecoration(
-                                                  color: Theme.of(context).accentColor,
-                                                  borderRadius: BorderRadius.all(
-                                                    Radius.circular(12),
-                                                  ),
-                                                ),
-                                              ),
-                                              SizedBox(width: 5.6.w,),
-                                              Container(
-                                                width: 38.0.w,
-                                                height: 56.0.w,
-                                                decoration: BoxDecoration(
-                                                  color: Theme.of(context).accentColor,
-                                                  borderRadius: BorderRadius.all(
-                                                    Radius.circular(12),
-                                                  ),
-                                                ),
-                                              ),
-                                              SizedBox(width: 5.6.w,),
-                                              Container(
-                                                width: 38.0.w,
-                                                height: 56.0.w,
-                                                decoration: BoxDecoration(
-                                                  color: Theme.of(context).accentColor,
-                                                  borderRadius: BorderRadius.all(
-                                                    Radius.circular(12),
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      );
-                                    }
-                                    if (snapshot.connectionState == ConnectionState.done) {
-                                      print('SQFLite: ' + snapshot.data.length.toString() + ' records');
-                                    }
-                                    return SizedBox(
-                                      height: 58.0.w,
-                                      child: ListView.builder(
-                                        itemCount: snapshot.data.length,
-                                        scrollDirection: Axis.horizontal,
-                                        physics: BouncingScrollPhysics(),
-                                        padding: EdgeInsets.only(left: 6.6.w, right: 1.1.w),
-                                        itemBuilder: (context, index) {
-                                          Checklist checkListItem = Checklist.get(snapshot.data[index]);
-                                          return Row(
-                                            children: [
-                                              Padding(
-                                                padding: EdgeInsets.symmetric(vertical: 1.0.w),
-                                                child: InkWell(
-                                                  child: Container(
+                                return StatefulBuilder(
+                                  builder: (context, setState) {
+                                    return FutureBuilder(
+                                      future: db.list(document[currentPage].get('week')),
+                                      builder: (context, snapshot) {
+                                        if (!snapshot.hasData || snapshot.data == null || snapshot.hasError) {
+                                          return Shimmer.fromColors(
+                                            baseColor: Theme.of(context).accentColor,
+                                            highlightColor: Theme.of(context).highlightColor,
+                                            child: SingleChildScrollView(
+                                              physics: NeverScrollableScrollPhysics(),
+                                              scrollDirection: Axis.horizontal,
+                                              child: Row(
+                                                children: [
+                                                  SizedBox(width: 6.6.w,),
+                                                  Container(
                                                     width: 38.0.w,
+                                                    height: 56.0.w,
                                                     decoration: BoxDecoration(
-                                                      color: Theme.of(context).primaryColor,
+                                                      color: Theme.of(context).accentColor,
                                                       borderRadius: BorderRadius.all(
                                                         Radius.circular(12),
                                                       ),
-                                                      boxShadow: [
-                                                        BoxShadow(
-                                                          color: Theme.of(context).shadowColor,
-                                                          blurRadius: 6.0,
-                                                          offset: Offset(3,0),
-                                                        ),
-                                                      ]
                                                     ),
-                                                    child: Column(
-                                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                                      children: [
-                                                        Stack(
-                                                          alignment: Alignment.topRight,
-                                                          children: [
-                                                            ClipRRect(
-                                                              borderRadius: BorderRadius.only(
-                                                                topLeft: Radius.circular(12),
-                                                                topRight: Radius.circular(12),
-                                                              ),
-                                                              child: Container(
-                                                                child: Image.network(
-                                                                  checkListItem.cl_image,
-                                                                  height: 40.0.w,
-                                                                  fit: BoxFit.cover,
-                                                                  loadingBuilder: (context, child, loadingProgress) {
-                                                                    if (loadingProgress == null) return child;
-                                                                    return SizedBox(
-                                                                      height: 40.0.w,
-                                                                      child: Center(
-                                                                        child: SpinKitPulse(
-                                                                          color: Colors.white,
-                                                                        ),
-                                                                      ),
-                                                                    );
-                                                                  },
-                                                                ),
-                                                                color: Theme.of(context).primaryColorLight,
-                                                              ),
+                                                  ),
+                                                  SizedBox(width: 5.6.w,),
+                                                  Container(
+                                                    width: 38.0.w,
+                                                    height: 56.0.w,
+                                                    decoration: BoxDecoration(
+                                                      color: Theme.of(context).accentColor,
+                                                      borderRadius: BorderRadius.all(
+                                                        Radius.circular(12),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  SizedBox(width: 5.6.w,),
+                                                  Container(
+                                                    width: 38.0.w,
+                                                    height: 56.0.w,
+                                                    decoration: BoxDecoration(
+                                                      color: Theme.of(context).accentColor,
+                                                      borderRadius: BorderRadius.all(
+                                                        Radius.circular(12),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          );
+                                        }
+                                        if (snapshot.connectionState == ConnectionState.done) {
+                                          print('SQFLite: ' + snapshot.data.length.toString() + ' records');
+                                        }
+                                        return SizedBox(
+                                          height: 58.0.w,
+                                          child: ListView.builder(
+                                            itemCount: snapshot.data.length,
+                                            scrollDirection: Axis.horizontal,
+                                            physics: BouncingScrollPhysics(),
+                                            padding: EdgeInsets.only(left: 6.6.w, right: 1.1.w),
+                                            itemBuilder: (context, index) {
+                                              Checklist checkListItem = Checklist.get(snapshot.data[index]);
+                                              return Row(
+                                                children: [
+                                                  Padding(
+                                                    padding: EdgeInsets.symmetric(vertical: 1.0.w),
+                                                    child: InkWell(
+                                                      child: Container(
+                                                        width: 38.0.w,
+                                                        decoration: BoxDecoration(
+                                                            color: Theme.of(context).primaryColor,
+                                                            borderRadius: BorderRadius.all(
+                                                              Radius.circular(12),
                                                             ),
-                                                            Positioned(
-                                                              top: 2.8.w,
-                                                              right: 2.8.w,
-                                                              child: Container(
-                                                                width: 6.6.w,
-                                                                height: 6.6.w,
-                                                                decoration: BoxDecoration(
-                                                                  shape: BoxShape.circle,
-                                                                  color: Colors.white,
-                                                                ),
-                                                                child: Center(
-                                                                  child: Image.asset(
-                                                                    checkListItem.cl_checked == 1
-                                                                        ? 'images/ic_checkedlist.png'
-                                                                        : 'images/ic_unchecklist.png',
-                                                                    width: 3.3.w,
+                                                            boxShadow: [
+                                                              BoxShadow(
+                                                                color: Theme.of(context).shadowColor,
+                                                                blurRadius: 6.0,
+                                                                offset: Offset(3,0),
+                                                              ),
+                                                            ]
+                                                        ),
+                                                        child: Column(
+                                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                                          children: [
+                                                            Stack(
+                                                              alignment: Alignment.topRight,
+                                                              children: [
+                                                                ClipRRect(
+                                                                  borderRadius: BorderRadius.only(
+                                                                    topLeft: Radius.circular(12),
+                                                                    topRight: Radius.circular(12),
                                                                   ),
+                                                                  child: Container(
+                                                                    child: Image.network(
+                                                                      checkListItem.cl_image,
+                                                                      height: 40.0.w,
+                                                                      fit: BoxFit.cover,
+                                                                      loadingBuilder: (context, child, loadingProgress) {
+                                                                        if (loadingProgress == null) return child;
+                                                                        return SizedBox(
+                                                                          height: 40.0.w,
+                                                                          child: Center(
+                                                                            child: SpinKitPulse(
+                                                                              color: Colors.white,
+                                                                            ),
+                                                                          ),
+                                                                        );
+                                                                      },
+                                                                    ),
+                                                                    color: Theme.of(context).primaryColorLight,
+                                                                  ),
+                                                                ),
+                                                                Positioned(
+                                                                  top: 2.8.w,
+                                                                  right: 2.8.w,
+                                                                  child: Container(
+                                                                    width: 6.6.w,
+                                                                    height: 6.6.w,
+                                                                    decoration: BoxDecoration(
+                                                                      shape: BoxShape.circle,
+                                                                      color: Colors.white,
+                                                                    ),
+                                                                    child: Center(
+                                                                      child: Image.asset(
+                                                                        checkListItem.cl_checked == 1
+                                                                            ? 'images/ic_checkedlist.png'
+                                                                            : 'images/ic_unchecklist.png',
+                                                                        width: 3.3.w,
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                            Padding(
+                                                              padding: EdgeInsets.fromLTRB(2.2.w,3.0.w,2.2.w,0),
+                                                              child: Text(
+                                                                checkListItem.cl_title,
+                                                                style: TextStyle(
+                                                                  color: Colors.white,
+                                                                  fontSize: 12.0.sp,
+                                                                  fontWeight: FontWeight.w700,
                                                                 ),
                                                               ),
                                                             ),
                                                           ],
                                                         ),
-                                                        Padding(
-                                                          padding: EdgeInsets.fromLTRB(2.2.w,3.0.w,2.2.w,0),
-                                                          child: Text(
-                                                            checkListItem.cl_title,
-                                                            style: TextStyle(
-                                                              color: Colors.white,
-                                                              fontSize: 12.0.sp,
-                                                              fontWeight: FontWeight.w700,
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ],
+                                                      ),
+                                                      onTap: () {
+                                                        if (checkListItem.cl_checked == 1) {
+                                                          var checklist = Checklist(
+                                                            cl_id: checkListItem.cl_id,
+                                                            cl_week: checkListItem.cl_week,
+                                                            cl_title: checkListItem.cl_title,
+                                                            cl_image: checkListItem.cl_image,
+                                                            cl_checked: 0,
+                                                          );
+                                                          db.update(checklist);
+                                                        } else {
+                                                          var checklist = Checklist(
+                                                            cl_id: checkListItem.cl_id,
+                                                            cl_week: checkListItem.cl_week,
+                                                            cl_title: checkListItem.cl_title,
+                                                            cl_image: checkListItem.cl_image,
+                                                            cl_checked: 1,
+                                                          );
+                                                          db.update(checklist);
+                                                        }
+                                                        setState(() {});
+                                                      },
                                                     ),
                                                   ),
-                                                  onTap: () {
-                                                    if (checkListItem.cl_checked == 1) {
-                                                      var checklist = Checklist(
-                                                        cl_id: checkListItem.cl_id,
-                                                        cl_week: checkListItem.cl_week,
-                                                        cl_title: checkListItem.cl_title,
-                                                        cl_image: checkListItem.cl_image,
-                                                        cl_checked: 0,
-                                                      );
-                                                      db.update(checklist);
-                                                    } else {
-                                                      var checklist = Checklist(
-                                                        cl_id: checkListItem.cl_id,
-                                                        cl_week: checkListItem.cl_week,
-                                                        cl_title: checkListItem.cl_title,
-                                                        cl_image: checkListItem.cl_image,
-                                                        cl_checked: 1,
-                                                      );
-                                                      db.update(checklist);
-                                                    }
-                                                    setState(() {});
-                                                  },
-                                                ),
-                                              ),
-                                              SizedBox(width: 5.6.w,)
-                                            ],
-                                          );
-                                        },
-                                      ),
+                                                  SizedBox(width: 5.6.w,)
+                                                ],
+                                              );
+                                            },
+                                          ),
+                                        );
+                                      },
                                     );
                                   },
                                 );
