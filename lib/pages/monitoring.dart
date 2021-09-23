@@ -1132,6 +1132,53 @@ class _MonitoringState extends State<Monitoring> {
                     ),
                   ],
                 ),
+                Column(
+                  children: [
+                    SizedBox(height: 5.6.h,),
+                    Padding(
+                      padding: EdgeInsets.only(right: 21.4.w,),
+                      child: InkWell(
+                        onTap: () {
+                          Navigator.pushReplacementNamed(context, '/babysname');
+                        },
+                        child: Stack(
+                          alignment: AlignmentDirectional.center,
+                          children: [
+                            Opacity(
+                              opacity: .8,
+                              child: Container(
+                                width: 12.5.w,
+                                height: 12.5.w,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(30),
+                                  ),
+                                  color: Colors.white,
+                                  boxShadow: [
+                                    BoxShadow(
+                                      blurRadius: 6.0,
+                                      color: Theme.of(context).shadowColor,
+                                      offset: Offset(0, 3),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                            Container(
+                              width: 5.6.w,
+                              height: 5.6.w,
+                              child: FittedBox(
+                                child: Image.asset(
+                                  'images/ic_baby.png',
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ],
             );
           },

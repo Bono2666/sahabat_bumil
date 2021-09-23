@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sahabat_bumil_v2/pages/babysname/babysname.dart';
 import 'package:sahabat_bumil_v2/pages/onboarding.dart';
 import 'package:sahabat_bumil_v2/pages/addpregnancy.dart';
 import 'package:sahabat_bumil_v2/pages/monitoring.dart';
@@ -76,6 +77,8 @@ class MyTheme extends StatelessWidget {
                 return slideUpRoute(page: Monitoring());
               case '/viewarticle':
                 return slideLeftRoute(page: ViewArticle());
+              case '/babysname':
+                return slideUpRoute(page: BabysName());
             }
           },
         );
