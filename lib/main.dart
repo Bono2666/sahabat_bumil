@@ -107,6 +107,7 @@ class SharedPrefs {
   String get getBabyName => _prefs.getString('babyname') ?? '';
   String get getSextype => _prefs.getString('sextype') ?? '';
   String get getArticleId => _prefs.getString('articleid') ?? '';
+  String get getRoute => _prefs.getString('route') ?? '';
 
   setFirstlaunch(bool value) => _prefs.setBool('firstlaunch', value);
   setName(String value) => _prefs.setString('name', value);
@@ -117,6 +118,7 @@ class SharedPrefs {
   setBabyName(String value) => _prefs.setString('babyname', value);
   setSextype(String value) => _prefs.setString('sextype', value);
   setArticleId(String value) => _prefs.setString('articleid', value);
+  setRoute(String value) => _prefs.setString('route', value);
 }
 
 class slideUpRoute extends PageRouteBuilder {

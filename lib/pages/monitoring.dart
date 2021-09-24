@@ -1092,6 +1092,7 @@ class _MonitoringState extends State<Monitoring> {
                       padding: EdgeInsets.only(right: 6.6.w,),
                       child: InkWell(
                         onTap: () {
+                          prefs.setRoute('/monitoring');
                           Navigator.pushReplacementNamed(context, '/updpregnancy');
                         },
                         child: Stack(
