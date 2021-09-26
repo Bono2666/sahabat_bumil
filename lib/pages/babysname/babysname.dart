@@ -8,6 +8,8 @@ class BabysName extends StatefulWidget {
 }
 
 class _BabysNameState extends State<BabysName> {
+  String sextype;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -16,6 +18,7 @@ class _BabysNameState extends State<BabysName> {
           Padding(
             padding: EdgeInsets.fromLTRB(6.7.w, 19.0.h, 6.7.w, 0),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   'Generator Nama',
@@ -23,6 +26,602 @@ class _BabysNameState extends State<BabysName> {
                     color: Theme.of(context).backgroundColor,
                     fontWeight: FontWeight.w700,
                     fontSize: 24.0.sp,
+                  ),
+                ),
+                SizedBox(height: 1.9.h,),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment:
+                  CrossAxisAlignment.center,
+                  children: [
+                    Image.asset(
+                      'images/ic_baby.png',
+                      height: 3.2.w,
+                    ),
+                    SizedBox(
+                      width: 1.4.w,
+                    ),
+                    Text(
+                      'Inspirasi nama bayi Islami',
+                      style: TextStyle(
+                        fontSize: 10.0.sp,
+                        fontWeight: FontWeight.w700,
+                        color:
+                        Theme.of(context).backgroundColor,
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 4.4.h,),
+                Text(
+                  'Jenis Kelamin',
+                  style: TextStyle(
+                    fontSize: 13.0.sp,
+                    color: Theme.of(context).backgroundColor,
+                  ),
+                ),
+                SizedBox(height: 1.0.h,),
+                InkWell(
+                  onTap: () {
+                    showModalBottomSheet(
+                      context: context,
+                      builder: (context) {
+                        return Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Theme.of(context).shadowColor,
+                                    blurRadius: 8,
+                                    offset: Offset(0, 3),
+                                  ),
+                                ],
+                              ),
+                              child: Padding(
+                                padding: EdgeInsets.fromLTRB(8.8.w, 4.4.w, 8.8.w, 5.2.w),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Image.asset(
+                                      'images/ic_gender.png',
+                                      width: 4.2.w,
+                                    ),
+                                    SizedBox(width: 6.0.w,),
+                                    Text(
+                                      'Jenis Kelamin',
+                                      style: TextStyle(
+                                        fontSize: 17.0.sp,
+                                        color: Theme.of(context).backgroundColor,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 3.0.h,),
+                            Column(
+                              children: [
+                                Container(
+                                  child: ListTile(
+                                    title: Text(
+                                      'Laki-laki',
+                                      style: TextStyle(
+                                        fontSize: 13.0.sp,
+                                      ),
+                                    ),
+                                    contentPadding: EdgeInsets.fromLTRB(8.8.w,3.4.w,8.8.w,3.2.w),
+                                    onTap: () {
+                                      setState(() {
+                                        sextype = 'Laki-laki';
+                                        Navigator.pop(context);
+                                      });
+                                    },
+                                  ),
+                                  decoration: BoxDecoration(
+                                    border: Border(
+                                      top: BorderSide(
+                                        color: Theme.of(context).dividerColor,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Container(
+                                  child: ListTile(
+                                    title: Text(
+                                      'Perempuan',
+                                      style: TextStyle(
+                                        fontSize: 13.0.sp,
+                                      ),
+                                    ),
+                                    contentPadding: EdgeInsets.fromLTRB(8.8.w,3.4.w,8.8.w,3.2.w),
+                                    onTap: () {
+                                      setState(() {
+                                        sextype = 'Perempuan';
+                                        Navigator.pop(context);
+                                      });
+                                    },
+                                  ),
+                                  decoration: BoxDecoration(
+                                    border: Border(
+                                      top: BorderSide(
+                                        color: Theme.of(context).dividerColor,
+                                      ),
+                                      bottom: BorderSide(
+                                        color: Theme.of(context).dividerColor,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 4.4.h,)
+                          ],
+                        );
+                      },
+                    );
+                  },
+                  child: Container(
+                    height: 4.8.h,
+                    decoration: BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(
+                          color: Theme.of(context).accentColor,
+                        ),
+                      ),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Expanded(
+                          child: Text(
+                            sextype == null ? '' : sextype,
+                            style: TextStyle(
+                              fontSize: 15.0.sp,
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 2.2.w,
+                          child: Image.asset(
+                            'images/ic_down_arrow.png',
+                          ),
+                        ),
+                        SizedBox(width: 2.2.w,)
+                      ],
+                    ),
+                  ),
+                ),
+                SizedBox(height: 3.3.h,),
+                Text(
+                  'Kriteria Nama Depan',
+                  style: TextStyle(
+                    fontSize: 13.0.sp,
+                    color: Theme.of(context).backgroundColor,
+                  ),
+                ),
+                SizedBox(height: 1.0.h,),
+                InkWell(
+                  onTap: () {
+                    showModalBottomSheet(
+                      context: context,
+                      builder: (context) {
+                        return Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Theme.of(context).shadowColor,
+                                    blurRadius: 8,
+                                    offset: Offset(0, 3),
+                                  ),
+                                ],
+                              ),
+                              child: Padding(
+                                padding: EdgeInsets.fromLTRB(8.8.w, 4.4.w, 8.8.w, 5.2.w),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Image.asset(
+                                      'images/ic_gender.png',
+                                      width: 4.2.w,
+                                    ),
+                                    SizedBox(width: 6.0.w,),
+                                    Text(
+                                      'Jenis Kelamin',
+                                      style: TextStyle(
+                                        fontSize: 17.0.sp,
+                                        color: Theme.of(context).backgroundColor,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 3.0.h,),
+                            Column(
+                              children: [
+                                Container(
+                                  child: ListTile(
+                                    title: Text(
+                                      'Laki-laki',
+                                      style: TextStyle(
+                                        fontSize: 13.0.sp,
+                                      ),
+                                    ),
+                                    contentPadding: EdgeInsets.fromLTRB(8.8.w,3.4.w,8.8.w,3.2.w),
+                                    onTap: () {
+                                      setState(() {
+                                        sextype = 'Laki-laki';
+                                        Navigator.pop(context);
+                                      });
+                                    },
+                                  ),
+                                  decoration: BoxDecoration(
+                                    border: Border(
+                                      top: BorderSide(
+                                        color: Theme.of(context).dividerColor,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Container(
+                                  child: ListTile(
+                                    title: Text(
+                                      'Perempuan',
+                                      style: TextStyle(
+                                        fontSize: 13.0.sp,
+                                      ),
+                                    ),
+                                    contentPadding: EdgeInsets.fromLTRB(8.8.w,3.4.w,8.8.w,3.2.w),
+                                    onTap: () {
+                                      setState(() {
+                                        sextype = 'Perempuan';
+                                        Navigator.pop(context);
+                                      });
+                                    },
+                                  ),
+                                  decoration: BoxDecoration(
+                                    border: Border(
+                                      top: BorderSide(
+                                        color: Theme.of(context).dividerColor,
+                                      ),
+                                      bottom: BorderSide(
+                                        color: Theme.of(context).dividerColor,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 4.4.h,)
+                          ],
+                        );
+                      },
+                    );
+                  },
+                  child: Container(
+                    height: 4.8.h,
+                    decoration: BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(
+                          color: Theme.of(context).accentColor,
+                        ),
+                      ),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Expanded(
+                          child: Text(
+                            sextype == null ? '' : sextype,
+                            style: TextStyle(
+                              fontSize: 15.0.sp,
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 2.2.w,
+                          child: Image.asset(
+                            'images/ic_down_arrow.png',
+                          ),
+                        ),
+                        SizedBox(width: 2.2.w,)
+                      ],
+                    ),
+                  ),
+                ),
+                SizedBox(height: 3.3.h,),
+                Text(
+                  'Kriteria Nama Tengah',
+                  style: TextStyle(
+                    fontSize: 13.0.sp,
+                    color: Theme.of(context).backgroundColor,
+                  ),
+                ),
+                SizedBox(height: 1.0.h,),
+                InkWell(
+                  onTap: () {
+                    showModalBottomSheet(
+                      context: context,
+                      builder: (context) {
+                        return Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Theme.of(context).shadowColor,
+                                    blurRadius: 8,
+                                    offset: Offset(0, 3),
+                                  ),
+                                ],
+                              ),
+                              child: Padding(
+                                padding: EdgeInsets.fromLTRB(8.8.w, 4.4.w, 8.8.w, 5.2.w),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Image.asset(
+                                      'images/ic_gender.png',
+                                      width: 4.2.w,
+                                    ),
+                                    SizedBox(width: 6.0.w,),
+                                    Text(
+                                      'Jenis Kelamin',
+                                      style: TextStyle(
+                                        fontSize: 17.0.sp,
+                                        color: Theme.of(context).backgroundColor,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 3.0.h,),
+                            Column(
+                              children: [
+                                Container(
+                                  child: ListTile(
+                                    title: Text(
+                                      'Laki-laki',
+                                      style: TextStyle(
+                                        fontSize: 13.0.sp,
+                                      ),
+                                    ),
+                                    contentPadding: EdgeInsets.fromLTRB(8.8.w,3.4.w,8.8.w,3.2.w),
+                                    onTap: () {
+                                      setState(() {
+                                        sextype = 'Laki-laki';
+                                        Navigator.pop(context);
+                                      });
+                                    },
+                                  ),
+                                  decoration: BoxDecoration(
+                                    border: Border(
+                                      top: BorderSide(
+                                        color: Theme.of(context).dividerColor,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Container(
+                                  child: ListTile(
+                                    title: Text(
+                                      'Perempuan',
+                                      style: TextStyle(
+                                        fontSize: 13.0.sp,
+                                      ),
+                                    ),
+                                    contentPadding: EdgeInsets.fromLTRB(8.8.w,3.4.w,8.8.w,3.2.w),
+                                    onTap: () {
+                                      setState(() {
+                                        sextype = 'Perempuan';
+                                        Navigator.pop(context);
+                                      });
+                                    },
+                                  ),
+                                  decoration: BoxDecoration(
+                                    border: Border(
+                                      top: BorderSide(
+                                        color: Theme.of(context).dividerColor,
+                                      ),
+                                      bottom: BorderSide(
+                                        color: Theme.of(context).dividerColor,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 4.4.h,)
+                          ],
+                        );
+                      },
+                    );
+                  },
+                  child: Container(
+                    height: 4.8.h,
+                    decoration: BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(
+                          color: Theme.of(context).accentColor,
+                        ),
+                      ),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Expanded(
+                          child: Text(
+                            sextype == null ? '' : sextype,
+                            style: TextStyle(
+                              fontSize: 15.0.sp,
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 2.2.w,
+                          child: Image.asset(
+                            'images/ic_down_arrow.png',
+                          ),
+                        ),
+                        SizedBox(width: 2.2.w,)
+                      ],
+                    ),
+                  ),
+                ),
+                SizedBox(height: 3.3.h,),
+                Text(
+                  'Kriteria Nama Belakang',
+                  style: TextStyle(
+                    fontSize: 13.0.sp,
+                    color: Theme.of(context).backgroundColor,
+                  ),
+                ),
+                SizedBox(height: 1.0.h,),
+                InkWell(
+                  onTap: () {
+                    showModalBottomSheet(
+                      context: context,
+                      builder: (context) {
+                        return Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Theme.of(context).shadowColor,
+                                    blurRadius: 8,
+                                    offset: Offset(0, 3),
+                                  ),
+                                ],
+                              ),
+                              child: Padding(
+                                padding: EdgeInsets.fromLTRB(8.8.w, 4.4.w, 8.8.w, 5.2.w),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Image.asset(
+                                      'images/ic_gender.png',
+                                      width: 4.2.w,
+                                    ),
+                                    SizedBox(width: 6.0.w,),
+                                    Text(
+                                      'Jenis Kelamin',
+                                      style: TextStyle(
+                                        fontSize: 17.0.sp,
+                                        color: Theme.of(context).backgroundColor,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 3.0.h,),
+                            Column(
+                              children: [
+                                Container(
+                                  child: ListTile(
+                                    title: Text(
+                                      'Laki-laki',
+                                      style: TextStyle(
+                                        fontSize: 13.0.sp,
+                                      ),
+                                    ),
+                                    contentPadding: EdgeInsets.fromLTRB(8.8.w,3.4.w,8.8.w,3.2.w),
+                                    onTap: () {
+                                      setState(() {
+                                        sextype = 'Laki-laki';
+                                        Navigator.pop(context);
+                                      });
+                                    },
+                                  ),
+                                  decoration: BoxDecoration(
+                                    border: Border(
+                                      top: BorderSide(
+                                        color: Theme.of(context).dividerColor,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Container(
+                                  child: ListTile(
+                                    title: Text(
+                                      'Perempuan',
+                                      style: TextStyle(
+                                        fontSize: 13.0.sp,
+                                      ),
+                                    ),
+                                    contentPadding: EdgeInsets.fromLTRB(8.8.w,3.4.w,8.8.w,3.2.w),
+                                    onTap: () {
+                                      setState(() {
+                                        sextype = 'Perempuan';
+                                        Navigator.pop(context);
+                                      });
+                                    },
+                                  ),
+                                  decoration: BoxDecoration(
+                                    border: Border(
+                                      top: BorderSide(
+                                        color: Theme.of(context).dividerColor,
+                                      ),
+                                      bottom: BorderSide(
+                                        color: Theme.of(context).dividerColor,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 4.4.h,)
+                          ],
+                        );
+                      },
+                    );
+                  },
+                  child: Container(
+                    height: 4.8.h,
+                    decoration: BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(
+                          color: Theme.of(context).accentColor,
+                        ),
+                      ),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Expanded(
+                          child: Text(
+                            sextype == null ? '' : sextype,
+                            style: TextStyle(
+                              fontSize: 15.0.sp,
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 2.2.w,
+                          child: Image.asset(
+                            'images/ic_down_arrow.png',
+                          ),
+                        ),
+                        SizedBox(width: 2.2.w,)
+                      ],
+                    ),
                   ),
                 ),
               ],
@@ -135,6 +734,37 @@ class _BabysNameState extends State<BabysName> {
                           ),
                         ),
                       ],
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(right: 40.0.w),
+                    child: InkWell(
+                      child: Stack(
+                        alignment: AlignmentDirectional.centerEnd,
+                        children: [
+                          Container(
+                            width: 43.0.w,
+                            height: 12.0.h,
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).backgroundColor,
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(40),
+                                bottomRight: Radius.circular(40),
+                              ),
+                            ),
+                            child: Center(
+                              child: Text(
+                                'Pilih Sendiri',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 15.0.sp,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ],

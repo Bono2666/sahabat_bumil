@@ -644,7 +644,7 @@ class _updPregnancyState extends State<updPregnancy> {
       await prefs.setHPL(hplPrefs);
       await prefs.setHPHT(hphtPrefs);
       await prefs.setBasecount(basecount);
-      Navigator.pushReplacementNamed(context, '/monitoring');
+      Navigator.pushReplacementNamed(context, prefs.getRoute);
   }
 }
 
