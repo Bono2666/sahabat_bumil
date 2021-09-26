@@ -29,6 +29,7 @@ class _BabysNameState extends State<BabysName> {
             ),
           ),
           Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Row(
                 children: [
@@ -108,29 +109,32 @@ class _BabysNameState extends State<BabysName> {
                 ],
               ),
               Expanded(child: SizedBox()),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
+              Stack(
+                alignment: AlignmentDirectional.bottomEnd,
                 children: [
                   InkWell(
-                    child: Container(
-                      width: 74.0.w,
-                      height: 12.0.h,
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).primaryColor,
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(40),
+                    child: Stack(
+                      alignment: AlignmentDirectional.centerEnd,
+                      children: [
+                        Container(
+                          width: 52.0.w,
+                          height: 12.0.h,
+                          color: Theme.of(context).primaryColor,
                         ),
-                      ),
-                      child: Center(
-                        child: Text(
-                          'Cari Nama',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w500,
-                            fontSize: 15.0.sp,
+                        SizedBox(
+                          width: 40.0.w,
+                          child: Center(
+                            child: Text(
+                              'Cari Nama',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 15.0.sp,
+                              ),
+                            ),
                           ),
                         ),
-                      ),
+                      ],
                     ),
                   ),
                 ],
