@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sahabat_bumil_v2/pages/babysname/babysname.dart';
+import 'package:sahabat_bumil_v2/pages/babysname/nameresult.dart';
 import 'package:sahabat_bumil_v2/pages/onboarding.dart';
 import 'package:sahabat_bumil_v2/pages/addpregnancy.dart';
 import 'package:sahabat_bumil_v2/pages/monitoring.dart';
@@ -35,6 +36,7 @@ class MyTheme extends StatelessWidget {
             backgroundColor: Color(0xff410B13),
             dividerColor: Color(0xffD1D3D4),
             hintColor: Color(0xffCDCDCD),
+            disabledColor: Color(0xffA7A7A7),
             shadowColor: Color(0x32000000),
             dialogBackgroundColor: Color(0x30000000),
 
@@ -79,6 +81,8 @@ class MyTheme extends StatelessWidget {
                 return slideLeftRoute(page: ViewArticle());
               case '/babysname':
                 return slideUpRoute(page: BabysName());
+              case '/nameresult':
+                return slideLeftRoute(page: NameResult());
             }
           },
         );
@@ -108,6 +112,10 @@ class SharedPrefs {
   String get getSextype => _prefs.getString('sextype') ?? '';
   String get getArticleId => _prefs.getString('articleid') ?? '';
   String get getRoute => _prefs.getString('route') ?? '';
+  String get getPrefix => _prefs.getString('prefix') ?? '';
+  String get getMiddle => _prefs.getString('middle') ?? '';
+  String get getSufix => _prefs.getString('sufix') ?? '';
+  String get getSexTypeName => _prefs.getString('sextypename') ?? '';
 
   setFirstlaunch(bool value) => _prefs.setBool('firstlaunch', value);
   setName(String value) => _prefs.setString('name', value);
@@ -119,6 +127,10 @@ class SharedPrefs {
   setSextype(String value) => _prefs.setString('sextype', value);
   setArticleId(String value) => _prefs.setString('articleid', value);
   setRoute(String value) => _prefs.setString('route', value);
+  setPrefix(String value) => _prefs.setString('prefix', value);
+  setMiddle(String value) => _prefs.setString('middle', value);
+  setSufix(String value) => _prefs.setString('sufix', value);
+  setSexTypeName(String value) => _prefs.setString('sextypename', value);
 }
 
 class slideUpRoute extends PageRouteBuilder {

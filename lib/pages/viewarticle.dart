@@ -360,8 +360,8 @@ class _ViewArticleState extends State<ViewArticle> {
                                 Navigator.pop(context);
                               },
                               child: Container(
-                                width: 19.4.w,
-                                height: 29.0.w,
+                                width: 19.0.w,
+                                height: 15.0.h,
                                 decoration: BoxDecoration(
                                   color: Theme.of(context).primaryColor,
                                   borderRadius: BorderRadius.only(
@@ -391,58 +391,60 @@ class _ViewArticleState extends State<ViewArticle> {
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
                               SizedBox(
-                                height: 13.0.w,
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(
-                                  right: 6.6.w,
-                                ),
-                                child: InkWell(
-                                  onTap: () {
-                                    final box =
-                                        context.findRenderObject() as RenderBox;
-                                    Share.share(
-                                      document[0].get('share'),
-                                      sharePositionOrigin:
-                                          box.localToGlobal(Offset.zero) &
-                                              box.size,
-                                    );
-                                  },
-                                  child: Stack(
-                                    alignment: AlignmentDirectional.center,
-                                    children: [
-                                      Opacity(
-                                        opacity: .8,
-                                        child: Container(
-                                          width: 12.5.w,
-                                          height: 12.5.w,
-                                          decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.all(
-                                              Radius.circular(30),
-                                            ),
-                                            color: Colors.white,
-                                            boxShadow: [
-                                              BoxShadow(
-                                                blurRadius: 6.0,
-                                                color: Theme.of(context)
-                                                    .shadowColor,
-                                                offset: Offset(0, 3),
-                                              )
+                                height: 15.0.h,
+                                child: Stack(
+                                  alignment: AlignmentDirectional.bottomCenter,
+                                  children: [
+                                    SizedBox(
+                                      height: 19.0.w,
+                                      child: Padding(
+                                        padding: EdgeInsets.only(right: 6.6.w,),
+                                        child: InkWell(
+                                          onTap: () {
+                                            final box = context.findRenderObject() as RenderBox;
+                                            Share.share(
+                                              document[0].get('share'),
+                                              sharePositionOrigin: box.localToGlobal(Offset.zero) & box.size,
+                                            );
+                                          },
+                                          child: Stack(
+                                            alignment: AlignmentDirectional.center,
+                                            children: [
+                                              Opacity(
+                                                opacity: .8,
+                                                child: Container(
+                                                  width: 12.5.w,
+                                                  height: 12.5.w,
+                                                  decoration: BoxDecoration(
+                                                    borderRadius: BorderRadius.all(
+                                                      Radius.circular(30),
+                                                    ),
+                                                    color: Colors.white,
+                                                    boxShadow: [
+                                                      BoxShadow(
+                                                        blurRadius: 6.0,
+                                                        color: Theme.of(context).shadowColor,
+                                                        offset: Offset(0, 3),
+                                                      )
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                              Container(
+                                                width: 5.6.w,
+                                                height: 5.6.w,
+                                                child: FittedBox(
+                                                  child: Image.asset(
+                                                    'images/ic_share.png',
+                                                  ),
+                                                ),
+                                              ),
                                             ],
                                           ),
                                         ),
                                       ),
-                                      Container(
-                                        width: 5.6.w,
-                                        height: 5.6.w,
-                                        child: FittedBox(
-                                          child: Image.asset(
-                                            'images/ic_share.png',
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ],
