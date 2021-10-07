@@ -187,7 +187,7 @@ class _BabysNameState extends State<BabysName> {
                         decoration: BoxDecoration(
                           border: Border(
                             bottom: BorderSide(
-                              color: Theme.of(context).accentColor,
+                              color: Theme.of(context).secondaryHeaderColor,
                             ),
                           ),
                         ),
@@ -235,7 +235,7 @@ class _BabysNameState extends State<BabysName> {
                         if (sextype == null) {
                           showDialog(
                             context: context,
-                            builder: (_) => alert(),
+                            builder: (_) => Alert(),
                             barrierDismissible: false,
                           );
                         } else {
@@ -244,7 +244,7 @@ class _BabysNameState extends State<BabysName> {
                           popTitle = 'Kriteria Nama Depan';
                           showDialog(
                             context: context,
-                            builder: (_) => criteria(),
+                            builder: (_) => Criteria(),
                             barrierDismissible: false,
                           );
                         }
@@ -280,7 +280,7 @@ class _BabysNameState extends State<BabysName> {
                               decoration: BoxDecoration(
                                 border: Border(
                                   bottom: BorderSide(
-                                    color: Theme.of(context).accentColor,
+                                    color: Theme.of(context).secondaryHeaderColor,
                                   ),
                                 ),
                               ),
@@ -306,7 +306,7 @@ class _BabysNameState extends State<BabysName> {
                         if (sextype == null) {
                           showDialog(
                             context: context,
-                            builder: (_) => alert(),
+                            builder: (_) => Alert(),
                             barrierDismissible: false,
                           );
                         } else {
@@ -315,7 +315,7 @@ class _BabysNameState extends State<BabysName> {
                           popTitle = 'Kriteria Nama Tengah';
                           showDialog(
                             context: context,
-                            builder: (_) => criteria(),
+                            builder: (_) => Criteria(),
                             barrierDismissible: false,
                           );
                         }
@@ -351,7 +351,7 @@ class _BabysNameState extends State<BabysName> {
                               decoration: BoxDecoration(
                                 border: Border(
                                   bottom: BorderSide(
-                                    color: Theme.of(context).accentColor,
+                                    color: Theme.of(context).secondaryHeaderColor,
                                   ),
                                 ),
                               ),
@@ -377,7 +377,7 @@ class _BabysNameState extends State<BabysName> {
                         if (sextype == null) {
                           showDialog(
                             context: context,
-                            builder: (_) => alert(),
+                            builder: (_) => Alert(),
                             barrierDismissible: false,
                           );
                         } else {
@@ -386,7 +386,7 @@ class _BabysNameState extends State<BabysName> {
                           popTitle = 'Kriteria Nama Belakang';
                           showDialog(
                             context: context,
-                            builder: (_) => criteria(),
+                            builder: (_) => Criteria(),
                             barrierDismissible: false,
                           );
                         }
@@ -422,7 +422,7 @@ class _BabysNameState extends State<BabysName> {
                               decoration: BoxDecoration(
                                 border: Border(
                                   bottom: BorderSide(
-                                    color: Theme.of(context).accentColor,
+                                    color: Theme.of(context).secondaryHeaderColor,
                                   ),
                                 ),
                               ),
@@ -598,12 +598,12 @@ class _BabysNameState extends State<BabysName> {
   }
 }
 
-class criteria extends StatefulWidget {
+class Criteria extends StatefulWidget {
   @override
-  _criteriaState createState() => _criteriaState();
+  _CriteriaState createState() => _CriteriaState();
 }
 
-class _criteriaState extends State<criteria> with SingleTickerProviderStateMixin {
+class _CriteriaState extends State<Criteria> with SingleTickerProviderStateMixin {
   AnimationController controller;
   Animation<double> scaleAnimation;
   List<QueryDocumentSnapshot> babysname;
@@ -765,7 +765,7 @@ class _criteriaState extends State<criteria> with SingleTickerProviderStateMixin
                                     decoration: BoxDecoration(
                                       border: Border(
                                         bottom: BorderSide(
-                                          color: Theme.of(context).accentColor,
+                                          color: Theme.of(context).secondaryHeaderColor,
                                         ),
                                       ),
                                     ),
@@ -824,7 +824,7 @@ class _criteriaState extends State<criteria> with SingleTickerProviderStateMixin
                                                 decoration: BoxDecoration(
                                                   border: Border(
                                                     bottom: BorderSide(
-                                                      color: Theme.of(context).accentColor,
+                                                      color: Theme.of(context).secondaryHeaderColor,
                                                     ),
                                                   ),
                                                 ),
@@ -958,18 +958,17 @@ class _criteriaState extends State<criteria> with SingleTickerProviderStateMixin
   }
 }
 
-class alert extends StatefulWidget {
+class Alert extends StatefulWidget {
   @override
-  _alertState createState() => _alertState();
+  _AlertState createState() => _AlertState();
 }
 
-class _alertState extends State<alert> with SingleTickerProviderStateMixin {
+class _AlertState extends State<Alert> with SingleTickerProviderStateMixin {
   AnimationController controller;
   Animation<double> scaleAnimation;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     controller = AnimationController(

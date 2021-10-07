@@ -126,7 +126,7 @@ class _ViewArticleState extends State<ViewArticle> {
                                       width: 8.6.w,
                                       height: 0.5.h,
                                       decoration: BoxDecoration(
-                                        color: Theme.of(context).accentColor,
+                                        color: Theme.of(context).secondaryHeaderColor,
                                         borderRadius: BorderRadius.all(
                                           Radius.circular(30),
                                         ),

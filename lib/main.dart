@@ -30,7 +30,7 @@ class MyTheme extends StatelessWidget {
             fontFamily: 'Ubuntu',
 
             highlightColor: Color(0xfFFDDCC7),
-            accentColor: Color(0xffFFC5A0),
+            secondaryHeaderColor: Color(0xffFFC5A0),
             primaryColorLight: Color(0xffFFA971),
             primaryColor: Color(0xffFF8C42),
             backgroundColor: Color(0xff410B13),
@@ -70,19 +70,19 @@ class MyTheme extends StatelessWidget {
           onGenerateRoute: (RouteSettings settings) {
             switch (settings.name) {
               case '/':
-                return slideLeftRoute(page: Onboarding());
+                return SlideLeftRoute(page: Onboarding());
               case '/addpregnancy':
-                return slideUpRoute(page: addPregnancy());
+                return SlideUpRoute(page: addPregnancy());
               case '/updpregnancy':
-                return slideUpRoute(page: updPregnancy());
+                return SlideUpRoute(page: updPregnancy());
               case '/monitoring':
-                return slideUpRoute(page: Monitoring());
+                return SlideUpRoute(page: Monitoring());
               case '/viewarticle':
-                return slideLeftRoute(page: ViewArticle());
+                return SlideLeftRoute(page: ViewArticle());
               case '/babysname':
-                return slideUpRoute(page: BabysName());
+                return SlideUpRoute(page: BabysName());
               case '/nameresult':
-                return slideLeftRoute(page: NameResult());
+                return SlideLeftRoute(page: NameResult());
             }
           },
         );
@@ -133,10 +133,10 @@ class SharedPrefs {
   setSexTypeName(String value) => _prefs.setString('sextypename', value);
 }
 
-class slideUpRoute extends PageRouteBuilder {
+class SlideUpRoute extends PageRouteBuilder {
   final Widget page;
 
-  slideUpRoute({this.page}) :super(
+  SlideUpRoute({this.page}) :super(
         transitionDuration: Duration(seconds: 1),
         transitionsBuilder: (BuildContext context, Animation<double> animation, Animation<double> secAnimation, Widget child) {
           animation = CurvedAnimation(parent: animation, curve: Curves.elasticInOut);
@@ -154,10 +154,10 @@ class slideUpRoute extends PageRouteBuilder {
   );
 }
 
-class slideLeftRoute extends PageRouteBuilder {
+class SlideLeftRoute extends PageRouteBuilder {
   final Widget page;
 
-  slideLeftRoute({this.page}) :super(
+  SlideLeftRoute({this.page}) :super(
       transitionDuration: Duration(seconds: 1),
       transitionsBuilder: (BuildContext context, Animation<double> animation, Animation<double> secAnimation, Widget child) {
         animation = CurvedAnimation(parent: animation, curve: Curves.elasticInOut);

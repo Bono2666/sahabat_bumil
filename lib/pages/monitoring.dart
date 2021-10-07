@@ -261,7 +261,7 @@ class _MonitoringState extends State<Monitoring> {
                                         width: 8.6.w,
                                         height: 0.5.h,
                                         decoration: BoxDecoration(
-                                          color: Theme.of(context).accentColor,
+                                          color: Theme.of(context).secondaryHeaderColor,
                                           borderRadius: BorderRadius.all(
                                             Radius.circular(30),
                                           ),
@@ -898,7 +898,7 @@ class _MonitoringState extends State<Monitoring> {
                                       builder: (context, snapshot) {
                                         if (!snapshot.hasData || snapshot.data == null || snapshot.hasError) {
                                           return Shimmer.fromColors(
-                                            baseColor: Theme.of(context).accentColor,
+                                            baseColor: Theme.of(context).secondaryHeaderColor,
                                             highlightColor: Theme.of(context).highlightColor,
                                             child: SingleChildScrollView(
                                               physics: NeverScrollableScrollPhysics(),
@@ -910,7 +910,7 @@ class _MonitoringState extends State<Monitoring> {
                                                     width: 38.0.w,
                                                     height: 56.0.w,
                                                     decoration: BoxDecoration(
-                                                      color: Theme.of(context).accentColor,
+                                                      color: Theme.of(context).secondaryHeaderColor,
                                                       borderRadius: BorderRadius.all(
                                                         Radius.circular(12),
                                                       ),
@@ -921,7 +921,7 @@ class _MonitoringState extends State<Monitoring> {
                                                     width: 38.0.w,
                                                     height: 56.0.w,
                                                     decoration: BoxDecoration(
-                                                      color: Theme.of(context).accentColor,
+                                                      color: Theme.of(context).secondaryHeaderColor,
                                                       borderRadius: BorderRadius.all(
                                                         Radius.circular(12),
                                                       ),
@@ -932,7 +932,7 @@ class _MonitoringState extends State<Monitoring> {
                                                     width: 38.0.w,
                                                     height: 56.0.w,
                                                     decoration: BoxDecoration(
-                                                      color: Theme.of(context).accentColor,
+                                                      color: Theme.of(context).secondaryHeaderColor,
                                                       borderRadius: BorderRadius.all(
                                                         Radius.circular(12),
                                                       ),
