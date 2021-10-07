@@ -21,7 +21,6 @@ class BabysName extends StatefulWidget {
 class _BabysNameState extends State<BabysName> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     if (prefs.getSextype != oldSexType) sextype = prefs.getSextype;
