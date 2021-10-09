@@ -7,7 +7,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:grouped_list/grouped_list.dart';
 import 'package:flutter_html/flutter_html.dart';
 
-String fieldName, currCat, popTitle, oldSexType;
+String fieldName, currCat, popTitle, oldSexType, pilih;
 String prefix = 'Acak';
 String middle = 'Acak';
 String sufix = 'Acak';
@@ -23,7 +23,8 @@ class _BabysNameState extends State<BabysName> {
   void initState() {
     super.initState();
 
-    if (prefs.getSextype != oldSexType) sextype = prefs.getSextype;
+    if (oldSexType != null)
+      if (prefs.getSextype != oldSexType) sextype = prefs.getSextype;
   }
 
   @override
@@ -271,7 +272,7 @@ class _BabysNameState extends State<BabysName> {
                                   'images/ic_down_arrow.png',
                                 ),
                               ),
-                              SizedBox(width: 2.2.w,)
+                              SizedBox(width: 4.0.w,)
                             ],
                           ),
                           Padding(
@@ -342,7 +343,7 @@ class _BabysNameState extends State<BabysName> {
                                   'images/ic_down_arrow.png',
                                 ),
                               ),
-                              SizedBox(width: 2.2.w,)
+                              SizedBox(width: 4.0.w,)
                             ],
                           ),
                           Padding(
@@ -413,7 +414,7 @@ class _BabysNameState extends State<BabysName> {
                                   'images/ic_down_arrow.png',
                                 ),
                               ),
-                              SizedBox(width: 2.2.w,)
+                              SizedBox(width: 4.0.w,)
                             ],
                           ),
                           Padding(
@@ -611,7 +612,6 @@ class _CriteriaState extends State<Criteria> with SingleTickerProviderStateMixin
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     selected = null;
