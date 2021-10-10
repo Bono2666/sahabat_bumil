@@ -17,7 +17,7 @@ class _NameResultState extends State<NameResult> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: FutureBuilder(
-        future: prefs.getPrefix == 'Acak'
+        future: prefs.getPrefix == 'Acak' || prefs.getPrefix.substring(0, 4) == 'Diaw'
             ? FirebaseFirestore.instance
             .collection('babysname')
             .where('sex', isEqualTo: prefs.getSexTypeName)
@@ -43,12 +43,24 @@ class _NameResultState extends State<NameResult> {
           if (snapshot.connectionState == ConnectionState.done) {
             prefixResult = snapshot.data.docs;
             prefixResult.shuffle();
-            while (prefixResult[0].get('category') == 'Acak'
-                || prefixResult[0].get('category') == 'Tidak pakai')
-              prefixResult.shuffle();
+
+            String prefixName = prefixResult[0].get('name').toString();
+
+            if (prefs.getPrefix.substring(0, 4) == 'Diaw') {
+              while (prefixResult[0].get('category') == 'Acak'
+                  || prefixResult[0].get('category') == 'Tidak pakai'
+                  || prefixName.substring(0, 1)
+                      != prefs.getPrefix.substring(prefs.getPrefix.length - 1)) {
+                prefixResult.shuffle();
+                prefixName = prefixResult[0].get('name').toString();
+              }
+            } else
+              while (prefixResult[0].get('category') == 'Acak'
+                  || prefixResult[0].get('category') == 'Tidak pakai')
+                prefixResult.shuffle();
           }
           return FutureBuilder(
-            future: prefs.getMiddle == 'Acak'
+            future: prefs.getMiddle == 'Acak' || prefs.getPrefix.substring(0, 4) == 'Diaw'
                 ? FirebaseFirestore.instance
                 .collection('babysname')
                 .where('sex', isEqualTo: prefs.getSexTypeName)
@@ -74,12 +86,30 @@ class _NameResultState extends State<NameResult> {
               if (snapshot.connectionState == ConnectionState.done) {
                 middleResult = snapshot.data.docs;
                 middleResult.shuffle();
-                while (prefixResult[0].get('category') == 'Acak'
-                    || prefixResult[0].get('category') == 'Tidak pakai')
-                  prefixResult.shuffle();
+
+                String middleName = middleResult[0].get('name').toString();
+
+                if (prefs.getMiddle.substring(0, 4) == 'Diaw') {
+                  while (middleResult[0].get('category') == 'Acak'
+                      || middleResult[0].get('category') == 'Tidak pakai'
+                      || middleResult[0].get('category') == prefixResult[0].get('category')
+                      || middleName.substring(0, 1)
+                          != prefs.getMiddle.substring(prefs.getMiddle.length - 1)) {
+                    middleResult.shuffle();
+                    middleName = middleResult[0].get('name').toString();
+                  }
+                } else if (prefs.getMiddle == 'Acak')
+                  while (middleResult[0].get('category') == 'Acak'
+                      || middleResult[0].get('category') == 'Tidak pakai'
+                      || middleResult[0].get('category') == prefixResult[0].get('category'))
+                    middleResult.shuffle();
+                else
+                  while (middleResult[0].get('category') == 'Acak'
+                      || middleResult[0].get('category') == 'Tidak pakai')
+                    middleResult.shuffle();
               }
               return FutureBuilder(
-                future: prefs.getSufix == 'Acak'
+                future: prefs.getSufix == 'Acak' || prefs.getPrefix.substring(0, 4) == 'Diaw'
                     ? FirebaseFirestore.instance
                     .collection('babysname')
                     .where('sex', isEqualTo: prefs.getSexTypeName)
@@ -105,9 +135,29 @@ class _NameResultState extends State<NameResult> {
                   if (snapshot.connectionState == ConnectionState.done) {
                     sufixResult = snapshot.data.docs;
                     sufixResult.shuffle();
-                    while (prefixResult[0].get('category') == 'Acak'
-                        || prefixResult[0].get('category') == 'Tidak pakai')
-                      prefixResult.shuffle();
+
+                    String sufixName = sufixResult[0].get('name').toString();
+
+                    if (prefs.getSufix.substring(0, 4) == 'Diaw') {
+                      while (sufixResult[0].get('category') == 'Acak'
+                          || sufixResult[0].get('category') == 'Tidak pakai'
+                          || sufixResult[0].get('category') == prefixResult[0].get('category')
+                          || sufixResult[0].get('category') == middleResult[0].get('category')
+                          || sufixName.substring(0, 1)
+                              != prefs.getSufix.substring(prefs.getSufix.length - 1)) {
+                        sufixResult.shuffle();
+                        sufixName = sufixResult[0].get('name').toString();
+                      }
+                    } else if (prefs.getSufix == 'Acak')
+                        while (sufixResult[0].get('category') == 'Acak'
+                            || sufixResult[0].get('category') == 'Tidak pakai'
+                            || sufixResult[0].get('category') == prefixResult[0].get('category')
+                            || sufixResult[0].get('category') == middleResult[0].get('category'))
+                          sufixResult.shuffle();
+                    else
+                      while (sufixResult[0].get('category') == 'Acak'
+                          || sufixResult[0].get('category') == 'Tidak pakai')
+                        sufixResult.shuffle();
                   }
                   return Stack(
                     children: [

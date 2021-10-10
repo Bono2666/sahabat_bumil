@@ -528,11 +528,19 @@ class _BabysNameState extends State<BabysName> {
                 children: [
                   InkWell(
                     onTap: () {
-                      prefs.setSexTypeName(sextype);
-                      prefs.setPrefix(prefix);
-                      prefs.setMiddle(middle);
-                      prefs.setSufix(sufix);
-                      Navigator.pushNamed(context, '/nameresult');
+                      if (sextype == null) {
+                        showDialog(
+                          context: context,
+                          builder: (_) => Alert(),
+                          barrierDismissible: false,
+                        );
+                      } else {
+                        prefs.setSexTypeName(sextype);
+                        prefs.setPrefix(prefix);
+                        prefs.setMiddle(middle);
+                        prefs.setSufix(sufix);
+                        Navigator.pushNamed(context, '/nameresult');
+                      }
                     },
                     child: Stack(
                       alignment: AlignmentDirectional.centerEnd,
