@@ -54,13 +54,20 @@ class _NameResultState extends State<NameResult> {
                 prefixResult.shuffle();
                 prefixName = prefixResult[0].get('name').toString();
               }
-            } else
+            } else if (prefs.getPrefix == 'Acak') {
+              while (prefixResult[0].get('category') == 'Acak'
+                  || prefixResult[0].get('category') == 'Tidak pakai'
+                  || prefixResult[0].get('category') == prefs.getMiddle
+                  || prefixResult[0].get('category') == prefs.getSufix)
+                prefixResult.shuffle();
+            } else if (prefs.getPrefix != 'Tidak pakai') {
               while (prefixResult[0].get('category') == 'Acak'
                   || prefixResult[0].get('category') == 'Tidak pakai')
                 prefixResult.shuffle();
+            }
           }
           return FutureBuilder(
-            future: prefs.getMiddle == 'Acak' || prefs.getPrefix.substring(0, 4) == 'Diaw'
+            future: prefs.getMiddle == 'Acak' || prefs.getMiddle.substring(0, 4) == 'Diaw'
                 ? FirebaseFirestore.instance
                 .collection('babysname')
                 .where('sex', isEqualTo: prefs.getSexTypeName)
@@ -98,18 +105,21 @@ class _NameResultState extends State<NameResult> {
                     middleResult.shuffle();
                     middleName = middleResult[0].get('name').toString();
                   }
-                } else if (prefs.getMiddle == 'Acak')
+                } else if (prefs.getMiddle == 'Acak') {
                   while (middleResult[0].get('category') == 'Acak'
                       || middleResult[0].get('category') == 'Tidak pakai'
-                      || middleResult[0].get('category') == prefixResult[0].get('category'))
+                      || middleResult[0].get('category') ==
+                          prefixResult[0].get('category')
+                      || middleResult[0].get('category') == prefs.getSufix)
                     middleResult.shuffle();
-                else
+                } else if (prefs.getMiddle != 'Tidak pakai') {
                   while (middleResult[0].get('category') == 'Acak'
                       || middleResult[0].get('category') == 'Tidak pakai')
                     middleResult.shuffle();
+                }
               }
               return FutureBuilder(
-                future: prefs.getSufix == 'Acak' || prefs.getPrefix.substring(0, 4) == 'Diaw'
+                future: prefs.getSufix == 'Acak' || prefs.getSufix.substring(0, 4) == 'Diaw'
                     ? FirebaseFirestore.instance
                     .collection('babysname')
                     .where('sex', isEqualTo: prefs.getSexTypeName)
@@ -148,159 +158,149 @@ class _NameResultState extends State<NameResult> {
                         sufixResult.shuffle();
                         sufixName = sufixResult[0].get('name').toString();
                       }
-                    } else if (prefs.getSufix == 'Acak')
-                        while (sufixResult[0].get('category') == 'Acak'
-                            || sufixResult[0].get('category') == 'Tidak pakai'
-                            || sufixResult[0].get('category') == prefixResult[0].get('category')
-                            || sufixResult[0].get('category') == middleResult[0].get('category'))
-                          sufixResult.shuffle();
-                    else
+                    } else if (prefs.getSufix == 'Acak') {
+                      while (sufixResult[0].get('category') == 'Acak'
+                          || sufixResult[0].get('category') == 'Tidak pakai'
+                          || sufixResult[0].get('category') ==
+                              prefixResult[0].get('category')
+                          || sufixResult[0].get('category') ==
+                              middleResult[0].get('category'))
+                        sufixResult.shuffle();
+                    } else if (prefs.getSufix != 'Tidak pakai') {
                       while (sufixResult[0].get('category') == 'Acak'
                           || sufixResult[0].get('category') == 'Tidak pakai')
                         sufixResult.shuffle();
+                    }
                   }
                   return Stack(
                     children: [
-                      Padding(
-                        padding: EdgeInsets.only(left: 6.7.w, top: 19.0.h, right: 6.7.w),
+                      SingleChildScrollView(
+                        physics: BouncingScrollPhysics(),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              'Rekomendasi Nama',
-                              style: TextStyle(
-                                color: Theme.of(context).backgroundColor,
-                                fontWeight: FontWeight.w700,
-                                fontSize: 24.0.sp,
+                            Padding(
+                              padding: EdgeInsets.only(left: 6.7.w, top: 19.0.h, right: 6.7.w),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Rekomendasi Nama',
+                                    style: TextStyle(
+                                      color: Theme.of(context).backgroundColor,
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: 24.0.sp,
+                                    ),
+                                  ),
+                                  SizedBox(height: 1.9.h,),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                    CrossAxisAlignment.center,
+                                    children: [
+                                      Image.asset(
+                                        'images/ic_baby.png',
+                                        height: 3.2.w,
+                                      ),
+                                      SizedBox(
+                                        width: 1.4.w,
+                                      ),
+                                      Text(
+                                        'Rekomendasi nama bayi Anda',
+                                        style: TextStyle(
+                                          fontSize: 10.0.sp,
+                                          fontWeight: FontWeight.w700,
+                                          color: Theme.of(context).backgroundColor,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(height: 4.4.h,),
+                                ],
                               ),
                             ),
-                            SizedBox(height: 1.9.h,),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment:
-                              CrossAxisAlignment.center,
-                              children: [
-                                Image.asset(
-                                  'images/ic_baby.png',
-                                  height: 3.2.w,
-                                ),
-                                SizedBox(
-                                  width: 1.4.w,
-                                ),
-                                Text(
-                                  'Rekomendasi nama bayi Anda',
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 6.7.w,),
+                              child: Flexible(
+                                child: Text(
+                                  (prefs.getPrefix == 'Tidak pakai'
+                                      ? '' : prefixResult[0].get('name') + ' ') +
+                                      (prefs.getMiddle == 'Tidak pakai'
+                                          ? '' : middleResult[0].get('name') + ' ') +
+                                      (prefs.getSufix == 'Tidak pakai'
+                                          ? '' : sufixResult[0].get('name')),
                                   style: TextStyle(
-                                    fontSize: 10.0.sp,
+                                    color: Theme.of(context).primaryColor,
                                     fontWeight: FontWeight.w700,
-                                    color: Theme.of(context).backgroundColor,
+                                    fontSize: 20.0.sp,
                                   ),
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: 4.4.h,),
-                            Flexible(
-                              child: Text(
-                                (prefs.getPrefix == 'Tidak pakai'
-                                    ? '' : prefixResult[0].get('name') + ' ') +
-                                    (prefs.getMiddle == 'Tidak pakai'
-                                    ? '' : middleResult[0].get('name') + ' ') +
-                                    (prefs.getSufix == 'Tidak pakai'
-                                    ? '' : sufixResult[0].get('name')),
-                                style: TextStyle(
-                                  color: Theme.of(context).primaryColor,
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 20.0.sp,
                                 ),
                               ),
                             ),
                             SizedBox(height: 3.4.h,),
-                            prefs.getPrefix == 'Tidak pakai'
-                                ? Container()
-                                : Row(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Padding(
-                                        padding: EdgeInsets.only(top: 1.84.w),
-                                        child: Text(
-                                          prefixResult[0].get('name'),
-                                          style: TextStyle(
-                                            color: Theme.of(context).backgroundColor,
-                                            fontWeight: FontWeight.w700,
-                                            fontSize: 13.0.sp,
-                                          ),
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 4.8.w),
+                              child: prefs.getPrefix == 'Tidak pakai'
+                                  ? Container()
+                                  : Flexible(
+                                    child: Html(
+                                      data: '<span>' + prefixResult[0].get('name')
+                                          + '</span> artinya ' + prefixResult[0].get('desc'),
+                                      style: {
+                                        'body': Style(
+                                          fontSize: FontSize(13.0.sp),
+                                          color: Theme.of(context).backgroundColor,
+                                          lineHeight: LineHeight.em(1.1),
                                         ),
-                                      ),
-                                      Flexible(
-                                        child: Html(
-                                          data: 'artinya ' + prefixResult[0].get('desc'),
-                                          style: {
-                                            'body': Style(
-                                              fontSize: FontSize.rem(1.25),
-                                              color: Theme.of(context).backgroundColor,
-                                            ),
-                                          },
+                                        'span': Style(
+                                          fontWeight: FontWeight.w700,
                                         ),
-                                      ),
-                                    ],
+                                      },
+                                    ),
                                   ),
-                            prefs.getMiddle == 'Tidak pakai'
-                                ? Container()
-                                : Row(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Padding(
-                                        padding: EdgeInsets.only(top: 1.84.w),
-                                        child: Text(
-                                          middleResult[0].get('name'),
-                                          style: TextStyle(
-                                            color: Theme.of(context).backgroundColor,
-                                            fontWeight: FontWeight.w700,
-                                            fontSize: 13.0.sp,
-                                          ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 4.8.w,),
+                              child: prefs.getMiddle == 'Tidak pakai'
+                                  ? Container()
+                                  : Flexible(
+                                    child: Html(
+                                      data: '<span>' + middleResult[0].get('name')
+                                          + '</span> artinya ' + middleResult[0].get('desc'),
+                                      style: {
+                                        'body': Style(
+                                          fontSize: FontSize(13.0.sp),
+                                          color: Theme.of(context).backgroundColor,
+                                          lineHeight: LineHeight.em(1.1),
                                         ),
-                                      ),
-                                      Flexible(
-                                        child: Html(
-                                          data: 'artinya ' + middleResult[0].get('desc'),
-                                          style: {
-                                            'body': Style(
-                                              fontSize: FontSize.rem(1.25),
-                                              color: Theme.of(context).backgroundColor,
-                                            ),
-                                          },
+                                        'span': Style(
+                                          fontWeight: FontWeight.w700,
                                         ),
-                                      ),
-                                    ],
+                                      },
+                                    ),
                                   ),
-                            prefs.getSufix == 'Tidak pakai'
-                                ? Container()
-                                : Row(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Padding(
-                                        padding: EdgeInsets.only(top: 1.84.w),
-                                        child: Text(
-                                          sufixResult[0].get('name'),
-                                          style: TextStyle(
+                            ),
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 4.8.w,),
+                              child: prefs.getSufix == 'Tidak pakai'
+                                  ? Container()
+                                  : Flexible(
+                                      child: Html(
+                                        data: '<span>' + sufixResult[0].get('name') +
+                                            '</span> artinya ' + sufixResult[0].get('desc'),
+                                        style: {
+                                          'body': Style(
+                                            fontSize: FontSize(13.0.sp),
                                             color: Theme.of(context).backgroundColor,
-                                            fontWeight: FontWeight.w700,
-                                            fontSize: 13.0.sp,
+                                            lineHeight: LineHeight.em(1.1),
                                           ),
-                                        ),
+                                          'span': Style(
+                                            fontWeight: FontWeight.w700,
+                                          ),
+                                        },
                                       ),
-                                      Flexible(
-                                        child: Html(
-                                          data: 'artinya ' + sufixResult[0].get('desc'),
-                                          style: {
-                                            'body': Style(
-                                              fontSize: FontSize.rem(1.25),
-                                              color: Theme.of(context).backgroundColor,
-                                            ),
-                                          },
-                                        ),
-                                      ),
-                                    ],
-                                  ),
+                                    ),
+                            ),
                           ],
                         ),
                       ),

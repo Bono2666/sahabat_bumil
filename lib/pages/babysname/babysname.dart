@@ -24,7 +24,12 @@ class _BabysNameState extends State<BabysName> {
     super.initState();
 
     if (oldSexType != null)
-      if (prefs.getSextype != oldSexType) sextype = prefs.getSextype;
+      if (prefs.getSextype != oldSexType) {
+        sextype = prefs.getSextype;
+        prefix = 'Acak';
+        middle = 'Acak';
+        sufix = 'Acak';
+      }
   }
 
   @override
@@ -136,6 +141,9 @@ class _BabysNameState extends State<BabysName> {
                                         onTap: () {
                                           setState(() {
                                             sextype = 'Laki-laki';
+                                            prefix = 'Acak';
+                                            middle = 'Acak';
+                                            sufix = 'Acak';
                                             Navigator.pop(context);
                                           });
                                         },
@@ -160,6 +168,9 @@ class _BabysNameState extends State<BabysName> {
                                         onTap: () {
                                           setState(() {
                                             sextype = 'Perempuan';
+                                            prefix = 'Acak';
+                                            middle = 'Acak';
+                                            sufix = 'Acak';
                                             Navigator.pop(context);
                                           });
                                         },
@@ -233,7 +244,7 @@ class _BabysNameState extends State<BabysName> {
                   children: [
                     InkWell(
                       onTap: () {
-                        if (sextype == null) {
+                        if (sextype == '') {
                           showDialog(
                             context: context,
                             builder: (_) => Alert(),
@@ -260,7 +271,7 @@ class _BabysNameState extends State<BabysName> {
                                   data: prefix,
                                   style: {
                                     'body': Style(
-                                      fontSize: FontSize.rem(1.48),
+                                      fontSize: FontSize(15.0.sp),
                                       padding: EdgeInsets.all(0),
                                     ),
                                   },
@@ -304,7 +315,7 @@ class _BabysNameState extends State<BabysName> {
                     SizedBox(height: 1.0.h,),
                     InkWell(
                       onTap: () {
-                        if (sextype == null) {
+                        if (sextype == '') {
                           showDialog(
                             context: context,
                             builder: (_) => Alert(),
@@ -331,7 +342,7 @@ class _BabysNameState extends State<BabysName> {
                                   data: middle,
                                   style: {
                                     'body': Style(
-                                      fontSize: FontSize.rem(1.48),
+                                      fontSize: FontSize(15.0.sp),
                                       padding: EdgeInsets.all(0),
                                     ),
                                   },
@@ -375,7 +386,7 @@ class _BabysNameState extends State<BabysName> {
                     SizedBox(height: 1.0.h,),
                     InkWell(
                       onTap: () {
-                        if (sextype == null) {
+                        if (sextype == '') {
                           showDialog(
                             context: context,
                             builder: (_) => Alert(),
@@ -402,7 +413,7 @@ class _BabysNameState extends State<BabysName> {
                                   data: sufix,
                                   style: {
                                     'body': Style(
-                                      fontSize: FontSize.rem(1.48),
+                                      fontSize: FontSize(15.0.sp),
                                       padding: EdgeInsets.all(0),
                                     ),
                                   },
@@ -528,7 +539,7 @@ class _BabysNameState extends State<BabysName> {
                 children: [
                   InkWell(
                     onTap: () {
-                      if (sextype == null) {
+                      if (sextype == '') {
                         showDialog(
                           context: context,
                           builder: (_) => Alert(),
@@ -752,7 +763,7 @@ class _CriteriaState extends State<Criteria> with SingleTickerProviderStateMixin
                                         data: currCat,
                                         style: {
                                           'body': Style(
-                                            fontSize: FontSize.rem(1.68),
+                                            fontSize: FontSize(17.0.sp),
                                             color: Theme.of(context).disabledColor,
                                             padding: EdgeInsets.all(0),
                                           ),
@@ -782,66 +793,69 @@ class _CriteriaState extends State<Criteria> with SingleTickerProviderStateMixin
                               ],
                             ),
                           ),
-                          SizedBox(
-                            height: 56.0.h,
-                            child: GroupedListView(
-                              elements: babysname,
-                              padding: EdgeInsets.only(left: 5.2.w, right: 5.2.w, bottom: 12.0.h),
-                              groupBy: (element) => element['no_cat'],
-                              order: GroupedListOrder.ASC,
-                              groupSeparatorBuilder: (value) => Container(), //hanya persyaratan hrs ada groupSeparator
-                              itemBuilder: (context, element) => Container(), //hanya persyaratan hrs ada itemBuilder
-                              groupHeaderBuilder: (element) {
-                                return element['category'] == currCat
-                                    ? Container()
-                                    : InkWell(
-                                      onTap: () => setState(() => selected = element['category']),
-                                      child: Column(
-                                          children: [
-                                            SizedBox(height: 6.7.w,),
-                                            Padding(
-                                              padding: EdgeInsets.only(right: 1.6.w),
-                                              child: Row(
-                                                crossAxisAlignment: CrossAxisAlignment.center,
-                                                children: [
-                                                  SizedBox(
-                                                    width: 68.0.w,
-                                                    child: Html(
-                                                      data: element['category'],
-                                                      style: {
-                                                        'body': Style(
-                                                          fontSize: FontSize.rem(1.68),
-                                                          color: Theme.of(context).backgroundColor,
-                                                          padding: EdgeInsets.all(0),
+                          Expanded(
+                            child: SizedBox(
+                              child: GroupedListView(
+                                elements: babysname,
+                                physics: BouncingScrollPhysics(),
+                                padding: EdgeInsets.only(left: 5.2.w, right: 5.2.w, bottom: 14.0.h),
+                                groupBy: (element) => element['no_cat'],
+                                order: GroupedListOrder.ASC,
+                                groupSeparatorBuilder: (value) {return;}, //hanya persyaratan hrs ada groupSeparator
+                                itemBuilder: (context, element) {return;}, //hanya persyaratan hrs ada itemBuilder
+                                groupHeaderBuilder: (element) {
+                                  return element['category'] == currCat
+                                      ? Container()
+                                      : InkWell(
+                                        onTap: () => setState(() => selected = element['category']),
+                                        child: Column(
+                                            children: [
+                                              SizedBox(height: 6.7.w,),
+                                              Padding(
+                                                padding: EdgeInsets.only(right: 1.6.w),
+                                                child: Row(
+                                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                                  children: [
+                                                    Expanded(
+                                                      child: SizedBox(
+                                                        child: Html(
+                                                          data: element['category'],
+                                                          style: {
+                                                            'body': Style(
+                                                              fontSize: FontSize(17.0.sp),
+                                                              color: Theme.of(context).backgroundColor,
+                                                              padding: EdgeInsets.all(0),
+                                                            ),
+                                                          },
                                                         ),
-                                                      },
+                                                      ),
                                                     ),
-                                                  ),
-                                                  Expanded(child: SizedBox(),),
-                                                  Image.asset(
-                                                    element['category'] == selected ? 'images/ic_checked.png' : 'images/ic_radio.png',
-                                                    height: 8.9.w,
-                                                  ),
-                                                ],
+                                                    // Expanded(child: SizedBox(),),
+                                                    Image.asset(
+                                                      element['category'] == selected ? 'images/ic_checked.png' : 'images/ic_radio.png',
+                                                      height: 8.9.w,
+                                                    ),
+                                                  ],
+                                                ),
                                               ),
-                                            ),
-                                            SizedBox(height: 6.3.w,),
-                                            Padding(
-                                              padding: EdgeInsets.symmetric(horizontal: 1.6.w),
-                                              child: Container(
-                                                decoration: BoxDecoration(
-                                                  border: Border(
-                                                    bottom: BorderSide(
-                                                      color: Theme.of(context).secondaryHeaderColor,
+                                              SizedBox(height: 6.3.w,),
+                                              Padding(
+                                                padding: EdgeInsets.symmetric(horizontal: 1.6.w),
+                                                child: Container(
+                                                  decoration: BoxDecoration(
+                                                    border: Border(
+                                                      bottom: BorderSide(
+                                                        color: Theme.of(context).secondaryHeaderColor,
+                                                      ),
                                                     ),
                                                   ),
                                                 ),
                                               ),
-                                            ),
-                                          ],
-                                      ),
-                                    );
-                              },
+                                            ],
+                                        ),
+                                      );
+                                },
+                              ),
                             ),
                           ),
                         ],
