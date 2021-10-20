@@ -172,7 +172,7 @@ class _ViewArticleState extends State<ViewArticle> {
                                         lineHeight: LineHeight.rem(1),
                                       ),
                                       'h2': Style(
-                                        color: Theme.of(context).backgroundColor,
+                                        color: Theme.of(context).primaryColor,
                                         lineHeight: LineHeight.rem(1),
                                       ),
                                       'h3': Style(

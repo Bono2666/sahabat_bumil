@@ -301,42 +301,67 @@ class _NameResultState extends State<NameResult> {
                                       ),
                                     ),
                             ),
+                            SizedBox(height: 20.0.h,),
                           ],
                         ),
                       ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
-                          Row(
+                          Stack(
                             children: [
-                              InkWell(
-                                onTap: () {
-                                  Navigator.pop(context);
-                                },
-                                child: Container(
-                                  width: 19.0.w,
-                                  height: 15.0.h,
-                                  decoration: BoxDecoration(
-                                    color: Theme.of(context).primaryColor,
-                                    borderRadius: BorderRadius.only(
-                                      bottomRight: Radius.circular(40),
+                              Column(
+                                children: [
+                                  Container(
+                                    height: 4.0.h,
+                                    color: Colors.white,
+                                  ),
+                                  Container(
+                                    height: 11.0.h,
+                                    decoration: BoxDecoration(
+                                        gradient: LinearGradient(
+                                          begin: Alignment.topCenter,
+                                          end: Alignment.bottomCenter,
+                                          colors: [
+                                            Colors.white, Colors.white.withOpacity(0.0),
+                                          ],
+                                        )
                                     ),
                                   ),
-                                  child: Stack(
-                                    alignment: AlignmentDirectional.bottomCenter,
-                                    children: [
-                                      SizedBox(
-                                        width: 19.0.w,
-                                        height: 19.0.w,
-                                        child: Icon(
-                                          Icons.arrow_back_ios_rounded,
-                                          color: Colors.white,
-                                          size: 7.0.w,
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  InkWell(
+                                    onTap: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: Container(
+                                      width: 19.0.w,
+                                      height: 15.0.h,
+                                      decoration: BoxDecoration(
+                                        color: Theme.of(context).primaryColor,
+                                        borderRadius: BorderRadius.only(
+                                          bottomRight: Radius.circular(40),
                                         ),
                                       ),
-                                    ],
+                                      child: Stack(
+                                        alignment: AlignmentDirectional.bottomCenter,
+                                        children: [
+                                          SizedBox(
+                                            width: 19.0.w,
+                                            height: 19.0.w,
+                                            child: Icon(
+                                              Icons.arrow_back_ios_rounded,
+                                              color: Colors.white,
+                                              size: 7.0.w,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
                                   ),
-                                ),
+                                ],
                               ),
                             ],
                           ),
@@ -344,6 +369,26 @@ class _NameResultState extends State<NameResult> {
                           Stack(
                             alignment: AlignmentDirectional.bottomEnd,
                             children: [
+                              Column(
+                                children: [
+                                  Container(
+                                    height: 6.4.h,
+                                    decoration: BoxDecoration(
+                                        gradient: LinearGradient(
+                                          begin: Alignment.bottomCenter,
+                                          end: Alignment.topCenter,
+                                          colors: [
+                                            Colors.white, Colors.white.withOpacity(0.0),
+                                          ],
+                                        )
+                                    ),
+                                  ),
+                                  Container(
+                                    height: 5.0.h,
+                                    color: Colors.white,
+                                  ),
+                                ],
+                              ),
                               InkWell(
                                 onTap: () {
                                   setState(() {});

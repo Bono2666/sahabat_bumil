@@ -777,7 +777,7 @@ class _CriteriaState extends State<Criteria> with SingleTickerProviderStateMixin
                                     ),
                                   ],
                                 ),
-                                SizedBox(height: 6.3.w,),
+                                SizedBox(height: 5.5.w,),
                                 Padding(
                                   padding: EdgeInsets.only(left: 1.6.w),
                                   child: Container(
@@ -810,7 +810,7 @@ class _CriteriaState extends State<Criteria> with SingleTickerProviderStateMixin
                                         onTap: () => setState(() => selected = element['category']),
                                         child: Column(
                                             children: [
-                                              SizedBox(height: 6.7.w,),
+                                              SizedBox(height: 5.5.w,),
                                               Padding(
                                                 padding: EdgeInsets.only(right: 1.6.w),
                                                 child: Row(
@@ -838,7 +838,7 @@ class _CriteriaState extends State<Criteria> with SingleTickerProviderStateMixin
                                                   ],
                                                 ),
                                               ),
-                                              SizedBox(height: 6.3.w,),
+                                              SizedBox(height: 5.5.w,),
                                               Padding(
                                                 padding: EdgeInsets.symmetric(horizontal: 1.6.w),
                                                 child: Container(
