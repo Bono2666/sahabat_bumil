@@ -4,12 +4,6 @@ class Checklist {
 
   Checklist({this.cl_id, this.cl_week, this.cl_title, this.cl_image, this.cl_checked});
 
-  int get checklist_id => checklist_id;
-  int get checklist_week => checklist_week;
-  int get checklist_title => checklist_title;
-  int get checklist_image => checklist_image;
-  int get checklist_checked => checklist_checked;
-
   factory Checklist.get(Map<String, dynamic> data) => new Checklist(
     cl_id: data['cl_id'],
     cl_week: data['cl_week'],
