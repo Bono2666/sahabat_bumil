@@ -1,24 +1,21 @@
 import 'dart:async';
 import 'package:path/path.dart';
-import 'package:sahabat_bumil_v2/model/checklist_model.dart';
+import 'package:sahabat_bumil_v2/model/criteria_model.dart';
 import 'package:sqflite/sqflite.dart';
 
-class ChecklistDb {
-  static final ChecklistDb _instance = new ChecklistDb.internal();
+class CriteriaDb {
+  static final CriteriaDb _instance = new CriteriaDb.internal();
 
-  factory ChecklistDb() => _instance;
+  factory CriteriaDb() => _instance;
 
   final String dbName = 'sahabat_bumil.db';
-  final String tableName = 'checklist';
-  final String column_id = 'cl_id';
-  final String column_week = 'cl_week';
-  final String column_title = 'cl_title';
-  final String column_image = 'cl_image';
-  final String column_checked = 'cl_checked';
+  final String tableName = 'criteria';
+  final String column_id = 'crit_id';
+  final String column_cat = 'crit_cat';
 
   static Database _db;
 
-  ChecklistDb.internal();
+  CriteriaDb.internal();
 
   Future<Database> get db async {
     if (_db != null) {
@@ -32,38 +29,30 @@ class ChecklistDb {
   initDb() async {
     String dbPath = await getDatabasesPath();
     String path = join(dbPath, dbName);
-    var db = await openDatabase(path, version: 1, onCreate: _onCreate);
+    var db = await openDatabase(path, version: 1);
+    await db.execute('create table IF NOT EXISTS $tableName ('
+        '$column_id varchar(50) PRIMARY KEY, '
+        '$column_cat varchar(50))');
     return db;
   }
 
-  void _onCreate(Database db, int version) async {
-    await db.execute('create table $tableName('
-        '$column_id varchar(3) primary key, '
-        '$column_week integer, '
-        '$column_title varchar(50), '
-        '$column_image varchar(255), '
-        '$column_checked integer)');
-  }
-
-  Future<int> insert(Checklist checklist) async {
+  Future<int> insert(CriteriaName criteria) async {
     var dbClient = await db;
-    var result = await dbClient.insert(tableName, checklist.set());
+    var result = await dbClient.insert(tableName, criteria.set());
     return result;
   }
 
-  Future<List> list(int week) async {
+  Future<List> list(String id) async {
     var dbClient = await db;
     var result = await dbClient.rawQuery(
-        'SELECT * FROM $tableName WHERE $column_week = $week'
+        'SELECT * FROM $tableName WHERE SUBSTR($column_id,1,2) = "' + id + '" ORDER BY $column_id'
     );
     return result.toList();
   }
 
-  Future<int> update(Checklist checklist) async {
+  Future<int> delete() async {
     var dbClient = await db;
-    var result = await dbClient.update(
-      tableName, checklist.set(), where: '$column_id = ?', whereArgs: [checklist.cl_id],
-    );
+    var result = await dbClient.delete(tableName);
     return result;
   }
 }

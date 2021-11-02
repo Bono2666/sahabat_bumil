@@ -1,17 +1,15 @@
-class Criteria {
-  String crit_sex, crit_pos, crit_cat;
+class CriteriaName {
+  String crit_id, crit_cat;
 
-  Criteria({this.crit_sex, this.crit_pos, this.crit_cat});
+  CriteriaName({this.crit_id, this.crit_cat});
 
-  factory Criteria.get(Map<String, dynamic> data) => new Criteria(
-    crit_sex: data['crit_sex'],
-    crit_pos: data['crit_pos'],
+  factory CriteriaName.get(Map<String, dynamic> data) => new CriteriaName(
+    crit_id: data['crit_id'],
     crit_cat: data['crit_cat'],
   );
 
   Map<String, dynamic> set() => {
-    'crit_sex': crit_sex,
-    'crit_pos': crit_pos,
+    'crit_id': crit_id,
     'crit_cat': crit_cat,
   };
 }

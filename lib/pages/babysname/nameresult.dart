@@ -301,7 +301,26 @@ class _NameResultState extends State<NameResult> {
                                       ),
                                     ),
                             ),
-                            SizedBox(height: 20.0.h,),
+                            SizedBox(height: 3.4.h,),
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 4.8.w),
+                              child: Html(
+                                data: 'Pilih <span>Ganti Nama</span> untuk rekomendasi nama '
+                                    'lainnya atau <span>Pilih Sendiri</span> rekomendasi nama '
+                                    'yang ada',
+                                style: {
+                                  'body': Style(
+                                    fontSize: FontSize(10.0.sp),
+                                    color: Theme.of(context).backgroundColor,
+                                    lineHeight: LineHeight.em(1.1),
+                                  ),
+                                  'span': Style(
+                                    color: Theme.of(context).primaryColor,
+                                  ),
+                                },
+                              ),
+                            ),
+                            SizedBox(height: 20.0.h,)
                           ],
                         ),
                       ),
@@ -405,7 +424,7 @@ class _NameResultState extends State<NameResult> {
                                       width: 40.0.w,
                                       child: Center(
                                         child: Text(
-                                          'Cari Nama',
+                                          'Ganti Nama',
                                           style: TextStyle(
                                             color: Colors.white,
                                             fontWeight: FontWeight.w500,
