@@ -46,6 +46,7 @@ dependencies:
   sqflite:
   shimmer:
   share_plus:
+  grouped_list:
 
 dev_dependencies:
   flutter_test:
@@ -88,6 +89,9 @@ flutter:
     - family: Uthmanic
       fonts:
         - asset: fonts/UthmanicHafs.otf
+    - family: Symbols
+      fonts:
+        - asset: fonts/Symbols.otf
   #       - asset: fonts/Schyler-Italic.ttf
   #         style: italic
   #

@@ -639,12 +639,12 @@ class _updPregnancyState extends State<updPregnancy> {
 
   saveProfile() async {
       await prefs.setBabyName(babyname);
-      if (sextype == null) { sextype = ''; }
+      if (sextype == null) sextype = '';
       await prefs.setSextype(sextype);
       await prefs.setHPL(hplPrefs);
       await prefs.setHPHT(hphtPrefs);
       await prefs.setBasecount(basecount);
-      Navigator.pushReplacementNamed(context, '/monitoring');
+      Navigator.pushReplacementNamed(context, prefs.getRoute);
   }
 }
 

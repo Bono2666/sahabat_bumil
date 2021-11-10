@@ -32,17 +32,14 @@ class ChecklistDb {
   initDb() async {
     String dbPath = await getDatabasesPath();
     String path = join(dbPath, dbName);
-    var db = await openDatabase(path, version: 1, onCreate: _onCreate);
-    return db;
-  }
-
-  void _onCreate(Database db, int version) async {
-    await db.execute('create table $tableName('
+    var db = await openDatabase(path, version: 1);
+    await db.execute('create table IF NOT EXISTS $tableName('
         '$column_id varchar(3) primary key, '
         '$column_week integer, '
         '$column_title varchar(50), '
         '$column_image varchar(255), '
         '$column_checked integer)');
+    return db;
   }
 
   Future<int> insert(Checklist checklist) async {

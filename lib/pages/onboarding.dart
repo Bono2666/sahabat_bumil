@@ -103,6 +103,7 @@ class _OnboardingState extends State<Onboarding>
                                 });
                               },
                               itemBuilder: (contex, index) {
+                                print(document.length.toString() + ' Slides');
                                 return SlideItem(
                                   imageUrl: document[index].get('imageUrl'),
                                 );
