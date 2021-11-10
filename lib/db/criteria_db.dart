@@ -12,6 +12,7 @@ class CriteriaDb {
   final String tableName = 'criteria';
   final String column_id = 'crit_id';
   final String column_cat = 'crit_cat';
+  final String column_filter = 'crit_filter';
 
   static Database _db;
 
@@ -32,7 +33,8 @@ class CriteriaDb {
     var db = await openDatabase(path, version: 1);
     await db.execute('create table IF NOT EXISTS $tableName ('
         '$column_id varchar(50) PRIMARY KEY, '
-        '$column_cat varchar(50))');
+        '$column_cat varchar(50), '
+        '$column_filter varchar(30))');
     return db;
   }
 
@@ -46,6 +48,27 @@ class CriteriaDb {
     var dbClient = await db;
     var result = await dbClient.rawQuery(
         'SELECT * FROM $tableName WHERE SUBSTR($column_id,1,2) = "' + id + '" ORDER BY $column_id'
+    );
+    return result.toList();
+  }
+
+  Future<List> listFilter(String id) async {
+    var dbClient = await db;
+    var result = await dbClient.rawQuery(
+        'SELECT * FROM $tableName '
+            'WHERE $column_filter <> "" AND SUBSTR($column_id,1,1) = "' + id + '" '
+            'GROUP BY $column_cat ORDER BY $column_id'
+    );
+    return result.toList();
+  }
+
+  Future<List> listCaps(String sex) async {
+    var dbClient = await db;
+    var result = await dbClient.rawQuery(
+        'SELECT * FROM $tableName '
+            'WHERE SUBSTR($column_id,1,1) = "' + sex + '" AND '
+            'SUBSTR($column_cat,1,6) = "Diawal" '
+            'GROUP BY $column_cat ORDER BY $column_cat'
     );
     return result.toList();
   }

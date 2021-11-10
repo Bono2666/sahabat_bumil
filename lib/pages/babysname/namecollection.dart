@@ -1,612 +1,487 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:sahabat_bumil_v2/db/criteria_db.dart';
+import 'package:sahabat_bumil_v2/db/fav_db.dart';
+import 'package:sahabat_bumil_v2/model/criteria_model.dart';
+import 'package:sahabat_bumil_v2/model/fav_model.dart';
 import 'package:sizer/sizer.dart';
 import 'package:fswitch/fswitch.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
-import 'package:format_indonesia/format_indonesia.dart';
-import 'package:intl/intl.dart';
-import 'package:sahabat_bumil_v2/main.dart';
 
-class addPregnancy extends StatefulWidget {
+class NameCollection extends StatefulWidget {
   @override
-  _addPregnancyState createState() => _addPregnancyState();
+  _NameCollectionState createState() => _NameCollectionState();
 }
 
-class _addPregnancyState extends State<addPregnancy> {
-  String name = '';
-  String basecount = '';
-  String title = 'Bunda';
-  String hplPrefs = '';
-  String hphtPrefs = '';
-  DateTime hpl, hpht;
-  var hplText = TextEditingController();
-  var hphtText = TextEditingController();
-  var hplResult = TextEditingController();
-  var aqiqahResult = TextEditingController();
-  var f = NumberFormat('00');
-  bool isBunda = true;
+class _NameCollectionState extends State<NameCollection> {
+  bool isPerempuan = false;
+  String title = 'Nama Laki-laki';
+  AsyncSnapshot<dynamic> dbCat, dbCap, dbName, dbFirstCap;
+  var critDb = CriteriaDb();
+  var favDb = FavDb();
+  String id = '1';
+  int selectedIndex = 0;
+  int selectedCap = 0;
+  String category, cap, sex;
+
+  @override
+  void initState() {
+    super.initState();
+
+    category = 'Semua';
+    cap = 'A';
+    sex = 'Laki-laki';
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          SingleChildScrollView(
-            physics: BouncingScrollPhysics(),
-            child: Column(
+      body: FutureBuilder(
+        future: favDb.listwcat1cap(sex, category),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData || snapshot.data == null || snapshot.hasError) {
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 7.0.w),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(height: 16.0.h,),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.end,
+                SpinKitPulse(
+                  color: Theme.of(context).primaryColor,
+                ),
+              ],
+            );
+          }
+          if (snapshot.connectionState == ConnectionState.done) {
+            dbFirstCap = snapshot;
+            if (category != 'Semua' && selectedCap == 0)
+              cap = Fav.get(dbFirstCap.data[0]).fav_name.substring(0, 1);
+          }
+          return FutureBuilder(
+            future: critDb.listFilter(id),
+            builder: (context, snapshot) {
+              if (!snapshot.hasData || snapshot.data == null || snapshot.hasError) {
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SpinKitPulse(
+                      color: Theme.of(context).primaryColor,
+                    ),
+                  ],
+                );
+              }
+              if (snapshot.connectionState == ConnectionState.done) {
+                dbCat = snapshot;
+              }
+              return FutureBuilder(
+                future: category == 'Semua' ? critDb.listCaps(id) : favDb.listCapsWCat(sex, category),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData || snapshot.data == null || snapshot.hasError) {
+                    return Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SpinKitPulse(
+                          color: Theme.of(context).primaryColor,
+                        ),
+                      ],
+                    );
+                  }
+                  if (snapshot.connectionState == ConnectionState.done) {
+                    dbCap = snapshot;
+                  }
+                  return FutureBuilder(
+                    future: category == 'Semua'
+                        ? favDb.list(sex, cap)
+                        : favDb.listwcat(sex, category, cap),
+                    builder: (context, snapshot) {
+                      if (!snapshot.hasData || snapshot.data == null || snapshot.hasError) {
+                        return Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SpinKitPulse(
+                              color: Theme.of(context).primaryColor,
+                            ),
+                          ],
+                        );
+                      }
+                      if (snapshot.connectionState == ConnectionState.done) {
+                        dbName = snapshot;
+                      }
+                      return Stack(
+                        alignment: AlignmentDirectional.topEnd,
                         children: [
-                          Expanded(
-                            child: Text(
-                              'Profil',
-                              style: TextStyle(
-                                color: Theme.of(context).backgroundColor,
-                                fontWeight: FontWeight.w700,
-                                fontSize: 24.0.sp,
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              InkWell(
+                                onTap: () {
+                                  Navigator.pop(context);
+                                },
+                                child: Container(
+                                  width: 19.0.w,
+                                  height: 15.0.h,
+                                  decoration: BoxDecoration(
+                                    color: Theme.of(context).backgroundColor,
+                                    borderRadius: BorderRadius.only(
+                                      bottomRight: Radius.circular(40),
+                                    ),
+                                  ),
+                                  child: Stack(
+                                    alignment: AlignmentDirectional.bottomCenter,
+                                    children: [
+                                      SizedBox(
+                                        width: 19.0.w,
+                                        height: 19.0.w,
+                                        child: Icon(
+                                          Icons.arrow_back_ios_new_rounded,
+                                          color: Colors.white,
+                                          size: 7.0.w,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(left: 4.4.w, bottom: 5.2.w),
+                                child: Row(
+                                  children: [
+                                    FSwitch(
+                                      open: isPerempuan,
+                                      width: 12.0.w,
+                                      height: 9.0.w,
+                                      offset: 1.0,
+                                      color: Theme.of(context).primaryColor,
+                                      openColor: Theme.of(context).primaryColor,
+                                      sliderChild: Image.asset(
+                                        isPerempuan ? 'images/ic_woman.png' : 'images/ic_man.png',
+                                        width: 3.3.w,
+                                      ),
+                                      onChanged: (value) {
+                                        setState(() {
+                                          isPerempuan = value;
+                                          if (isPerempuan) {
+                                            title = 'Nama Perempuan';
+                                            id = '2';
+                                            sex = 'Perempuan';
+                                          } else {
+                                            title = 'Nama Laki-laki';
+                                            id = '1';
+                                            sex = 'Laki-laki';
+                                          }
+                                          selectedIndex = 0;
+                                          category = 'Semua';
+                                          cap = 'A';
+                                          selectedCap = 0;
+                                        });
+                                      },
+                                    ),
+                                    SizedBox(width: 2.2.w,),
+                                    Text(
+                                      isPerempuan ? 'Nama Perempuan' : 'Nama Laki-laki',
+                                      style: TextStyle(
+                                        fontSize: 12.0.sp,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Expanded(child: SizedBox()),
+                              Padding(
+                                padding: EdgeInsets.fromLTRB(0, 0, 6.6.w, 4.0.w),
+                                child: InkWell(
+                                  onTap: () {
+                                    Navigator.pushNamed(context, '/favname');
+                                  },
+                                  child: Stack(
+                                    alignment: AlignmentDirectional.center,
+                                    children: [
+                                      Opacity(
+                                        opacity: .8,
+                                        child: Container(
+                                          width: 12.5.w,
+                                          height: 12.5.w,
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.all(
+                                              Radius.circular(30),
+                                            ),
+                                            color: Colors.white,
+                                            boxShadow: [
+                                              BoxShadow(
+                                                blurRadius: 6.0,
+                                                color: Theme.of(context).shadowColor,
+                                                offset: Offset(0, 3),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                      Container(
+                                        width: 5.6.w,
+                                        height: 5.6.w,
+                                        child: FittedBox(
+                                          child: Image.asset(
+                                            'images/ic_fav.png',
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(top: 19.1.h),
+                            child: SizedBox(
+                              height: 12.0.w,
+                              child: ListView.builder(
+                                itemCount: dbCat.data.length,
+                                physics: BouncingScrollPhysics(),
+                                scrollDirection: Axis.horizontal,
+                                padding: EdgeInsets.only(left: 6.6.w, right: 4.4.w),
+                                itemBuilder: (context, index) {
+                                  CriteriaName filterItem = CriteriaName.get(dbCat.data[index]);
+                                  var cat;
+                                  switch (filterItem.crit_filter.substring(filterItem.crit_filter.length - 5)) {
+                                    case 'Allah':
+                                      cat = Runes(filterItem.crit_filter + ' \ufdfb');
+                                      break;
+                                    case 'Nabi ':
+                                      cat = Runes(filterItem.crit_filter + '\ufdfa');
+                                      break;
+                                    default:
+                                      cat = Runes(filterItem.crit_filter);
+                                      break;
+                                  }
+                                  return Row(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      InkWell(
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.all(Radius.circular(16)),
+                                              border: Border.all(
+                                                  color: selectedIndex == index
+                                                      ? Colors.transparent : Theme.of(context).primaryColor
+                                              ),
+                                              color: selectedIndex == index
+                                                  ? Theme.of(context).primaryColor : Colors.transparent
+                                          ),
+                                          child: Padding(
+                                            padding: EdgeInsets.symmetric(vertical: 3.6.w, horizontal: 4.4.w),
+                                            child: Text(
+                                              String.fromCharCodes(cat),
+                                              style: TextStyle(
+                                                fontSize: 12.0.sp,
+                                                color: selectedIndex == index
+                                                    ? Colors.white : Theme.of(context).backgroundColor,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        onTap: () {
+                                          setState(() {
+                                            selectedIndex = index;
+                                            if (selectedIndex == 0) {
+                                              category = 'Semua';
+                                              cap = 'A';
+                                            } else {
+                                              category = filterItem.crit_cat;
+                                            }
+                                            selectedCap = 0;
+                                          });
+                                        },
+                                      ),
+                                      SizedBox(width: 2.2.w,),
+                                    ],
+                                  );
+                                },
                               ),
                             ),
                           ),
                           Padding(
-                            padding: EdgeInsets.only(right: 1.0.w),
-                            child: Column(
-                              children: [
-                                Text(
-                                  isBunda ? 'Bunda' : 'Ayah',
-                                  style: TextStyle(
-                                    fontSize: 12.0.sp,
+                            padding: EdgeInsets.only(top: 29.4.h),
+                            child: Expanded(
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(20),
+                                ),
+                                child: Container(
+                                  width: 9.2.w,
+                                  color: Theme.of(context).backgroundColor,
+                                  constraints: BoxConstraints(
+                                    minHeight: 70.6.h,
+                                  ),
+                                  child: ListView.builder(
+                                    itemCount: dbCap.data.length,
+                                    physics: BouncingScrollPhysics(),
+                                    shrinkWrap: true,
+                                    padding: EdgeInsets.fromLTRB(0,0,0,6.4.w),
+                                    itemBuilder: (context, index) {
+                                      CriteriaName capsItem = CriteriaName.get(dbCap.data[index]);
+                                      Fav capsCatItem = Fav.get(dbCap.data[index]);
+                                      return InkWell(
+                                        onTap: () {
+                                          setState(() {
+                                            selectedCap = index;
+                                            if (category == 'Semua') {
+                                              cap = capsItem.crit_cat.substring(
+                                                  capsItem.crit_cat.length - 1,
+                                                  capsItem.crit_cat.length);
+                                            } else {
+                                              cap = capsCatItem.fav_name.substring(0,1);
+                                            }
+                                          });
+                                        },
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(20),
+                                              bottomRight: Radius.circular(20),
+                                            ),
+                                            color: selectedCap == index
+                                                ? Theme.of(context).primaryColor : Colors.transparent,
+                                          ),
+                                          child: Padding(
+                                            padding: EdgeInsets.all(3.3.w),
+                                            child: Center(
+                                              child: Text(
+                                                category == 'Semua'
+                                                    ? capsItem.crit_cat.substring(capsItem.crit_cat.length-1,capsItem.crit_cat.length)
+                                                    : capsCatItem.fav_name.substring(0,1),
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.w700,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    },
                                   ),
                                 ),
-                                SizedBox(height: 1.0.h,),
-                                FSwitch(
-                                  open: isBunda,
-                                  width: 12.0.w,
-                                  height: 9.0.w,
-                                  offset: 1.0,
-                                  color: Theme.of(context).primaryColor,
-                                  openColor: Theme.of(context).primaryColor,
-                                  sliderChild: Image.asset(
-                                    isBunda ? 'images/ic_bunda.png' : 'images/ic_ayah.png',
-                                    width: 3.3.w,
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(left: 6.6.w, top: 29.4.h, right: 12.5.w),
+                            child: Row(
+                              children: [
+                                SizedBox(
+                                  child: Text(
+                                    'Nama',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: 10.0.sp,
+                                    ),
                                   ),
-                                  onChanged: (value) {
-                                    setState(() {
-                                      isBunda = value;
-                                      if (isBunda) {
-                                        title = 'Bunda';
-                                      } else { title = 'Ayah'; }
-                                    });
+                                  width: 27.8.w,
+                                ),
+                                Text(
+                                  'Arti',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 10.0.sp,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(left: 6.6.w, top: 32.8.h, right: 12.5.w),
+                            child: Expanded(
+                              child: SizedBox(
+                                child: ListView.builder(
+                                  itemCount: dbName.data.length,
+                                  physics: BouncingScrollPhysics(),
+                                  padding: EdgeInsets.fromLTRB(0, 0, 0, 4.0.h),
+                                  itemBuilder: (context, index) {
+                                    Fav nameItem = Fav.get(dbName.data[index]);
+                                    return Container(
+                                      decoration: BoxDecoration(
+                                        border: Border(
+                                          bottom: BorderSide(
+                                            color: Theme.of(context).secondaryHeaderColor,
+                                          ),
+                                        ),
+                                      ),
+                                      child: Padding(
+                                        padding: EdgeInsets.only(bottom: 1.0.h),
+                                        child: Row(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Padding(
+                                              padding: EdgeInsets.only(top: 1.8.h,),
+                                              child: SizedBox(
+                                                child: Text(
+                                                  nameItem.fav_name,
+                                                  style: TextStyle(
+                                                    fontSize: 12.0.sp,
+                                                    color: Theme.of(context).backgroundColor,
+                                                  ),
+                                                ),
+                                                width: 26.0.w,
+                                              ),
+                                            ),
+                                            Flexible(
+                                              child: Padding(
+                                                padding: EdgeInsets.only(top: 0.5.h),
+                                                child: Html(
+                                                  data: nameItem.fav_desc,
+                                                  style: {
+                                                    'body': Style(
+                                                      fontSize: FontSize(12.0.sp),
+                                                      color: Theme.of(context).backgroundColor,
+                                                      lineHeight: LineHeight(1.0.sp),
+                                                    ),
+                                                  },
+                                                ),
+                                              ),
+                                            ),
+                                            InkWell(
+                                              child: Padding(
+                                                padding: EdgeInsets.only(top: 1.8.h),
+                                                child: Image.asset(
+                                                  nameItem.fav_check == 0 ? 'images/ic_unfav.png' : 'images/ic_fav.png',
+                                                  width: 5.6.w,
+                                                ),
+                                              ),
+                                              onTap: () {
+                                                if (nameItem.fav_check == 1) {
+                                                  var check = Fav(
+                                                    fav_id: nameItem.fav_id,
+                                                    fav_check: 0,
+                                                  );
+                                                  favDb.update(check);
+                                                } else {
+                                                  var check = Fav(
+                                                    fav_id: nameItem.fav_id,
+                                                    fav_check: 1,
+                                                  );
+                                                  favDb.update(check);
+                                                }
+                                                setState(() {});
+                                              },
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    );
                                   },
                                 ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 4.0.h,),
-                      Text(
-                        'Nama Lengkap',
-                        style: TextStyle(
-                          fontSize: 13.0.sp,
-                          color: Theme.of(context).backgroundColor,
-                        ),
-                      ),
-                      TextField(
-                        onChanged: (String str) {
-                          setState(() {
-                            name = str;
-                          });
-                        },
-                        cursorColor: Colors.black,
-                        style: TextStyle(
-                          fontSize: 15.0.sp,
-                        ),
-                      ),
-                      SizedBox(height: 3.0.h,),
-                      Text(
-                        'Sudah tahu kapan HPL Anda?',
-                        style: TextStyle(
-                          fontSize: 13.0.sp,
-                          color: Theme.of(context).backgroundColor,
-                        ),
-                      ),
-                      TextField(
-                        controller: hplText,
-                        cursorColor: Colors.black,
-                        readOnly: true,
-                        onTap: () {
-                          DatePicker.showDatePicker(
-                            context,
-                            minTime: DateTime.now(),
-                            maxTime: DateTime.now().add(Duration(days: 280)),
-                            onConfirm: (date) {
-                              setState(() {
-                                hpl = date;
-                                hpht = date.subtract(Duration(days: 280));
-                                hplPrefs = f.format(hpl.day).toString() + f.format(hpl.month).toString() + hpl.year.toString();
-                                hphtPrefs = f.format(hpht.day).toString() + f.format(hpht.month).toString() + hpht.year.toString();
-                                basecount = 'hpl';
-                                hplText.text = Waktu(hpl).yMMMMd();
-                                hphtText.text = '';
-                                hplResult.text = Waktu(hpl).yMMMMEEEEd();
-                                aqiqahResult.text = Waktu(hpl.add(Duration(days: 6))).yMMMMEEEEd();
-                              });
-                            },
-                            theme: DatePickerTheme(
-                              itemStyle: TextStyle(
-                                fontFamily: 'Ubuntu',
-                                fontSize: 15.0.sp,
-                                color: Theme.of(context).backgroundColor,
-                              ),
-                              doneStyle: TextStyle(
-                                fontFamily: 'Ubuntu',
-                                color: Theme.of(context).backgroundColor,
-                              ),
-                              cancelStyle: TextStyle(
-                                fontFamily: 'Ubuntu',
-                                color: Theme.of(context).primaryColor,
                               ),
                             ),
-                          );
-                        },
-                        decoration: InputDecoration(
-                          suffixIcon: Container(
-                            margin: EdgeInsets.fromLTRB(4.4.w, 2.2.w, 2.2.w, 4.4.w),
-                            height: 3.0.h,
-                            child: Image.asset(
-                              'images/ic_cal.png',
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                          hintText: 'Masukkan HPL menurut dokter',
-                          hintStyle: TextStyle(
-                            color: Theme.of(context).hintColor,
-                            fontSize: 15.0.sp,
-                          ),
-                        ),
-                        style: TextStyle(
-                          fontSize: 15.0.sp,
-                        ),
-                      ),
-                      SizedBox(height: 1.0.h,),
-                      Row(
-                        children: [
-                          Container(
-                            width: 4.0.w,
-                            height: 4.0.w,
-                            child: new Image.asset(
-                              'images/ic_info.png',
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                          SizedBox(width: 1.0.w,),
-                          Text(
-                            'HPL : Hari Perkiraan Lahir',
-                            style: TextStyle(
-                              fontSize: 10.0.sp,
-                              color: Theme.of(context).primaryColor,
-                            ),
                           ),
                         ],
-                      ),
-                      SizedBox(height: 3.0.h,),
-                      Text(
-                        'atau',
-                        style: TextStyle(
-                          fontSize: 12.0.sp,
-                          color: Theme.of(context).backgroundColor,
-                        ),
-                      ),
-                      SizedBox(height: 3.0.h,),
-                      Text(
-                        'Hitung HPL berdasarkan HPHT',
-                        style: TextStyle(
-                          fontSize: 13.0.sp,
-                          color: Theme.of(context).backgroundColor,
-                        ),
-                      ),
-                      TextField(
-                        controller: hphtText,
-                        readOnly: true,
-                        onTap: () {
-                          DatePicker.showDatePicker(
-                              context,
-                              theme: DatePickerTheme(
-                                itemStyle: TextStyle(
-                                  fontFamily: 'Ubuntu',
-                                  fontSize: 15.0.sp,
-                                  color: Theme.of(context).backgroundColor,
-                                ),
-                                doneStyle: TextStyle(
-                                  fontFamily: 'Ubuntu',
-                                  color: Theme.of(context).backgroundColor,
-                                ),
-                                cancelStyle: TextStyle(
-                                  fontFamily: 'Ubuntu',
-                                  color: Theme.of(context).primaryColor,
-                                ),
-                              ),
-                              minTime: DateTime.now().subtract(Duration(days: 280)),
-                              maxTime: DateTime.now(),
-                              onConfirm: (date) {
-                                setState(() {
-                                  hpht = date;
-                                  hpl = date.add(Duration(days: 280));
-                                  hplPrefs = f.format(hpl.day).toString() + f.format(hpl.month).toString() + hpl.year.toString();
-                                  hphtPrefs = f.format(hpht.day).toString() + f.format(hpht.month).toString() + hpht.year.toString();
-                                  basecount = 'hpht';
-                                  hplText.text = '';
-                                  hphtText.text = Waktu(hpht).yMMMMd();
-                                  hplResult.text = Waktu(hpl).yMMMMEEEEd();
-                                  aqiqahResult.text = Waktu(hpl.add(Duration(days: 6))).yMMMMEEEEd();
-                                });
-                              }
-                          );
-                        },
-                        decoration: InputDecoration(
-                          suffixIcon: Container(
-                            margin: EdgeInsets.fromLTRB(4.4.w, 2.2.w, 2.2.w, 4.4.w),
-                            height: 3.0.h,
-                            child: Image.asset(
-                              'images/ic_cal.png',
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                          hintText: 'Masukkan HPHT Anda',
-                          hintStyle: TextStyle(
-                            color: Theme.of(context).hintColor,
-                            fontSize: 15.0.sp,
-                          ),
-                        ),
-                        cursorColor: Colors.black,
-                        style: TextStyle(
-                          fontSize: 15.0.sp,
-                        ),
-                      ),
-                      SizedBox(height: 1.0.h,),
-                      Row(
-                        children: [
-                          Container(
-                            width: 4.0.w,
-                            height: 4.0.w,
-                            child: new Image.asset(
-                              'images/ic_info.png',
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                          SizedBox(width: 1.0.w,),
-                          Text(
-                            'HPHT : Hari Pertama Haid Terakhir',
-                            style: TextStyle(
-                              fontSize: 10.0.sp,
-                              color: Theme.of(context).primaryColor,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                (hplText.text == '') && (hphtText.text == '') ? Container()
-                : Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(height: 3.0.h,),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 7.0.w),
-                      child: Text(
-                        'Insya Allah hari perkiraan lahir bayi Anda adalah',
-                        style: TextStyle(
-                          fontSize: 13.0.sp,
-                          fontWeight: FontWeight.w500,
-                          height: 1.5,
-                          color: Theme.of(context).backgroundColor,
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 3.0.h,),
-                    Container(
-                      height: 10.0.h,
-                      color: Theme.of(context).primaryColor,
-                      padding: EdgeInsets.symmetric(horizontal: 7.0.w),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          TextField(
-                            enabled: false,
-                            controller: hplResult,
-                            style: TextStyle(
-                              fontSize: 15.0.sp,
-                              color: Colors.white
-                            ),
-                            decoration: InputDecoration(
-                              border: InputBorder.none,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(height: 4.0.h,),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 7.0.w),
-                      child: Text(
-                        'Insya Allah hari aqiqah bayi Anda adalah',
-                        style: TextStyle(
-                          fontSize: 13.0.sp,
-                          fontWeight: FontWeight.w500,
-                          height: 1.5,
-                          color: Theme.of(context).backgroundColor,
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 3.0.h,),
-                    Container(
-                      height: 10.0.h,
-                      color: Theme.of(context).primaryColor,
-                      padding: EdgeInsets.symmetric(horizontal: 7.0.w),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          TextField(
-                            enabled: false,
-                            controller: aqiqahResult,
-                            style: TextStyle(
-                                fontSize: 15.0.sp,
-                                color: Colors.white
-                            ),
-                            decoration: InputDecoration(
-                              border: InputBorder.none,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(height: 20.0.h,),
-                  ],
-                ),
-              ],
-            ),
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Stack(
-                children: [
-                  Column(
-                    children: [
-                      Container(
-                        height: 4.0.h,
-                        color: Colors.white,
-                      ),
-                      Container(
-                        height: 11.0.h,
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                            colors: [
-                              Colors.white, Colors.white.withOpacity(0.0),
-                            ],
-                          )
-                        ),
-                      ),
-                    ],
-                  ),
-                  InkWell(
-                    onTap: () {
-                      Navigator.pushReplacementNamed(context, '/');
+                      );
                     },
-                    child: Container(
-                      width: 19.0.w,
-                      height: 15.0.h,
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).primaryColor,
-                        borderRadius: BorderRadius.only(
-                          bottomRight: Radius.circular(40),
-                        ),
-                      ),
-                      child: Stack(
-                        alignment: AlignmentDirectional.bottomCenter,
-                        children: [
-                          SizedBox(
-                            width: 19.0.w,
-                            height: 19.0.w,
-                            child: Icon(
-                              Icons.close,
-                              color: Colors.white,
-                              size: 7.0.w,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Expanded(child: SizedBox()),
-              Stack(
-                alignment: AlignmentDirectional.bottomEnd,
-                children: [
-                  Column(
-                    children: [
-                      Container(
-                        height: 6.4.h,
-                        decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              begin: Alignment.bottomCenter,
-                              end: Alignment.topCenter,
-                              colors: [
-                                Colors.white, Colors.white.withOpacity(0.0),
-                              ],
-                            )
-                        ),
-                      ),
-                      Container(
-                        height: 5.0.h,
-                        color: Colors.white,
-                      ),
-                    ],
-                  ),
-                  InkWell(
-                    onTap: saveProfile,
-                    child: Container(
-                      width: 74.0.w,
-                      height: 12.0.h,
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).backgroundColor,
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(40),
-                        ),
-                      ),
-                      child: Center(
-                        child: Text(
-                          'Simpan',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w500,
-                            fontSize: 15.0.sp,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  saveProfile() async {
-    if ((hplText.text == '') && (hphtText.text == '')) {
-      showDialog(
-        context: context,
-        builder: (_) => alert(),
-        barrierDismissible: false,
-      );
-    } else {
-      await prefs.setName(name);
-      await prefs.setTitle(title);
-      await prefs.setHPL(hplPrefs);
-      await prefs.setHPHT(hphtPrefs);
-      await prefs.setBasecount(basecount);
-      await prefs.setFirstlaunch(false);
-      Navigator.pushReplacementNamed(context, '/monitoring');
-    }
-  }
-}
-
-class alert extends StatefulWidget {
-  @override
-  _alertState createState() => _alertState();
-}
-
-class _alertState extends State<alert> with SingleTickerProviderStateMixin {
-  AnimationController controller;
-  Animation<double> scaleAnimation;
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-
-    controller = AnimationController(
-      vsync: this,
-      duration: Duration(seconds: 1),
-    );
-
-    scaleAnimation = CurvedAnimation(
-      parent: controller,
-      curve: Curves.elasticInOut,
-    );
-
-    controller.addListener(() {
-      setState(() {});
-    });
-
-    controller.forward();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return ScaleTransition(
-      scale: scaleAnimation,
-      child: Material(
-        color: Colors.transparent,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              width: 80.0.w,
-              constraints: BoxConstraints(
-                minHeight: 24.0.w,
-              ),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(
-                  Radius.circular(24),
-                ),
-                color: Colors.white,
-                boxShadow: [
-                  BoxShadow(
-                    color: Theme.of(context).dialogBackgroundColor,
-                    blurRadius: 24,
-                    offset: Offset(0, 24),
-                  ),
-                ],
-              ),
-              child: Padding(
-                padding: EdgeInsets.fromLTRB(7.8.w, 5.0.w, 7.8.w, 5.0.w),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'HPL atau HPHT harus diisi.',
-                      textAlign: TextAlign.left,
-                      style: TextStyle(
-                        color: Theme.of(context).backgroundColor,
-                        fontFamily: 'Ubuntu',
-                        fontWeight: FontWeight.w400,
-                        fontSize: 13.0.sp,
-                        height: 1.5,
-                      ),
-                    ),
-                    SizedBox(height: 7.0.h,),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Ink(
-                          child: InkWell(
-                            onTap: () {
-                              Navigator.pop(context);
-                            },
-                            child: Container(
-                              width: 8.8.h,
-                              height: 8.8.h,
-                              child: Image.asset(
-                                'images/ic_ok.png',
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    )
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
+                  );
+                },
+              );
+            },
+          );
+        },
       ),
     );
   }

@@ -371,7 +371,7 @@ class _NameResultState extends State<NameResult> {
                                             width: 19.0.w,
                                             height: 19.0.w,
                                             child: Icon(
-                                              Icons.arrow_back_ios_rounded,
+                                              Icons.arrow_back_ios_new_rounded,
                                               color: Colors.white,
                                               size: 7.0.w,
                                             ),
@@ -439,6 +439,9 @@ class _NameResultState extends State<NameResult> {
                               Padding(
                                 padding: EdgeInsets.only(right: 40.0.w),
                                 child: InkWell(
+                                  onTap: () {
+                                    Navigator.pushNamed(context, '/namecollection');
+                                  },
                                   child: Stack(
                                     alignment: AlignmentDirectional.centerEnd,
                                     children: [

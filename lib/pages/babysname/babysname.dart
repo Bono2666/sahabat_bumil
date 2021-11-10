@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:sahabat_bumil_v2/db/criteria_db.dart';
 import 'package:sahabat_bumil_v2/model/criteria_model.dart';
 import 'package:sizer/sizer.dart';
@@ -9,7 +8,7 @@ import 'package:sahabat_bumil_v2/main.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_html/flutter_html.dart';
 
-String fieldName, currCat, popTitle, oldSexType, pilih;
+String parID, currCat, popTitle, oldSexType, pilih;
 String prefix = 'Acak';
 String middle = 'Acak';
 String sufix = 'Acak';
@@ -21,15 +20,6 @@ class BabysName extends StatefulWidget {
 }
 
 class _BabysNameState extends State<BabysName> {
-  List<QueryDocumentSnapshot> boysname1,
-      boysname2,
-      boysname3,
-      girlsname1,
-      girlsname2,
-      girlsname3;
-  var db = CriteriaDb();
-  var f = NumberFormat('00');
-
   @override
   void initState() {
     super.initState();
@@ -71,9 +61,7 @@ class _BabysNameState extends State<BabysName> {
                           fontSize: 24.0.sp,
                         ),
                       ),
-                      SizedBox(
-                        height: 1.9.h,
-                      ),
+                      SizedBox(height: 1.9.h,),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -183,8 +171,7 @@ class _BabysNameState extends State<BabysName> {
                                         decoration: BoxDecoration(
                                           border: Border(
                                             top: BorderSide(
-                                              color:
-                                                  Theme.of(context).dividerColor,
+                                              color: Theme.of(context).dividerColor,
                                             ),
                                           ),
                                         ),
@@ -295,7 +282,7 @@ class _BabysNameState extends State<BabysName> {
                               barrierDismissible: false,
                             );
                           } else {
-                            fieldName = sextype == 'Laki-laki' ? '11' : '21';
+                            parID = sextype == 'Laki-laki' ? '11' : '21';
                             currCat = prefix;
                             popTitle = 'Kriteria Nama Depan';
                             showDialog(
@@ -373,7 +360,7 @@ class _BabysNameState extends State<BabysName> {
                               barrierDismissible: false,
                             );
                           } else {
-                            fieldName = sextype == 'Laki-laki' ? '12' : '22';
+                            parID = sextype == 'Laki-laki' ? '12' : '22';
                             currCat = middle;
                             popTitle = 'Kriteria Nama Tengah';
                             showDialog(
@@ -451,7 +438,7 @@ class _BabysNameState extends State<BabysName> {
                               barrierDismissible: false,
                             );
                           } else {
-                            fieldName = sextype == 'Laki-laki' ? '13' : '23';
+                            parID = sextype == 'Laki-laki' ? '13' : '23';
                             currCat = sufix;
                             popTitle = 'Kriteria Nama Belakang';
                             showDialog(
@@ -643,6 +630,9 @@ class _BabysNameState extends State<BabysName> {
                     Padding(
                       padding: EdgeInsets.only(right: 40.0.w),
                       child: InkWell(
+                        onTap: () {
+                          Navigator.pushNamed(context, '/namecollection');
+                        },
                         child: Stack(
                           alignment: AlignmentDirectional.centerEnd,
                           children: [
@@ -721,7 +711,7 @@ class _CriteriaState extends State<Criteria>
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: db.list(fieldName),
+      future: db.list(parID),
       builder: (context, snapshot) {
         if (!snapshot.hasData || snapshot.data == null || snapshot.hasError) {
           return Column(
@@ -866,7 +856,7 @@ class _CriteriaState extends State<Criteria>
                                 itemCount: snapshot.data.length,
                                 physics: BouncingScrollPhysics(),
                                 padding: EdgeInsets.only(
-                                    left: 5.2.w, right: 5.2.w, bottom: 14.0.h),
+                                    left: 6.6.w, right: 6.6.w, bottom: 14.0.h),
                                 itemBuilder: (context, index) {
                                   CriteriaName criteriaItem =
                                       CriteriaName.get(snapshot.data[index]);
@@ -997,7 +987,7 @@ class _CriteriaState extends State<Criteria>
                               InkWell(
                                 onTap: () {
                                   if (selected != null) {
-                                    switch (fieldName.substring(1, 2)) {
+                                    switch (parID.substring(1, 2)) {
                                       case '1':
                                         prefix = selected;
                                         break;

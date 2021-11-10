@@ -73,7 +73,7 @@ class _addPregnancyState extends State<addPregnancy> {
                                   color: Theme.of(context).primaryColor,
                                   openColor: Theme.of(context).primaryColor,
                                   sliderChild: Image.asset(
-                                    isBunda ? 'images/ic_bunda.png' : 'images/ic_ayah.png',
+                                    isBunda ? 'images/ic_woman.png' : 'images/ic_man.png',
                                     width: 3.3.w,
                                   ),
                                   onChanged: (value) {
