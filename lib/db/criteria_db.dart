@@ -62,17 +62,6 @@ class CriteriaDb {
     return result.toList();
   }
 
-  Future<List> listCaps(String sex) async {
-    var dbClient = await db;
-    var result = await dbClient.rawQuery(
-        'SELECT * FROM $tableName '
-            'WHERE SUBSTR($column_id,1,1) = "' + sex + '" AND '
-            'SUBSTR($column_cat,1,6) = "Diawal" '
-            'GROUP BY $column_cat ORDER BY $column_cat'
-    );
-    return result.toList();
-  }
-
   Future<int> delete() async {
     var dbClient = await db;
     var result = await dbClient.delete(tableName);

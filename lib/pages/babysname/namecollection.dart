@@ -73,7 +73,7 @@ class _NameCollectionState extends State<NameCollection> {
                 dbCat = snapshot;
               }
               return FutureBuilder(
-                future: category == 'Semua' ? critDb.listCaps(id) : favDb.listCapsWCat(sex, category),
+                future: category == 'Semua' ? favDb.listCapsAll(sex) : favDb.listCapsWCat(sex, category),
                 builder: (context, snapshot) {
                   if (!snapshot.hasData || snapshot.data == null || snapshot.hasError) {
                     return Column(
@@ -318,19 +318,12 @@ class _NameCollectionState extends State<NameCollection> {
                                     shrinkWrap: true,
                                     padding: EdgeInsets.fromLTRB(0,0,0,6.4.w),
                                     itemBuilder: (context, index) {
-                                      CriteriaName capsItem = CriteriaName.get(dbCap.data[index]);
                                       Fav capsCatItem = Fav.get(dbCap.data[index]);
                                       return InkWell(
                                         onTap: () {
                                           setState(() {
                                             selectedCap = index;
-                                            if (category == 'Semua') {
-                                              cap = capsItem.crit_cat.substring(
-                                                  capsItem.crit_cat.length - 1,
-                                                  capsItem.crit_cat.length);
-                                            } else {
-                                              cap = capsCatItem.fav_name.substring(0,1);
-                                            }
+                                            cap = capsCatItem.fav_name.substring(0,1);
                                           });
                                         },
                                         child: Container(
@@ -346,9 +339,7 @@ class _NameCollectionState extends State<NameCollection> {
                                             padding: EdgeInsets.all(3.3.w),
                                             child: Center(
                                               child: Text(
-                                                category == 'Semua'
-                                                    ? capsItem.crit_cat.substring(capsItem.crit_cat.length-1,capsItem.crit_cat.length)
-                                                    : capsCatItem.fav_name.substring(0,1),
+                                                capsCatItem.fav_name.substring(0,1),
                                                 style: TextStyle(
                                                   color: Colors.white,
                                                   fontWeight: FontWeight.w700,

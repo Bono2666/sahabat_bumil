@@ -87,6 +87,16 @@ class FavDb {
     return result.toList();
   }
 
+  Future<List> listCapsAll(String sex) async {
+    var dbClient = await db;
+    var result = await dbClient.rawQuery(
+        'SELECT *, SUBSTR($column_name,1,1) AS caps FROM $tableName '
+            'WHERE $column_sex = "' + sex + '" AND $column_desc != "" '
+            'GROUP BY caps ORDER BY caps'
+    );
+    return result.toList();
+  }
+
   Future<List> listCapsWCat(String sex, String cat) async {
     var dbClient = await db;
     var result = await dbClient.rawQuery(
