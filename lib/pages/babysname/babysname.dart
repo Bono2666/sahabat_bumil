@@ -619,7 +619,7 @@ class _BabysNameState extends State<BabysName> {
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.w500,
-                                  fontSize: 15.0.sp,
+                                  fontSize: 13.0.sp,
                                 ),
                               ),
                             ),
@@ -652,7 +652,7 @@ class _BabysNameState extends State<BabysName> {
                                   style: TextStyle(
                                     color: Colors.white,
                                     fontWeight: FontWeight.w500,
-                                    fontSize: 15.0.sp,
+                                    fontSize: 13.0.sp,
                                   ),
                                 ),
                               ),
@@ -806,7 +806,7 @@ class _CriteriaState extends State<Criteria>
                             ),
                           ),
                           Padding(
-                            padding: EdgeInsets.only(left: 5.2.w, right: 6.8.w),
+                            padding: EdgeInsets.only(left: 5.2.w, right: 6.7.w),
                             child: Column(
                               children: [
                                 Row(
@@ -856,7 +856,7 @@ class _CriteriaState extends State<Criteria>
                                 itemCount: snapshot.data.length,
                                 physics: BouncingScrollPhysics(),
                                 padding: EdgeInsets.only(
-                                    left: 6.6.w, right: 6.6.w, bottom: 14.0.h),
+                                    left: 5.2.w, right: 5.2.w, bottom: 14.0.h),
                                 itemBuilder: (context, index) {
                                   CriteriaName criteriaItem =
                                       CriteriaName.get(snapshot.data[index]);
@@ -1024,7 +1024,7 @@ class _CriteriaState extends State<Criteria>
                                       style: TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.w500,
-                                        fontSize: 15.0.sp,
+                                        fontSize: 13.0.sp,
                                       ),
                                     ),
                                   ),

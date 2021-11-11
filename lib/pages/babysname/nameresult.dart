@@ -373,7 +373,7 @@ class _NameResultState extends State<NameResult> {
                                             child: Icon(
                                               Icons.arrow_back_ios_new_rounded,
                                               color: Colors.white,
-                                              size: 7.0.w,
+                                              size: 5.2.w,
                                             ),
                                           ),
                                         ],
@@ -428,7 +428,7 @@ class _NameResultState extends State<NameResult> {
                                           style: TextStyle(
                                             color: Colors.white,
                                             fontWeight: FontWeight.w500,
-                                            fontSize: 15.0.sp,
+                                            fontSize: 13.0.sp,
                                           ),
                                         ),
                                       ),
@@ -461,7 +461,7 @@ class _NameResultState extends State<NameResult> {
                                             style: TextStyle(
                                               color: Colors.white,
                                               fontWeight: FontWeight.w500,
-                                              fontSize: 15.0.sp,
+                                              fontSize: 13.0.sp,
                                             ),
                                           ),
                                         ),

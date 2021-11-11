@@ -621,7 +621,7 @@ class _updPregnancyState extends State<updPregnancy> {
                             style: TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.w500,
-                              fontSize: 15.0.sp,
+                              fontSize: 13.0.sp,
                             ),
                           ),
                         ),

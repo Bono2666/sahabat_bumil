@@ -59,7 +59,7 @@ class _FavNameState extends State<FavName> {
                         child: Icon(
                           Icons.arrow_back_ios_new_rounded,
                           color: Colors.white,
-                          size: 7.0.w,
+                          size: 5.2.w,
                         ),
                       ),
                     ],

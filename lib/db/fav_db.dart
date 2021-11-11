@@ -57,7 +57,7 @@ class FavDb {
     var dbClient = await db;
     var result = await dbClient.rawQuery(
         'SELECT * FROM $tableName WHERE $column_sex = "' + sex + '" AND '
-            'SUBSTR($column_name, 1, 1) = "' + cap + '" AND $column_desc != ""'
+            'SUBSTR($column_name, 1, 1) = "' + cap + '" AND $column_desc != "" ORDER BY $column_name'
     );
     return result.toList();
   }
@@ -66,7 +66,7 @@ class FavDb {
     var dbClient = await db;
     var result = await dbClient.rawQuery(
         'SELECT * FROM $tableName WHERE $column_sex = "' + sex + '" AND $column_cat = "' + cat + '" AND '
-            'SUBSTR($column_name, 1, 1) = "' + cap + '" AND $column_desc != ""'
+            'SUBSTR($column_name, 1, 1) = "' + cap + '" AND $column_desc != "" ORDER BY $column_name'
     );
     return result.toList();
   }
@@ -82,7 +82,7 @@ class FavDb {
   Future<List> listfav() async {
     var dbClient = await db;
     var result = await dbClient.rawQuery(
-        'SELECT * FROM $tableName WHERE $column_check = 1'
+        'SELECT * FROM $tableName WHERE $column_check = 1 ORDER BY $column_name'
     );
     return result.toList();
   }

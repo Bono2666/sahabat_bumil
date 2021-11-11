@@ -134,7 +134,7 @@ class _NameCollectionState extends State<NameCollection> {
                                         child: Icon(
                                           Icons.arrow_back_ios_new_rounded,
                                           color: Colors.white,
-                                          size: 7.0.w,
+                                          size: 5.2.w,
                                         ),
                                       ),
                                     ],
@@ -341,6 +341,7 @@ class _NameCollectionState extends State<NameCollection> {
                                               child: Text(
                                                 capsCatItem.fav_name.substring(0,1),
                                                 style: TextStyle(
+                                                  fontSize: 10.0.sp,
                                                   color: Colors.white,
                                                   fontWeight: FontWeight.w700,
                                                 ),
