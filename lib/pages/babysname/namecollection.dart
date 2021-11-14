@@ -233,7 +233,7 @@ class _NameCollectionState extends State<NameCollection> {
                           Padding(
                             padding: EdgeInsets.only(top: 19.1.h),
                             child: SizedBox(
-                              height: 12.0.w,
+                              height: 11.6.w,
                               child: ListView.builder(
                                 itemCount: dbCat.data.length,
                                 physics: BouncingScrollPhysics(),
@@ -268,7 +268,7 @@ class _NameCollectionState extends State<NameCollection> {
                                                   ? Theme.of(context).primaryColor : Colors.transparent
                                           ),
                                           child: Padding(
-                                            padding: EdgeInsets.symmetric(vertical: 3.6.w, horizontal: 4.4.w),
+                                            padding: EdgeInsets.fromLTRB(4.4.w, 3.0.w, 4.4.w, 3.6.w),
                                             child: Text(
                                               String.fromCharCodes(cat),
                                               style: TextStyle(
@@ -440,20 +440,21 @@ class _NameCollectionState extends State<NameCollection> {
                                                 ),
                                               ),
                                               onTap: () {
-                                                if (nameItem.fav_check == 1) {
-                                                  var check = Fav(
-                                                    fav_id: nameItem.fav_id,
-                                                    fav_check: 0,
-                                                  );
-                                                  favDb.update(check);
-                                                } else {
-                                                  var check = Fav(
-                                                    fav_id: nameItem.fav_id,
-                                                    fav_check: 1,
-                                                  );
-                                                  favDb.update(check);
-                                                }
-                                                setState(() {});
+                                                setState(() {
+                                                  if (nameItem.fav_check == 1) {
+                                                    var check = Fav(
+                                                      fav_id: nameItem.fav_id,
+                                                      fav_check: 0,
+                                                    );
+                                                    favDb.update(check);
+                                                  } else {
+                                                    var check = Fav(
+                                                      fav_id: nameItem.fav_id,
+                                                      fav_check: 1,
+                                                    );
+                                                    favDb.update(check);
+                                                  }
+                                                });
                                               },
                                             ),
                                           ],
