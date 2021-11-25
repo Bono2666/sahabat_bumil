@@ -49,6 +49,7 @@ class _NameResultState extends State<NameResult> {
             if (prefs.getPrefix.substring(0, 4) == 'Diaw') {
               while (prefixResult[0].get('category') == 'Acak'
                   || prefixResult[0].get('category') == 'Tidak pakai'
+                  || prefixResult[0].get('status') == 'delete'
                   || prefixName.substring(0, 1)
                       != prefs.getPrefix.substring(prefs.getPrefix.length - 1)) {
                 prefixResult.shuffle();
@@ -57,11 +58,13 @@ class _NameResultState extends State<NameResult> {
             } else if (prefs.getPrefix == 'Acak') {
               while (prefixResult[0].get('category') == 'Acak'
                   || prefixResult[0].get('category') == 'Tidak pakai'
+                  || prefixResult[0].get('status') == 'delete'
                   || prefixResult[0].get('category') == prefs.getMiddle
                   || prefixResult[0].get('category') == prefs.getSufix)
                 prefixResult.shuffle();
             } else if (prefs.getPrefix != 'Tidak pakai') {
               while (prefixResult[0].get('category') == 'Acak'
+                  || prefixResult[0].get('status') == 'delete'
                   || prefixResult[0].get('category') == 'Tidak pakai')
                 prefixResult.shuffle();
             }
@@ -99,6 +102,7 @@ class _NameResultState extends State<NameResult> {
                 if (prefs.getMiddle.substring(0, 4) == 'Diaw') {
                   while (middleResult[0].get('category') == 'Acak'
                       || middleResult[0].get('category') == 'Tidak pakai'
+                      || middleResult[0].get('status') == 'delete'
                       || middleResult[0].get('category') == prefixResult[0].get('category')
                       || middleName.substring(0, 1)
                           != prefs.getMiddle.substring(prefs.getMiddle.length - 1)) {
@@ -108,12 +112,14 @@ class _NameResultState extends State<NameResult> {
                 } else if (prefs.getMiddle == 'Acak') {
                   while (middleResult[0].get('category') == 'Acak'
                       || middleResult[0].get('category') == 'Tidak pakai'
+                      || middleResult[0].get('status') == 'delete'
                       || middleResult[0].get('category') ==
                           prefixResult[0].get('category')
                       || middleResult[0].get('category') == prefs.getSufix)
                     middleResult.shuffle();
                 } else if (prefs.getMiddle != 'Tidak pakai') {
                   while (middleResult[0].get('category') == 'Acak'
+                      || middleResult[0].get('status') == 'delete'
                       || middleResult[0].get('category') == 'Tidak pakai')
                     middleResult.shuffle();
                 }
@@ -151,6 +157,7 @@ class _NameResultState extends State<NameResult> {
                     if (prefs.getSufix.substring(0, 4) == 'Diaw') {
                       while (sufixResult[0].get('category') == 'Acak'
                           || sufixResult[0].get('category') == 'Tidak pakai'
+                          || sufixResult[0].get('status') == 'delete'
                           || sufixResult[0].get('category') == prefixResult[0].get('category')
                           || sufixResult[0].get('category') == middleResult[0].get('category')
                           || sufixName.substring(0, 1)
@@ -161,6 +168,7 @@ class _NameResultState extends State<NameResult> {
                     } else if (prefs.getSufix == 'Acak') {
                       while (sufixResult[0].get('category') == 'Acak'
                           || sufixResult[0].get('category') == 'Tidak pakai'
+                          || sufixResult[0].get('status') == 'delete'
                           || sufixResult[0].get('category') ==
                               prefixResult[0].get('category')
                           || sufixResult[0].get('category') ==
@@ -168,6 +176,7 @@ class _NameResultState extends State<NameResult> {
                         sufixResult.shuffle();
                     } else if (prefs.getSufix != 'Tidak pakai') {
                       while (sufixResult[0].get('category') == 'Acak'
+                          || sufixResult[0].get('status') == 'delete'
                           || sufixResult[0].get('category') == 'Tidak pakai')
                         sufixResult.shuffle();
                     }
