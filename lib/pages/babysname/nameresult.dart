@@ -230,19 +230,17 @@ class _NameResultState extends State<NameResult> {
                             ),
                             Padding(
                               padding: EdgeInsets.symmetric(horizontal: 6.7.w,),
-                              child: Flexible(
-                                child: Text(
-                                  (prefs.getPrefix == 'Tidak pakai'
-                                      ? '' : prefixResult[0].get('name') + ' ') +
-                                      (prefs.getMiddle == 'Tidak pakai'
-                                          ? '' : middleResult[0].get('name') + ' ') +
-                                      (prefs.getSufix == 'Tidak pakai'
-                                          ? '' : sufixResult[0].get('name')),
-                                  style: TextStyle(
-                                    color: Theme.of(context).primaryColor,
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: 20.0.sp,
-                                  ),
+                              child: Text(
+                                (prefs.getPrefix == 'Tidak pakai'
+                                    ? '' : prefixResult[0].get('name') + ' ') +
+                                    (prefs.getMiddle == 'Tidak pakai'
+                                        ? '' : middleResult[0].get('name') + ' ') +
+                                    (prefs.getSufix == 'Tidak pakai'
+                                        ? '' : sufixResult[0].get('name')),
+                                style: TextStyle(
+                                  color: Theme.of(context).primaryColor,
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 20.0.sp,
                                 ),
                               ),
                             ),
@@ -251,64 +249,58 @@ class _NameResultState extends State<NameResult> {
                               padding: EdgeInsets.symmetric(horizontal: 4.8.w),
                               child: prefs.getPrefix == 'Tidak pakai'
                                   ? Container()
-                                  : Flexible(
-                                    child: Html(
-                                      data: '<span>' + prefixResult[0].get('name')
-                                          + '</span> artinya ' + prefixResult[0].get('desc'),
-                                      style: {
-                                        'body': Style(
-                                          fontSize: FontSize(13.0.sp),
-                                          color: Theme.of(context).backgroundColor,
-                                          lineHeight: LineHeight.em(1.1),
-                                        ),
-                                        'span': Style(
-                                          fontWeight: FontWeight.w700,
-                                        ),
-                                      },
-                                    ),
+                                  : Html(
+                                    data: '<span>' + prefixResult[0].get('name')
+                                        + '</span> artinya ' + prefixResult[0].get('desc'),
+                                    style: {
+                                      'body': Style(
+                                        fontSize: FontSize(13.0.sp),
+                                        color: Theme.of(context).backgroundColor,
+                                        lineHeight: LineHeight.em(1.1),
+                                      ),
+                                      'span': Style(
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    },
                                   ),
                             ),
                             Padding(
                               padding: EdgeInsets.symmetric(horizontal: 4.8.w,),
                               child: prefs.getMiddle == 'Tidak pakai'
                                   ? Container()
-                                  : Flexible(
-                                    child: Html(
-                                      data: '<span>' + middleResult[0].get('name')
-                                          + '</span> artinya ' + middleResult[0].get('desc'),
-                                      style: {
-                                        'body': Style(
-                                          fontSize: FontSize(13.0.sp),
-                                          color: Theme.of(context).backgroundColor,
-                                          lineHeight: LineHeight.em(1.1),
-                                        ),
-                                        'span': Style(
-                                          fontWeight: FontWeight.w700,
-                                        ),
-                                      },
-                                    ),
+                                  : Html(
+                                    data: '<span>' + middleResult[0].get('name')
+                                        + '</span> artinya ' + middleResult[0].get('desc'),
+                                    style: {
+                                      'body': Style(
+                                        fontSize: FontSize(13.0.sp),
+                                        color: Theme.of(context).backgroundColor,
+                                        lineHeight: LineHeight.em(1.1),
+                                      ),
+                                      'span': Style(
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    },
                                   ),
                             ),
                             Padding(
                               padding: EdgeInsets.symmetric(horizontal: 4.8.w,),
                               child: prefs.getSufix == 'Tidak pakai'
                                   ? Container()
-                                  : Flexible(
-                                      child: Html(
-                                        data: '<span>' + sufixResult[0].get('name') +
-                                            '</span> artinya ' + sufixResult[0].get('desc'),
-                                        style: {
-                                          'body': Style(
-                                            fontSize: FontSize(13.0.sp),
-                                            color: Theme.of(context).backgroundColor,
-                                            lineHeight: LineHeight.em(1.1),
-                                          ),
-                                          'span': Style(
-                                            fontWeight: FontWeight.w700,
-                                          ),
-                                        },
+                                  : Html(
+                                    data: '<span>' + sufixResult[0].get('name') +
+                                        '</span> artinya ' + sufixResult[0].get('desc'),
+                                    style: {
+                                      'body': Style(
+                                        fontSize: FontSize(13.0.sp),
+                                        color: Theme.of(context).backgroundColor,
+                                        lineHeight: LineHeight.em(1.1),
                                       ),
-                                    ),
+                                      'span': Style(
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    },
+                                  ),
                             ),
                             SizedBox(height: 3.4.h,),
                             Padding(

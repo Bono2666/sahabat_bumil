@@ -319,57 +319,53 @@ class _NameCollectionState extends State<NameCollection> {
                           ),
                           Padding(
                             padding: EdgeInsets.only(top: 29.4.h),
-                            child: Expanded(
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(20),
-                                ),
-                                child: Container(
-                                  width: 9.2.w,
-                                  color: Theme.of(context).backgroundColor,
-                                  constraints: BoxConstraints(
-                                    minHeight: 70.6.h,
-                                  ),
-                                  child: ListView.builder(
-                                    itemCount: dbCap.data.length,
-                                    physics: BouncingScrollPhysics(),
-                                    shrinkWrap: true,
-                                    padding: EdgeInsets.fromLTRB(0,0,0,6.4.w),
-                                    itemBuilder: (context, index) {
-                                      Fav capsCatItem = Fav.get(dbCap.data[index]);
-                                      return InkWell(
-                                        onTap: () {
-                                          setState(() {
-                                            selectedCap = index;
-                                            cap = capsCatItem.fav_name.substring(0,1);
-                                          });
-                                        },
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.only(
-                                              topLeft: Radius.circular(20),
-                                              bottomRight: Radius.circular(20),
-                                            ),
-                                            color: selectedCap == index
-                                                ? Theme.of(context).primaryColor : Colors.transparent,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(20),
+                              ),
+                              child: Container(
+                                width: 9.2.w,
+                                color: Theme.of(context).backgroundColor,
+                                constraints: BoxConstraints(minHeight: 70.6.h,),
+                                child: ListView.builder(
+                                  itemCount: dbCap.data.length,
+                                  physics: BouncingScrollPhysics(),
+                                  shrinkWrap: true,
+                                  padding: EdgeInsets.fromLTRB(0,0,0,6.4.w),
+                                  itemBuilder: (context, index) {
+                                    Fav capsCatItem = Fav.get(dbCap.data[index]);
+                                    return InkWell(
+                                      onTap: () {
+                                        setState(() {
+                                          selectedCap = index;
+                                          cap = capsCatItem.fav_name.substring(0,1);
+                                        });
+                                      },
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.only(
+                                            topLeft: Radius.circular(20),
+                                            bottomRight: Radius.circular(20),
                                           ),
-                                          child: Padding(
-                                            padding: EdgeInsets.all(3.3.w),
-                                            child: Center(
-                                              child: Text(
-                                                capsCatItem.fav_name.substring(0,1),
-                                                style: TextStyle(
-                                                  fontSize: 10.0.sp,
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.w700,
-                                                ),
+                                          color: selectedCap == index
+                                              ? Theme.of(context).primaryColor : Colors.transparent,
+                                        ),
+                                        child: Padding(
+                                          padding: EdgeInsets.all(3.3.w),
+                                          child: Center(
+                                            child: Text(
+                                              capsCatItem.fav_name.substring(0,1),
+                                              style: TextStyle(
+                                                fontSize: 10.0.sp,
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.w700,
                                               ),
                                             ),
                                           ),
                                         ),
-                                      );
-                                    },
-                                  ),
+                                      ),
+                                    );
+                                  },
                                 ),
                               ),
                             ),
@@ -400,87 +396,85 @@ class _NameCollectionState extends State<NameCollection> {
                           ),
                           Padding(
                             padding: EdgeInsets.only(left: 6.6.w, top: 32.8.h, right: 12.5.w),
-                            child: Expanded(
-                              child: SizedBox(
-                                child: ListView.builder(
-                                  itemCount: dbName.data.length,
-                                  physics: BouncingScrollPhysics(),
-                                  padding: EdgeInsets.fromLTRB(0, 0, 0, 4.0.h),
-                                  itemBuilder: (context, index) {
-                                    Fav nameItem = Fav.get(dbName.data[index]);
-                                    return Container(
-                                      decoration: BoxDecoration(
-                                        border: Border(
-                                          bottom: BorderSide(
-                                            color: Theme.of(context).secondaryHeaderColor,
+                            child: SizedBox(
+                              child: ListView.builder(
+                                itemCount: dbName.data.length,
+                                physics: BouncingScrollPhysics(),
+                                padding: EdgeInsets.fromLTRB(0, 0, 0, 4.0.h),
+                                itemBuilder: (context, index) {
+                                  Fav nameItem = Fav.get(dbName.data[index]);
+                                  return Container(
+                                    decoration: BoxDecoration(
+                                      border: Border(
+                                        bottom: BorderSide(
+                                          color: Theme.of(context).secondaryHeaderColor,
+                                        ),
+                                      ),
+                                    ),
+                                    child: Padding(
+                                      padding: EdgeInsets.only(bottom: 1.0.h),
+                                      child: Row(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Padding(
+                                            padding: EdgeInsets.only(top: 1.8.h,),
+                                            child: SizedBox(
+                                              child: Text(
+                                                nameItem.fav_name,
+                                                style: TextStyle(
+                                                  fontSize: 12.0.sp,
+                                                  color: Theme.of(context).backgroundColor,
+                                                ),
+                                              ),
+                                              width: 26.0.w,
+                                            ),
                                           ),
-                                        ),
-                                      ),
-                                      child: Padding(
-                                        padding: EdgeInsets.only(bottom: 1.0.h),
-                                        child: Row(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Padding(
-                                              padding: EdgeInsets.only(top: 1.8.h,),
-                                              child: SizedBox(
-                                                child: Text(
-                                                  nameItem.fav_name,
-                                                  style: TextStyle(
-                                                    fontSize: 12.0.sp,
+                                          Flexible(
+                                            child: Padding(
+                                              padding: EdgeInsets.only(top: 0.5.h),
+                                              child: Html(
+                                                data: nameItem.fav_desc,
+                                                style: {
+                                                  'body': Style(
+                                                    fontSize: FontSize(12.0.sp),
                                                     color: Theme.of(context).backgroundColor,
+                                                    lineHeight: LineHeight(1.0.sp),
                                                   ),
-                                                ),
-                                                width: 26.0.w,
+                                                },
                                               ),
                                             ),
-                                            Flexible(
-                                              child: Padding(
-                                                padding: EdgeInsets.only(top: 0.5.h),
-                                                child: Html(
-                                                  data: nameItem.fav_desc,
-                                                  style: {
-                                                    'body': Style(
-                                                      fontSize: FontSize(12.0.sp),
-                                                      color: Theme.of(context).backgroundColor,
-                                                      lineHeight: LineHeight(1.0.sp),
-                                                    ),
-                                                  },
-                                                ),
+                                          ),
+                                          InkWell(
+                                            child: Padding(
+                                              padding: EdgeInsets.only(top: 1.8.h),
+                                              child: Image.asset(
+                                                nameItem.fav_check == 0 ? 'images/ic_unfav.png' : 'images/ic_fav.png',
+                                                width: 5.6.w,
                                               ),
                                             ),
-                                            InkWell(
-                                              child: Padding(
-                                                padding: EdgeInsets.only(top: 1.8.h),
-                                                child: Image.asset(
-                                                  nameItem.fav_check == 0 ? 'images/ic_unfav.png' : 'images/ic_fav.png',
-                                                  width: 5.6.w,
-                                                ),
-                                              ),
-                                              onTap: () {
-                                                setState(() {
-                                                  if (nameItem.fav_check == 1) {
-                                                    var check = Fav(
-                                                      fav_id: nameItem.fav_id,
-                                                      fav_check: 0,
-                                                    );
-                                                    favDb.updateFav(check);
-                                                  } else {
-                                                    var check = Fav(
-                                                      fav_id: nameItem.fav_id,
-                                                      fav_check: 1,
-                                                    );
-                                                    favDb.updateFav(check);
-                                                  }
-                                                });
-                                              },
-                                            ),
-                                          ],
-                                        ),
+                                            onTap: () {
+                                              setState(() {
+                                                if (nameItem.fav_check == 1) {
+                                                  var check = Fav(
+                                                    fav_id: nameItem.fav_id,
+                                                    fav_check: 0,
+                                                  );
+                                                  favDb.updateFav(check);
+                                                } else {
+                                                  var check = Fav(
+                                                    fav_id: nameItem.fav_id,
+                                                    fav_check: 1,
+                                                  );
+                                                  favDb.updateFav(check);
+                                                }
+                                              });
+                                            },
+                                          ),
+                                        ],
                                       ),
-                                    );
-                                  },
-                                ),
+                                    ),
+                                  );
+                                },
                               ),
                             ),
                           ),
