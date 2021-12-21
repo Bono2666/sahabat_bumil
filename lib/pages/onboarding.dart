@@ -197,7 +197,7 @@ class _OnboardingState extends State<Onboarding>
             ),
             InkWell(
               onTap: () {
-                Navigator.pushReplacementNamed(context, '/addpregnancy');
+                Navigator.pushReplacementNamed(context, '/home');
               },
               child: Container(
                 height: 14.0.h,

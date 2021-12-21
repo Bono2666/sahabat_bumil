@@ -40,7 +40,7 @@ class _BabysNameState extends State<BabysName> {
         middle = 'Acak';
         sufix = 'Acak';
         sextype = prefs.getSextype.isNotEmpty ? prefs.getSextype : '';
-        Navigator.pushReplacementNamed(context, '/monitoring');
+        Navigator.pushReplacementNamed(context, prefs.getRoute);
         return;
       },
       child: Scaffold(
@@ -511,7 +511,7 @@ class _BabysNameState extends State<BabysName> {
                         sufix = 'Acak';
                         sextype =
                             prefs.getSextype.isNotEmpty ? prefs.getSextype : '';
-                        Navigator.pushReplacementNamed(context, '/monitoring');
+                        Navigator.pushReplacementNamed(context, prefs.getRoute);
                       },
                       child: Container(
                         width: 19.0.w,

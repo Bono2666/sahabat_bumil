@@ -3,14 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:sahabat_bumil_v2/db/fav_db.dart';
 import 'package:sahabat_bumil_v2/model/fav_model.dart';
+import 'package:sahabat_bumil_v2/pages/aqiqah/aqiqah.dart';
 import 'package:sahabat_bumil_v2/pages/babysname/babysname.dart';
 import 'package:sahabat_bumil_v2/pages/babysname/favname.dart';
 import 'package:sahabat_bumil_v2/pages/babysname/namecollection.dart';
 import 'package:sahabat_bumil_v2/pages/babysname/nameresult.dart';
+import 'package:sahabat_bumil_v2/pages/features.dart';
 import 'package:sahabat_bumil_v2/pages/onboarding.dart';
 import 'package:sahabat_bumil_v2/pages/addpregnancy.dart';
 import 'package:sahabat_bumil_v2/pages/monitoring.dart';
+import 'package:sahabat_bumil_v2/pages/search.dart';
 import 'package:sahabat_bumil_v2/pages/updpregnancy.dart';
+import 'package:sahabat_bumil_v2/pages/home.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:sahabat_bumil_v2/pages/viewarticle.dart';
 import 'package:sizer/sizer.dart';
@@ -109,7 +113,7 @@ class MyTheme extends StatelessWidget {
                   theme: ThemeData(
                     fontFamily: 'Ubuntu',
 
-                    highlightColor: Color(0xfFFDDCC7),
+                    highlightColor: Color(0xffFDDCC7),
                     secondaryHeaderColor: Color(0xffFFC5A0),
                     primaryColorLight: Color(0xffFFA971),
                     primaryColor: Color(0xffFF8C42),
@@ -119,6 +123,9 @@ class MyTheme extends StatelessWidget {
                     disabledColor: Color(0xffA7A7A7),
                     shadowColor: Color(0x32000000),
                     dialogBackgroundColor: Color(0x30000000),
+                    unselectedWidgetColor: Color(0xff757575),
+                    primaryColorDark: Color(0xff484848),
+                    toggleableActiveColor: Color(0x38000000),
 
                     textSelectionTheme: TextSelectionThemeData(
                       cursorColor: Colors.black,
@@ -145,7 +152,7 @@ class MyTheme extends StatelessWidget {
                     ),
                   ),
 
-                  initialRoute: prefs.getFirstlaunch == false ? '/monitoring' : '/',
+                  initialRoute: prefs.getFirstlaunch == false ? '/home' : '/',
                   // ignore: missing_return
                   onGenerateRoute: (RouteSettings settings) {
                     switch (settings.name) {
@@ -167,6 +174,14 @@ class MyTheme extends StatelessWidget {
                         return SlideLeftRoute(page: NameCollection());
                       case '/favname':
                         return SlideLeftRoute(page: FavName());
+                      case '/home':
+                        return SlideUpRoute(page: Home());
+                      case '/features':
+                        return SlideDownRoute(page: Features());
+                      case '/search':
+                        return NoSlideRoute(page: Search());
+                      case '/aqiqah':
+                        return SlideUpRoute(page: Aqiqah());
                     }
                   },
                 );
@@ -213,6 +228,7 @@ class SharedPrefs {
   int get getSelectedIndexName => _prefs.getInt('selectedindexname') ?? 0;
   int get getSelectedCapName => _prefs.getInt('selectedcapname') ?? 0;
   String get getIdName => _prefs.getString('idname') ?? '';
+  String get getGoRoute => _prefs.getString('goroute') ?? '';
 
   setFirstlaunch(bool value) => _prefs.setBool('firstlaunch', value);
   setName(String value) => _prefs.setString('name', value);
@@ -237,6 +253,7 @@ class SharedPrefs {
   setSelectedIndexName(int value) => _prefs.setInt('selectedindexname', value);
   setSelectedCapName(int value) => _prefs.setInt('selectedcapname', value);
   setIdName(String value) => _prefs.setString('idname', value);
+  setGoRoute(String value) => _prefs.setString('goroute', value);
 }
 
 class SlideUpRoute extends PageRouteBuilder {
@@ -270,6 +287,48 @@ class SlideLeftRoute extends PageRouteBuilder {
         return SlideTransition(
           position: Tween(
             begin: const Offset(1.2,0),
+            end: Offset.zero,
+          ).animate(animation),
+          child: child,
+        );
+      },
+      pageBuilder: (BuildContext context, Animation<double> animation, Animation<double> secAnimation) {
+        return page;
+      }
+  );
+}
+
+class SlideDownRoute extends PageRouteBuilder {
+  final Widget page;
+
+  SlideDownRoute({this.page}) :super(
+      transitionDuration: Duration(seconds: 1),
+      transitionsBuilder: (BuildContext context, Animation<double> animation, Animation<double> secAnimation, Widget child) {
+        animation = CurvedAnimation(parent: animation, curve: Curves.elasticInOut);
+        return SlideTransition(
+          position: Tween(
+            begin: const Offset(0,-1.2),
+            end: Offset.zero,
+          ).animate(animation),
+          child: child,
+        );
+      },
+      pageBuilder: (BuildContext context, Animation<double> animation, Animation<double> secAnimation) {
+        return page;
+      }
+  );
+}
+
+class NoSlideRoute extends PageRouteBuilder {
+  final Widget page;
+
+  NoSlideRoute({this.page}) :super(
+      transitionDuration: Duration(seconds: 0),
+      transitionsBuilder: (BuildContext context, Animation<double> animation, Animation<double> secAnimation, Widget child) {
+        animation = CurvedAnimation(parent: animation, curve: Curves.elasticInOut);
+        return SlideTransition(
+          position: Tween(
+            begin: Offset.zero,
             end: Offset.zero,
           ).animate(animation),
           child: child,

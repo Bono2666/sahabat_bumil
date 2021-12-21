@@ -19,7 +19,9 @@ class _FavNameState extends State<FavName> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () => Navigator.pushReplacementNamed(context, '/namecollection'),
+      onWillPop: () {
+        return Navigator.pushReplacementNamed(context, '/namecollection');
+      },
       child: Scaffold(
         body: FutureBuilder(
           future: favDb.listfav(),
