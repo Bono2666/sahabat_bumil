@@ -401,7 +401,7 @@ class _addPregnancyState extends State<addPregnancy> {
                   ),
                   InkWell(
                     onTap: () {
-                      Navigator.pushReplacementNamed(context, '/');
+                      Navigator.pushReplacementNamed(context, prefs.getRoute);
                     },
                     child: Container(
                       width: 19.0.w,
@@ -500,7 +500,7 @@ class _addPregnancyState extends State<addPregnancy> {
       await prefs.setHPHT(hphtPrefs);
       await prefs.setBasecount(basecount);
       await prefs.setFirstlaunch(false);
-      Navigator.pushReplacementNamed(context, '/monitoring');
+      Navigator.pushReplacementNamed(context, prefs.getGoRoute);
     }
   }
 }
@@ -587,7 +587,7 @@ class _alertState extends State<alert> with SingleTickerProviderStateMixin {
                         Ink(
                           child: InkWell(
                             onTap: () {
-                              Navigator.pop(context);
+                              Navigator.pushReplacementNamed(context, prefs.getRoute);
                             },
                             child: Container(
                               width: 8.8.h,

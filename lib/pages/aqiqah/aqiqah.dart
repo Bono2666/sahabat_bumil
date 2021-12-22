@@ -11,12 +11,12 @@ import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:shimmer/shimmer.dart';
 
-class Monitoring extends StatefulWidget {
+class Aqiqah extends StatefulWidget {
   @override
-  _MonitoringState createState() => _MonitoringState();
+  _AqiqahState createState() => _AqiqahState();
 }
 
-class _MonitoringState extends State<Monitoring> {
+class _AqiqahState extends State<Aqiqah> {
   int currentPage, totalDays;
   String imageUrl = '', imgChecklist = '';
   PageController pageController;
@@ -25,7 +25,6 @@ class _MonitoringState extends State<Monitoring> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     DateTime hpht = DateTime(
@@ -1086,7 +1085,8 @@ class _MonitoringState extends State<Monitoring> {
                           padding: EdgeInsets.only(right: 6.6.w,),
                           child: InkWell(
                             onTap: () {
-                              Navigator.pushNamed(context, '/features');
+                              prefs.setRoute('/monitoring');
+                              Navigator.pushReplacementNamed(context, '/updpregnancy');
                             },
                             child: Stack(
                               alignment: AlignmentDirectional.center,

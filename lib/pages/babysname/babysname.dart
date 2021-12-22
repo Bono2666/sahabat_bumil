@@ -1,14 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:sahabat_bumil_v2/db/criteria_db.dart';
-import 'package:sahabat_bumil_v2/model/criteria_model.dart';
+import 'package:sahabat_bumil_v2/db/fav_db.dart';
+import 'package:sahabat_bumil_v2/model/fav_model.dart';
 import 'package:sizer/sizer.dart';
 import 'package:sahabat_bumil_v2/main.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_html/flutter_html.dart';
 
-String parID, currCat, popTitle, oldSexType, pilih;
+String parID, currCat, popTitle, oldSexType, pilih, col;
 String prefix = 'Acak';
 String middle = 'Acak';
 String sufix = 'Acak';
@@ -40,7 +40,7 @@ class _BabysNameState extends State<BabysName> {
         middle = 'Acak';
         sufix = 'Acak';
         sextype = prefs.getSextype.isNotEmpty ? prefs.getSextype : '';
-        Navigator.pushReplacementNamed(context, '/monitoring');
+        Navigator.pushReplacementNamed(context, prefs.getRoute);
         return;
       },
       child: Scaffold(
@@ -284,6 +284,7 @@ class _BabysNameState extends State<BabysName> {
                           } else {
                             parID = sextype == 'Laki-laki' ? '11' : '21';
                             currCat = prefix;
+                            col = 'fav_prefix';
                             popTitle = 'Kriteria Nama Depan';
                             showDialog(
                               context: context,
@@ -362,6 +363,7 @@ class _BabysNameState extends State<BabysName> {
                           } else {
                             parID = sextype == 'Laki-laki' ? '12' : '22';
                             currCat = middle;
+                            col = 'fav_middle';
                             popTitle = 'Kriteria Nama Tengah';
                             showDialog(
                               context: context,
@@ -440,6 +442,7 @@ class _BabysNameState extends State<BabysName> {
                           } else {
                             parID = sextype == 'Laki-laki' ? '13' : '23';
                             currCat = sufix;
+                            col = 'fav_sufix';
                             popTitle = 'Kriteria Nama Belakang';
                             showDialog(
                               context: context,
@@ -508,7 +511,7 @@ class _BabysNameState extends State<BabysName> {
                         sufix = 'Acak';
                         sextype =
                             prefs.getSextype.isNotEmpty ? prefs.getSextype : '';
-                        Navigator.pushReplacementNamed(context, '/monitoring');
+                        Navigator.pushReplacementNamed(context, prefs.getRoute);
                       },
                       child: Container(
                         width: 19.0.w,
@@ -683,7 +686,7 @@ class _CriteriaState extends State<Criteria>
   Animation<double> scaleAnimation;
   List<QueryDocumentSnapshot> babysname;
   String selected;
-  var db = CriteriaDb();
+  var dbCat = FavDb();
 
   @override
   void initState() {
@@ -711,7 +714,8 @@ class _CriteriaState extends State<Criteria>
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: db.list(parID),
+      // future: db.list(parID),
+      future: dbCat.listCatDrop(sextype, col),
       builder: (context, snapshot) {
         if (!snapshot.hasData || snapshot.data == null || snapshot.hasError) {
           return Column(
@@ -855,16 +859,14 @@ class _CriteriaState extends State<Criteria>
                               child: ListView.builder(
                                 itemCount: snapshot.data.length,
                                 physics: BouncingScrollPhysics(),
-                                padding: EdgeInsets.only(
-                                    left: 5.2.w, right: 5.2.w, bottom: 14.0.h),
+                                padding: EdgeInsets.only(left: 5.2.w, right: 5.2.w, bottom: 14.0.h),
                                 itemBuilder: (context, index) {
-                                  CriteriaName criteriaItem =
-                                      CriteriaName.get(snapshot.data[index]);
-                                  return criteriaItem.crit_cat == currCat
+                                  Fav criteriaItem = Fav.get(snapshot.data[index]);
+                                  return criteriaItem.fav_cat == currCat
                                       ? Container()
                                       : InkWell(
                                           onTap: () => setState(() =>
-                                              selected = criteriaItem.crit_cat),
+                                              selected = criteriaItem.fav_cat),
                                           child: Column(
                                             children: [
                                               SizedBox(height: 5.5.w,),
@@ -875,7 +877,7 @@ class _CriteriaState extends State<Criteria>
                                                     Expanded(
                                                       child: SizedBox(
                                                         child: Html(
-                                                          data: criteriaItem.crit_cat,
+                                                          data: criteriaItem.fav_cat,
                                                           style: {
                                                             'body': Style(
                                                               fontSize: FontSize(17.0.sp),
@@ -888,8 +890,7 @@ class _CriteriaState extends State<Criteria>
                                                     ),
                                                     // Expanded(child: SizedBox(),),
                                                     Image.asset(
-                                                      criteriaItem.crit_cat ==
-                                                              selected
+                                                      criteriaItem.fav_cat == selected
                                                           ? 'images/ic_checked.png'
                                                           : 'images/ic_radio.png',
                                                       height: 8.9.w,
@@ -897,12 +898,9 @@ class _CriteriaState extends State<Criteria>
                                                   ],
                                                 ),
                                               ),
-                                              SizedBox(
-                                                height: 5.5.w,
-                                              ),
+                                              SizedBox(height: 5.5.w,),
                                               Padding(
-                                                padding: EdgeInsets.symmetric(
-                                                    horizontal: 1.6.w),
+                                                padding: EdgeInsets.symmetric(horizontal: 1.6.w),
                                                 child: Container(
                                                   decoration: BoxDecoration(
                                                     border: Border(

@@ -3,9 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:sahabat_bumil_v2/db/criteria_db.dart';
 import 'package:sahabat_bumil_v2/db/fav_db.dart';
-import 'package:sahabat_bumil_v2/model/criteria_model.dart';
+import 'package:sahabat_bumil_v2/main.dart';
 import 'package:sahabat_bumil_v2/model/fav_model.dart';
 import 'package:sizer/sizer.dart';
 import 'package:fswitch/fswitch.dart';
@@ -19,20 +18,31 @@ class _NameCollectionState extends State<NameCollection> {
   bool isPerempuan = false;
   String title = 'Nama Laki-laki';
   AsyncSnapshot<dynamic> dbCat, dbCap, dbName, dbFirstCap;
-  var critDb = CriteriaDb();
   var favDb = FavDb();
   String id = '1';
   int selectedIndex = 0;
   int selectedCap = 0;
   String category, cap, sex;
+  bool openFavName = false;
 
   @override
   void initState() {
     super.initState();
 
-    category = 'Semua';
-    cap = 'A';
-    sex = 'Laki-laki';
+    if (prefs.getOpenFavName) {
+      category = prefs.getCatName;
+      selectedIndex = prefs.getSelectedIndexName;
+      id = prefs.getIdName;
+      cap = prefs.getCapName;
+      selectedCap = prefs.getSelectedCapName;
+      sex = prefs.getSexName;
+      isPerempuan = prefs.getIsPerempuanName;
+      prefs.setOpenFavName(false);
+    } else {
+      category = 'Semua';
+      cap = 'A';
+      sex = 'Laki-laki';
+    }
   }
 
   @override
@@ -57,7 +67,7 @@ class _NameCollectionState extends State<NameCollection> {
               cap = Fav.get(dbFirstCap.data[0]).fav_name.substring(0, 1);
           }
           return FutureBuilder(
-            future: critDb.listFilter(id),
+            future: favDb.listCat(sex),
             builder: (context, snapshot) {
               if (!snapshot.hasData || snapshot.data == null || snapshot.hasError) {
                 return Column(
@@ -190,7 +200,15 @@ class _NameCollectionState extends State<NameCollection> {
                                 padding: EdgeInsets.fromLTRB(0, 0, 6.6.w, 4.0.w),
                                 child: InkWell(
                                   onTap: () {
-                                    Navigator.pushNamed(context, '/favname');
+                                    prefs.setIsPerempuanName(isPerempuan);
+                                    prefs.setSexName(sex);
+                                    prefs.setSelectedIndexName(selectedIndex);
+                                    prefs.setIdName(id);
+                                    prefs.setCatName(category);
+                                    prefs.setSelectedCapName(selectedCap);
+                                    prefs.setCapName(cap);
+                                    prefs.setOpenFavName(true);
+                                    Navigator.pushReplacementNamed(context, '/favname');
                                   },
                                   child: Stack(
                                     alignment: AlignmentDirectional.center,
@@ -240,17 +258,17 @@ class _NameCollectionState extends State<NameCollection> {
                                 scrollDirection: Axis.horizontal,
                                 padding: EdgeInsets.only(left: 6.6.w, right: 4.4.w),
                                 itemBuilder: (context, index) {
-                                  CriteriaName filterItem = CriteriaName.get(dbCat.data[index]);
+                                  Fav filterItem = Fav.get(dbCat.data[index]);
                                   var cat;
-                                  switch (filterItem.crit_filter.substring(filterItem.crit_filter.length - 5)) {
+                                  switch (filterItem.fav_filter.substring(filterItem.fav_filter.length - 5)) {
                                     case 'Allah':
-                                      cat = Runes(filterItem.crit_filter + ' \ufdfb');
+                                      cat = Runes(filterItem.fav_filter + ' \ufdfb');
                                       break;
                                     case 'Nabi ':
-                                      cat = Runes(filterItem.crit_filter + '\ufdfa');
+                                      cat = Runes(filterItem.fav_filter + '\ufdfa');
                                       break;
                                     default:
-                                      cat = Runes(filterItem.crit_filter);
+                                      cat = Runes(filterItem.fav_filter);
                                       break;
                                   }
                                   return Row(
@@ -286,7 +304,7 @@ class _NameCollectionState extends State<NameCollection> {
                                               category = 'Semua';
                                               cap = 'A';
                                             } else {
-                                              category = filterItem.crit_cat;
+                                              category = filterItem.fav_cat;
                                             }
                                             selectedCap = 0;
                                           });
@@ -301,57 +319,53 @@ class _NameCollectionState extends State<NameCollection> {
                           ),
                           Padding(
                             padding: EdgeInsets.only(top: 29.4.h),
-                            child: Expanded(
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(20),
-                                ),
-                                child: Container(
-                                  width: 9.2.w,
-                                  color: Theme.of(context).backgroundColor,
-                                  constraints: BoxConstraints(
-                                    minHeight: 70.6.h,
-                                  ),
-                                  child: ListView.builder(
-                                    itemCount: dbCap.data.length,
-                                    physics: BouncingScrollPhysics(),
-                                    shrinkWrap: true,
-                                    padding: EdgeInsets.fromLTRB(0,0,0,6.4.w),
-                                    itemBuilder: (context, index) {
-                                      Fav capsCatItem = Fav.get(dbCap.data[index]);
-                                      return InkWell(
-                                        onTap: () {
-                                          setState(() {
-                                            selectedCap = index;
-                                            cap = capsCatItem.fav_name.substring(0,1);
-                                          });
-                                        },
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.only(
-                                              topLeft: Radius.circular(20),
-                                              bottomRight: Radius.circular(20),
-                                            ),
-                                            color: selectedCap == index
-                                                ? Theme.of(context).primaryColor : Colors.transparent,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(20),
+                              ),
+                              child: Container(
+                                width: 9.2.w,
+                                color: Theme.of(context).backgroundColor,
+                                constraints: BoxConstraints(minHeight: 70.6.h,),
+                                child: ListView.builder(
+                                  itemCount: dbCap.data.length,
+                                  physics: BouncingScrollPhysics(),
+                                  shrinkWrap: true,
+                                  padding: EdgeInsets.fromLTRB(0,0,0,6.4.w),
+                                  itemBuilder: (context, index) {
+                                    Fav capsCatItem = Fav.get(dbCap.data[index]);
+                                    return InkWell(
+                                      onTap: () {
+                                        setState(() {
+                                          selectedCap = index;
+                                          cap = capsCatItem.fav_name.substring(0,1);
+                                        });
+                                      },
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.only(
+                                            topLeft: Radius.circular(20),
+                                            bottomRight: Radius.circular(20),
                                           ),
-                                          child: Padding(
-                                            padding: EdgeInsets.all(3.3.w),
-                                            child: Center(
-                                              child: Text(
-                                                capsCatItem.fav_name.substring(0,1),
-                                                style: TextStyle(
-                                                  fontSize: 10.0.sp,
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.w700,
-                                                ),
+                                          color: selectedCap == index
+                                              ? Theme.of(context).primaryColor : Colors.transparent,
+                                        ),
+                                        child: Padding(
+                                          padding: EdgeInsets.all(3.3.w),
+                                          child: Center(
+                                            child: Text(
+                                              capsCatItem.fav_name.substring(0,1),
+                                              style: TextStyle(
+                                                fontSize: 10.0.sp,
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.w700,
                                               ),
                                             ),
                                           ),
                                         ),
-                                      );
-                                    },
-                                  ),
+                                      ),
+                                    );
+                                  },
                                 ),
                               ),
                             ),
@@ -382,87 +396,85 @@ class _NameCollectionState extends State<NameCollection> {
                           ),
                           Padding(
                             padding: EdgeInsets.only(left: 6.6.w, top: 32.8.h, right: 12.5.w),
-                            child: Expanded(
-                              child: SizedBox(
-                                child: ListView.builder(
-                                  itemCount: dbName.data.length,
-                                  physics: BouncingScrollPhysics(),
-                                  padding: EdgeInsets.fromLTRB(0, 0, 0, 4.0.h),
-                                  itemBuilder: (context, index) {
-                                    Fav nameItem = Fav.get(dbName.data[index]);
-                                    return Container(
-                                      decoration: BoxDecoration(
-                                        border: Border(
-                                          bottom: BorderSide(
-                                            color: Theme.of(context).secondaryHeaderColor,
+                            child: SizedBox(
+                              child: ListView.builder(
+                                itemCount: dbName.data.length,
+                                physics: BouncingScrollPhysics(),
+                                padding: EdgeInsets.fromLTRB(0, 0, 0, 4.0.h),
+                                itemBuilder: (context, index) {
+                                  Fav nameItem = Fav.get(dbName.data[index]);
+                                  return Container(
+                                    decoration: BoxDecoration(
+                                      border: Border(
+                                        bottom: BorderSide(
+                                          color: Theme.of(context).secondaryHeaderColor,
+                                        ),
+                                      ),
+                                    ),
+                                    child: Padding(
+                                      padding: EdgeInsets.only(bottom: 1.0.h),
+                                      child: Row(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Padding(
+                                            padding: EdgeInsets.only(top: 1.8.h,),
+                                            child: SizedBox(
+                                              child: Text(
+                                                nameItem.fav_name,
+                                                style: TextStyle(
+                                                  fontSize: 12.0.sp,
+                                                  color: Theme.of(context).backgroundColor,
+                                                ),
+                                              ),
+                                              width: 26.0.w,
+                                            ),
                                           ),
-                                        ),
-                                      ),
-                                      child: Padding(
-                                        padding: EdgeInsets.only(bottom: 1.0.h),
-                                        child: Row(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Padding(
-                                              padding: EdgeInsets.only(top: 1.8.h,),
-                                              child: SizedBox(
-                                                child: Text(
-                                                  nameItem.fav_name,
-                                                  style: TextStyle(
-                                                    fontSize: 12.0.sp,
+                                          Flexible(
+                                            child: Padding(
+                                              padding: EdgeInsets.only(top: 0.5.h),
+                                              child: Html(
+                                                data: nameItem.fav_desc,
+                                                style: {
+                                                  'body': Style(
+                                                    fontSize: FontSize(12.0.sp),
                                                     color: Theme.of(context).backgroundColor,
+                                                    lineHeight: LineHeight(1.0.sp),
                                                   ),
-                                                ),
-                                                width: 26.0.w,
+                                                },
                                               ),
                                             ),
-                                            Flexible(
-                                              child: Padding(
-                                                padding: EdgeInsets.only(top: 0.5.h),
-                                                child: Html(
-                                                  data: nameItem.fav_desc,
-                                                  style: {
-                                                    'body': Style(
-                                                      fontSize: FontSize(12.0.sp),
-                                                      color: Theme.of(context).backgroundColor,
-                                                      lineHeight: LineHeight(1.0.sp),
-                                                    ),
-                                                  },
-                                                ),
+                                          ),
+                                          InkWell(
+                                            child: Padding(
+                                              padding: EdgeInsets.only(top: 1.8.h),
+                                              child: Image.asset(
+                                                nameItem.fav_check == 0 ? 'images/ic_unfav.png' : 'images/ic_fav.png',
+                                                width: 5.6.w,
                                               ),
                                             ),
-                                            InkWell(
-                                              child: Padding(
-                                                padding: EdgeInsets.only(top: 1.8.h),
-                                                child: Image.asset(
-                                                  nameItem.fav_check == 0 ? 'images/ic_unfav.png' : 'images/ic_fav.png',
-                                                  width: 5.6.w,
-                                                ),
-                                              ),
-                                              onTap: () {
-                                                setState(() {
-                                                  if (nameItem.fav_check == 1) {
-                                                    var check = Fav(
-                                                      fav_id: nameItem.fav_id,
-                                                      fav_check: 0,
-                                                    );
-                                                    favDb.update(check);
-                                                  } else {
-                                                    var check = Fav(
-                                                      fav_id: nameItem.fav_id,
-                                                      fav_check: 1,
-                                                    );
-                                                    favDb.update(check);
-                                                  }
-                                                });
-                                              },
-                                            ),
-                                          ],
-                                        ),
+                                            onTap: () {
+                                              setState(() {
+                                                if (nameItem.fav_check == 1) {
+                                                  var check = Fav(
+                                                    fav_id: nameItem.fav_id,
+                                                    fav_check: 0,
+                                                  );
+                                                  favDb.updateFav(check);
+                                                } else {
+                                                  var check = Fav(
+                                                    fav_id: nameItem.fav_id,
+                                                    fav_check: 1,
+                                                  );
+                                                  favDb.updateFav(check);
+                                                }
+                                              });
+                                            },
+                                          ),
+                                        ],
                                       ),
-                                    );
-                                  },
-                                ),
+                                    ),
+                                  );
+                                },
                               ),
                             ),
                           ),
