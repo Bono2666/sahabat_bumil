@@ -125,7 +125,9 @@ class _HomeState extends State<Home> {
                                           mainAxisAlignment: MainAxisAlignment.start,
                                           children: [
                                             Padding(
-                                              padding: EdgeInsets.only(top: 15.8.h),
+                                              padding: prefs.getBasecount == ''
+                                                  ? EdgeInsets.only(top: 22.8.h)
+                                                  : EdgeInsets.only(top: 15.8.h),
                                               child: SpinKitPulse(
                                                 color: Colors.white,
                                               ),

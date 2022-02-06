@@ -47,6 +47,7 @@ dependencies:
   shimmer:
   share_plus:
   grouped_list:
+  url_launcher:
 
 dev_dependencies:
   flutter_test:
