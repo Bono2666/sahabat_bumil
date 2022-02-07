@@ -20,8 +20,8 @@ class _AqiqahState extends State<Aqiqah> {
   int currentPage = 0, prevPage = 0;
   PageController pageController = new PageController();
   AsyncSnapshot<dynamic> dbBanner, dbPackages, dbPromo, dbRecomended,
-      dbRecomendedList, dbTopProducts, dbSetup;
-  List lsRecomended;
+      dbRecomendedList, dbTopProducts;
+  List lsRecomended, dbSetup;
 
   Future getBanner() async {
     var url = Uri.parse('https://sahabataqiqah.co.id/sahabat_bumil/api/get_banner.php');
@@ -209,7 +209,7 @@ class _AqiqahState extends State<Aqiqah> {
                                       );
                                     }
                                     if (snapshot.connectionState == ConnectionState.done) {
-                                      dbSetup = snapshot;
+                                      dbSetup = snapshot.data;
                                     }
                                     return Stack(
                                       alignment: AlignmentDirectional.bottomEnd,
@@ -730,24 +730,24 @@ class _AqiqahState extends State<Aqiqah> {
                                                                         lsRecommendedList[index]['promo'] == ''
                                                                             ? Container()
                                                                             : Padding(
-                                                                          padding: EdgeInsets.only(top: 3.3.w,),
-                                                                          child: Image.asset(
-                                                                            'images/bg_label.png',
-                                                                            height: 7.9.w,
-                                                                          ),
-                                                                        ),
+                                                                                padding: EdgeInsets.only(top: 3.3.w,),
+                                                                                child: Image.asset(
+                                                                                  'images/bg_label.png',
+                                                                                  height: 7.9.w,
+                                                                                ),
+                                                                              ),
                                                                         lsRecommendedList[index]['promo'] == ''
                                                                             ? Container()
                                                                             : Padding(
-                                                                          padding: EdgeInsets.fromLTRB(3.4.w, 4.7.w, 0, 0),
-                                                                          child: Text(
-                                                                            lsRecommendedList[index]['promo'],
-                                                                            style: TextStyle(
-                                                                              color: Colors.white,
-                                                                              fontSize: 9.0.sp,
-                                                                            ),
-                                                                          ),
-                                                                        ),
+                                                                                padding: EdgeInsets.fromLTRB(3.4.w, 4.7.w, 0, 0),
+                                                                                child: Text(
+                                                                                  lsRecommendedList[index]['promo'],
+                                                                                  style: TextStyle(
+                                                                                    color: Colors.white,
+                                                                                    fontSize: 9.0.sp,
+                                                                                  ),
+                                                                                ),
+                                                                              ),
                                                                         Positioned(
                                                                           left: 32.8.w,
                                                                           top: 3.3.w,
@@ -759,7 +759,282 @@ class _AqiqahState extends State<Aqiqah> {
                                                                       ],
                                                                     ),
                                                                     onTap: () {
-
+                                                                      showModalBottomSheet(
+                                                                        shape: RoundedRectangleBorder(
+                                                                          borderRadius: BorderRadius.only(
+                                                                            topLeft: Radius.circular(40),
+                                                                            topRight: Radius.circular(40),
+                                                                          ),
+                                                                        ),
+                                                                        backgroundColor: Colors.white,
+                                                                        constraints: BoxConstraints(
+                                                                          minHeight: 165.0.w,
+                                                                          maxHeight: 165.0.w,
+                                                                        ),
+                                                                        isScrollControlled: true,
+                                                                        context: context,
+                                                                        builder: (context) {
+                                                                          return Column(
+                                                                            mainAxisSize: MainAxisSize.min,
+                                                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                                                            children: [
+                                                                              Stack(
+                                                                                children: [
+                                                                                  ClipRRect(
+                                                                                    borderRadius: BorderRadius.only(
+                                                                                      topLeft: Radius.circular(40),
+                                                                                      topRight: Radius.circular(40),
+                                                                                    ),
+                                                                                    child: Container(
+                                                                                      color: Theme.of(context).primaryColor,
+                                                                                      height: 66.7.w,
+                                                                                      child: Image.network(
+                                                                                        lsRecommendedList[index]['image'],
+                                                                                        width: 100.0.w,
+                                                                                        fit: BoxFit.cover,
+                                                                                        loadingBuilder: (context, child, loadingProgress) {
+                                                                                          if (loadingProgress == null) return child;
+                                                                                          return SizedBox(
+                                                                                            height: 66.7.w,
+                                                                                            child: Center(
+                                                                                              child: SpinKitPulse(
+                                                                                                color: Colors.white,
+                                                                                              ),
+                                                                                            ),
+                                                                                          );
+                                                                                        },
+                                                                                      ),
+                                                                                    ),
+                                                                                  ),
+                                                                                  Row(
+                                                                                    children: [
+                                                                                      InkWell(
+                                                                                        onTap: () {
+                                                                                          Navigator.pop(context);
+                                                                                        },
+                                                                                        child: Container(
+                                                                                          width: 19.0.w,
+                                                                                          height: 14.6.h,
+                                                                                          decoration: BoxDecoration(
+                                                                                            color: Theme.of(context).primaryColor,
+                                                                                            borderRadius: BorderRadius.only(
+                                                                                              bottomRight: Radius.circular(40),
+                                                                                              topLeft: Radius.circular(40),
+                                                                                            ),
+                                                                                          ),
+                                                                                          child: Stack(
+                                                                                            alignment:
+                                                                                            AlignmentDirectional.bottomCenter,
+                                                                                            children: [
+                                                                                              SizedBox(
+                                                                                                width: 19.0.w,
+                                                                                                height: 19.0.w,
+                                                                                                child: Icon(
+                                                                                                  Icons.close,
+                                                                                                  color: Colors.white,
+                                                                                                  size: 7.0.w,
+                                                                                                ),
+                                                                                              ),
+                                                                                            ],
+                                                                                          ),
+                                                                                        ),
+                                                                                      ),
+                                                                                      Expanded(child: SizedBox(),),
+                                                                                      Positioned(
+                                                                                        top: 7.8.w,
+                                                                                        child: Image.asset(
+                                                                                          'images/ic_unfav.png',
+                                                                                          width: 6.7.w,
+                                                                                        ),
+                                                                                      ),
+                                                                                      SizedBox(width: 7.8.w,),
+                                                                                    ],
+                                                                                  ),
+                                                                                ],
+                                                                              ),
+                                                                              Stack(
+                                                                                children: [
+                                                                                  SizedBox(
+                                                                                    height: 98.0.w,
+                                                                                    child: SingleChildScrollView(
+                                                                                      child: Padding(
+                                                                                        padding: EdgeInsets.symmetric(horizontal: 6.9.w,),
+                                                                                        child: Column(
+                                                                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                                                                          children: [
+                                                                                            SizedBox(height: 11.0.w,),
+                                                                                            Text(
+                                                                                              lsRecommendedList[index]['package'],
+                                                                                              style: TextStyle(
+                                                                                                fontSize: 10.0.sp,
+                                                                                                fontWeight: FontWeight.w500,
+                                                                                                color: Theme.of(context).primaryColor,
+                                                                                              ),
+                                                                                            ),
+                                                                                            Text(
+                                                                                              lsRecommendedList[index]['name'],
+                                                                                              style: TextStyle(
+                                                                                                fontSize: 23.0.sp,
+                                                                                                fontWeight: FontWeight.w700,
+                                                                                                color: Theme.of(context).backgroundColor,
+                                                                                              ),
+                                                                                            ),
+                                                                                            SizedBox(height: 6.7.w,),
+                                                                                            Row(
+                                                                                              crossAxisAlignment: CrossAxisAlignment.center,
+                                                                                              children: [
+                                                                                                Text(
+                                                                                                  NumberFormat.currency(
+                                                                                                    locale: 'id',
+                                                                                                    symbol: 'Rp ',
+                                                                                                    decimalDigits: 0,
+                                                                                                  ).format(int.parse(lsRecommendedList[index]['price'])),
+                                                                                                  style: TextStyle(
+                                                                                                    fontSize: 16.0.sp,
+                                                                                                    fontWeight: FontWeight.w700,
+                                                                                                    color: Theme.of(context).backgroundColor,
+                                                                                                  ),
+                                                                                                ),
+                                                                                                Expanded(child: SizedBox(),),
+                                                                                                lsRecommendedList[index]['promo'] == ''
+                                                                                                    ? Container() : Container(
+                                                                                                      child: Padding(
+                                                                                                        padding: EdgeInsets.symmetric(
+                                                                                                          horizontal: 4.4.w, vertical: 1.4.w,),
+                                                                                                        child: Text(
+                                                                                                          lsRecommendedList[index]['promo'],
+                                                                                                          style: TextStyle(
+                                                                                                            fontSize: 8.0.sp,
+                                                                                                            color: Colors.white,
+                                                                                                          ),
+                                                                                                        ),
+                                                                                                      ),
+                                                                                                      decoration: BoxDecoration(
+                                                                                                        color: Theme.of(context).primaryColor,
+                                                                                                        borderRadius: BorderRadius.all(
+                                                                                                          Radius.circular(20),
+                                                                                                        ),
+                                                                                                      ),
+                                                                                                ),
+                                                                                              ],
+                                                                                            ),
+                                                                                            SizedBox(height: 5.2.w,),
+                                                                                            Html(
+                                                                                              data: lsRecommendedList[index]['description'],
+                                                                                              style: {
+                                                                                                'body': Style(
+                                                                                                  color: Colors.black,
+                                                                                                  fontSize: FontSize(11.0.sp),
+                                                                                                  margin: EdgeInsets.all(0),
+                                                                                                )
+                                                                                              },
+                                                                                            ),
+                                                                                            SizedBox(height: 35.5.w,),
+                                                                                          ],
+                                                                                        ),
+                                                                                      ),
+                                                                                    ),
+                                                                                  ),
+                                                                                  Column(
+                                                                                    children: [
+                                                                                      Container(
+                                                                                        height: 16.4.w,
+                                                                                        decoration: BoxDecoration(
+                                                                                            gradient: LinearGradient(
+                                                                                              begin: Alignment.topCenter,
+                                                                                              end: Alignment.bottomCenter,
+                                                                                              colors: [
+                                                                                                Colors.white, Colors.white.withOpacity(0.0),
+                                                                                              ],
+                                                                                            )
+                                                                                        ),
+                                                                                      ),
+                                                                                      SizedBox(height: 47.5.w,),
+                                                                                      Stack(
+                                                                                        alignment: AlignmentDirectional.bottomEnd,
+                                                                                        children: [
+                                                                                          Container(
+                                                                                            height: 34.4.w,
+                                                                                            decoration: BoxDecoration(
+                                                                                                gradient: LinearGradient(
+                                                                                                  begin: Alignment.bottomCenter,
+                                                                                                  end: Alignment.topCenter,
+                                                                                                  colors: [
+                                                                                                    Colors.white, Colors.white.withOpacity(0.0),
+                                                                                                  ],
+                                                                                                )
+                                                                                            ),
+                                                                                          ),
+                                                                                          InkWell(
+                                                                                            onTap: () {
+                                                                                              prefs.setIdProduct(lsRecommendedList[index]['id']);
+                                                                                              Navigator.pushNamed(context, '/checkout');
+                                                                                            },
+                                                                                            child: Stack(
+                                                                                              alignment: AlignmentDirectional.centerEnd,
+                                                                                              children: [
+                                                                                                Container(
+                                                                                                  width: 53.6.w,
+                                                                                                  height: 20.8.w,
+                                                                                                  color: Theme.of(context).primaryColor,
+                                                                                                ),
+                                                                                                SizedBox(
+                                                                                                  width: 42.8.w,
+                                                                                                  child: Center(
+                                                                                                    child: Text(
+                                                                                                      'Pesan',
+                                                                                                      style: TextStyle(
+                                                                                                        color: Colors.white,
+                                                                                                        fontWeight: FontWeight.w500,
+                                                                                                        fontSize: 13.0.sp,
+                                                                                                      ),
+                                                                                                    ),
+                                                                                                  ),
+                                                                                                ),
+                                                                                              ],
+                                                                                            ),
+                                                                                          ),
+                                                                                          Padding(
+                                                                                            padding: EdgeInsets.only(right: 42.8.w),
+                                                                                            child: InkWell(
+                                                                                              onTap: () {
+                                                                                                launch('https://api.whatsapp.com/send?phone=' + dbSetup[0]['wa_number'] +
+                                                                                                    '&text=Assalamualaikum%2C+saya+dapat+info+dari+aplikasi+'
+                                                                                                        '*Sahabat+Bumil*%2C+dan+ingin+bertanya+tentang+Aqiqah+anak+saya');
+                                                                                              },
+                                                                                              child: Container(
+                                                                                                width: 40.5.w,
+                                                                                                height: 20.8.w,
+                                                                                                decoration: BoxDecoration(
+                                                                                                  color: Theme.of(context).backgroundColor,
+                                                                                                  borderRadius: BorderRadius.only(
+                                                                                                    topLeft: Radius.circular(40),
+                                                                                                    bottomRight: Radius.circular(40),
+                                                                                                  ),
+                                                                                                ),
+                                                                                                child: Center(
+                                                                                                  child: Text(
+                                                                                                    'Chat',
+                                                                                                    style: TextStyle(
+                                                                                                      color: Colors.white,
+                                                                                                      fontWeight: FontWeight.w500,
+                                                                                                      fontSize: 13.0.sp,
+                                                                                                    ),
+                                                                                                  ),
+                                                                                                ),
+                                                                                              ),
+                                                                                            ),
+                                                                                          ),
+                                                                                        ],
+                                                                                      ),
+                                                                                    ],
+                                                                                  ),
+                                                                                ],
+                                                                              ),
+                                                                            ],
+                                                                          );
+                                                                        },
+                                                                      );
                                                                     },
                                                                   ),
                                                                 ),
@@ -804,7 +1079,6 @@ class _AqiqahState extends State<Aqiqah> {
                                                           padding: EdgeInsets.only(left: 3.9.w, right: 4.9.w),
                                                           itemBuilder: (context, index) {
                                                             List lsTopProducts = dbTopProducts.data;
-                                                            List lsSetup = dbSetup.data;
                                                             return Row(
                                                               children: [
                                                                 Padding(
@@ -1075,23 +1349,23 @@ class _AqiqahState extends State<Aqiqah> {
                                                                                                 Expanded(child: SizedBox(),),
                                                                                                 lsTopProducts[index]['promo'] == ''
                                                                                                     ? Container() : Container(
-                                                                                                  child: Padding(
-                                                                                                    padding: EdgeInsets.symmetric(
-                                                                                                      horizontal: 4.4.w, vertical: 1.4.w,),
-                                                                                                    child: Text(
-                                                                                                      lsTopProducts[index]['promo'],
-                                                                                                      style: TextStyle(
-                                                                                                        fontSize: 8.0.sp,
-                                                                                                        color: Colors.white,
+                                                                                                      child: Padding(
+                                                                                                        padding: EdgeInsets.symmetric(
+                                                                                                          horizontal: 4.4.w, vertical: 1.4.w,),
+                                                                                                        child: Text(
+                                                                                                          lsTopProducts[index]['promo'],
+                                                                                                          style: TextStyle(
+                                                                                                            fontSize: 8.0.sp,
+                                                                                                            color: Colors.white,
+                                                                                                          ),
+                                                                                                        ),
                                                                                                       ),
-                                                                                                    ),
-                                                                                                  ),
-                                                                                                  decoration: BoxDecoration(
-                                                                                                    color: Theme.of(context).primaryColor,
-                                                                                                    borderRadius: BorderRadius.all(
-                                                                                                      Radius.circular(20),
-                                                                                                    ),
-                                                                                                  ),
+                                                                                                      decoration: BoxDecoration(
+                                                                                                        color: Theme.of(context).primaryColor,
+                                                                                                        borderRadius: BorderRadius.all(
+                                                                                                          Radius.circular(20),
+                                                                                                        ),
+                                                                                                      ),
                                                                                                 ),
                                                                                               ],
                                                                                             ),
@@ -1144,7 +1418,8 @@ class _AqiqahState extends State<Aqiqah> {
                                                                                           ),
                                                                                           InkWell(
                                                                                             onTap: () {
-
+                                                                                              prefs.setIdProduct(lsTopProducts[index]['id']);
+                                                                                              Navigator.pushNamed(context, '/checkout');
                                                                                             },
                                                                                             child: Stack(
                                                                                               alignment: AlignmentDirectional.centerEnd,
@@ -1174,9 +1449,9 @@ class _AqiqahState extends State<Aqiqah> {
                                                                                             padding: EdgeInsets.only(right: 42.8.w),
                                                                                             child: InkWell(
                                                                                               onTap: () {
-                                                                                                launch('https://api.whatsapp.com/send?phone=' + lsSetup[0]['wa_number'] +
-                                                                                                    '&text=Halo+CS+Sahabat+Aqiqah%2C+saya+dapat+info+dari+Sahabat+Bumil%2C+'
-                                                                                                        'dan+ingin+bertanya+tentang+Aqiqah+anak+saya');
+                                                                                                launch('https://api.whatsapp.com/send?phone=' + dbSetup[0]['wa_number'] +
+                                                                                                    '&text=Assalamualaikum%2C+saya+dapat+info+dari+aplikasi+'
+                                                                                                        '*Sahabat+Bumil*%2C+dan+ingin+bertanya+tentang+Aqiqah+anak+saya');
                                                                                               },
                                                                                               child: Container(
                                                                                                 width: 40.5.w,

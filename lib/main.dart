@@ -4,6 +4,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:sahabat_bumil_v2/db/fav_db.dart';
 import 'package:sahabat_bumil_v2/model/fav_model.dart';
 import 'package:sahabat_bumil_v2/pages/aqiqah/aqiqah.dart';
+import 'package:sahabat_bumil_v2/pages/aqiqah/checkout.dart';
 import 'package:sahabat_bumil_v2/pages/babysname/babysname.dart';
 import 'package:sahabat_bumil_v2/pages/babysname/favname.dart';
 import 'package:sahabat_bumil_v2/pages/babysname/namecollection.dart';
@@ -182,6 +183,8 @@ class MyTheme extends StatelessWidget {
                         return NoSlideRoute(page: Search());
                       case '/aqiqah':
                         return SlideUpRoute(page: Aqiqah());
+                      case '/checkout':
+                        return SlideLeftRoute(page: Checkout());
                     }
                   },
                 );
@@ -229,6 +232,7 @@ class SharedPrefs {
   int get getSelectedCapName => _prefs.getInt('selectedcapname') ?? 0;
   String get getIdName => _prefs.getString('idname') ?? '';
   String get getGoRoute => _prefs.getString('goroute') ?? '';
+  String get getIdProduct => _prefs.getString('idproduct') ?? '';
 
   setFirstlaunch(bool value) => _prefs.setBool('firstlaunch', value);
   setName(String value) => _prefs.setString('name', value);
@@ -254,6 +258,7 @@ class SharedPrefs {
   setSelectedCapName(int value) => _prefs.setInt('selectedcapname', value);
   setIdName(String value) => _prefs.setString('idname', value);
   setGoRoute(String value) => _prefs.setString('goroute', value);
+  setIdProduct(String value) => _prefs.setString('idproduct', value);
 }
 
 class SlideUpRoute extends PageRouteBuilder {
