@@ -590,7 +590,7 @@ class _HomeState extends State<Home> {
                                       SizedBox(height: 2.8.h,),
                                       ListView.builder(
                                         shrinkWrap: true,
-                                        itemCount: listArticle.length > 3 ?3 :listArticle.length,
+                                        itemCount: listArticle.length > 3 ? 3 : listArticle.length,
                                         physics: NeverScrollableScrollPhysics(),
                                         padding: EdgeInsets.only(top: 0),
                                         itemBuilder: (context, index) {
@@ -608,7 +608,7 @@ class _HomeState extends State<Home> {
                                                         BoxShadow(
                                                           color: Theme.of(context).shadowColor,
                                                           blurRadius: 6.0,
-                                                          offset: Offset(3,0),
+                                                          offset: Offset(0,3),
                                                         ),
                                                       ]
                                                   ),

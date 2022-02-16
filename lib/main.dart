@@ -5,6 +5,7 @@ import 'package:sahabat_bumil_v2/db/fav_db.dart';
 import 'package:sahabat_bumil_v2/model/fav_model.dart';
 import 'package:sahabat_bumil_v2/pages/aqiqah/aqiqah.dart';
 import 'package:sahabat_bumil_v2/pages/aqiqah/checkout.dart';
+import 'package:sahabat_bumil_v2/pages/aqiqah/package.dart';
 import 'package:sahabat_bumil_v2/pages/babysname/babysname.dart';
 import 'package:sahabat_bumil_v2/pages/babysname/favname.dart';
 import 'package:sahabat_bumil_v2/pages/babysname/namecollection.dart';
@@ -185,6 +186,8 @@ class MyTheme extends StatelessWidget {
                         return SlideUpRoute(page: Aqiqah());
                       case '/checkout':
                         return SlideLeftRoute(page: Checkout());
+                      case '/package':
+                        return SlideLeftRoute(page: Package());
                     }
                   },
                 );
@@ -233,6 +236,7 @@ class SharedPrefs {
   String get getIdName => _prefs.getString('idname') ?? '';
   String get getGoRoute => _prefs.getString('goroute') ?? '';
   String get getIdProduct => _prefs.getString('idproduct') ?? '';
+  String get getIdPackage => _prefs.getString('idpackage') ?? '';
 
   setFirstlaunch(bool value) => _prefs.setBool('firstlaunch', value);
   setName(String value) => _prefs.setString('name', value);
@@ -259,6 +263,7 @@ class SharedPrefs {
   setIdName(String value) => _prefs.setString('idname', value);
   setGoRoute(String value) => _prefs.setString('goroute', value);
   setIdProduct(String value) => _prefs.setString('idproduct', value);
+  setIdPackage(String value) => _prefs.setString('idpackage', value);
 }
 
 class SlideUpRoute extends PageRouteBuilder {

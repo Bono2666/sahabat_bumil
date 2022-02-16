@@ -384,7 +384,7 @@ class _AqiqahState extends State<Aqiqah> {
                                                                             BoxShadow(
                                                                               color: Theme.of(context).shadowColor,
                                                                               blurRadius: 6.0,
-                                                                              offset: Offset(3,0),
+                                                                              offset: Offset(0,3),
                                                                             ),
                                                                           ]
                                                                       ),
@@ -434,7 +434,8 @@ class _AqiqahState extends State<Aqiqah> {
                                                                       ),
                                                                     ),
                                                                     onTap: () {
-
+                                                                      prefs.setIdPackage(lsPackages[index]['id']);
+                                                                      Navigator.pushNamed(context, '/package');
                                                                     },
                                                                   ),
                                                                 ),
@@ -502,7 +503,7 @@ class _AqiqahState extends State<Aqiqah> {
                                                                                   BoxShadow(
                                                                                     color: Theme.of(context).shadowColor,
                                                                                     blurRadius: 6.0,
-                                                                                    offset: Offset(3,0),
+                                                                                    offset: Offset(0,3),
                                                                                   ),
                                                                                 ]
                                                                             ),
@@ -592,7 +593,8 @@ class _AqiqahState extends State<Aqiqah> {
                                                                         Positioned(
                                                                           left: 53.9.w,
                                                                           bottom: 57.5.w,
-                                                                          child: Image.asset(
+                                                                          child: int.parse(lsPromo[index]['package']) > 1
+                                                                              ? Container() : Image.asset(
                                                                             'images/ic_unfav.png',
                                                                             width: 5.6.w,
                                                                           ),
@@ -600,7 +602,7 @@ class _AqiqahState extends State<Aqiqah> {
                                                                       ],
                                                                     ),
                                                                     onTap: () {
-                                                                      if (lsPromo[index]['product'] != 0) {
+                                                                      if (int.parse(lsPromo[index]['product']) > 0) {
                                                                         prodId = int.parse(lsPromo[index]['product']);
                                                                         waNumber = dbSetup[0]['wa_number'];
                                                                         showModalBottomSheet(
@@ -619,6 +621,10 @@ class _AqiqahState extends State<Aqiqah> {
                                                                           context: context,
                                                                           builder: (context) => ViewProduct(),
                                                                         );
+                                                                      }
+                                                                      if (int.parse(lsPromo[index]['package']) > 0) {
+                                                                        prefs.setIdPackage(lsPromo[index]['package']);
+                                                                        Navigator.pushNamed(context, '/package');
                                                                       }
                                                                     },
                                                                   ),
@@ -685,7 +691,7 @@ class _AqiqahState extends State<Aqiqah> {
                                                                                   BoxShadow(
                                                                                     color: Theme.of(context).shadowColor,
                                                                                     blurRadius: 6.0,
-                                                                                    offset: Offset(3,0),
+                                                                                    offset: Offset(0,3),
                                                                                   ),
                                                                                 ]
                                                                             ),
@@ -955,6 +961,7 @@ class _AqiqahState extends State<Aqiqah> {
                                                                                           ],
                                                                                         ),
                                                                                       ),
+                                                                                      physics: BouncingScrollPhysics(),
                                                                                     ),
                                                                                   ),
                                                                                   Column(
@@ -1095,7 +1102,7 @@ class _AqiqahState extends State<Aqiqah> {
                                                       SizedBox(
                                                         height: 68.9.w,
                                                         child: ListView.builder(
-                                                          itemCount: 4,
+                                                          itemCount: dbTopProducts.data.length,
                                                           scrollDirection: Axis.horizontal,
                                                           physics: BouncingScrollPhysics(),
                                                           padding: EdgeInsets.only(left: 3.9.w, right: 4.9.w),
@@ -1123,7 +1130,7 @@ class _AqiqahState extends State<Aqiqah> {
                                                                                   BoxShadow(
                                                                                     color: Theme.of(context).shadowColor,
                                                                                     blurRadius: 6.0,
-                                                                                    offset: Offset(3,0),
+                                                                                    offset: Offset(0,3),
                                                                                   ),
                                                                                 ]
                                                                             ),
@@ -1406,6 +1413,7 @@ class _AqiqahState extends State<Aqiqah> {
                                                                                           ],
                                                                                         ),
                                                                                       ),
+                                                                                      physics: BouncingScrollPhysics(),
                                                                                     ),
                                                                                   ),
                                                                                   Column(
@@ -1792,6 +1800,7 @@ class _ViewProductState extends State<ViewProduct> {
                 SizedBox(
                   height: 98.0.w,
                   child: SingleChildScrollView(
+                    physics: BouncingScrollPhysics(),
                     child: Padding(
                       padding: EdgeInsets.symmetric(horizontal: 6.9.w,),
                       child: Column(

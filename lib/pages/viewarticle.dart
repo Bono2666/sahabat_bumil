@@ -261,7 +261,7 @@ class _ViewArticleState extends State<ViewArticle> {
                                                         color: Theme.of(context)
                                                             .shadowColor,
                                                         blurRadius: 6.0,
-                                                        offset: Offset(3, 0),
+                                                        offset: Offset(0, 3),
                                                       ),
                                                     ]),
                                                 child: Column(

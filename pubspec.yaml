@@ -48,6 +48,7 @@ dependencies:
   share_plus:
   grouped_list:
   url_launcher:
+  http:
 
 dev_dependencies:
   flutter_test:

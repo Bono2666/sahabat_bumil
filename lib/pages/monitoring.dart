@@ -330,21 +330,24 @@ class _MonitoringState extends State<Monitoring> {
                                         Stack(
                                           alignment: AlignmentDirectional.topStart,
                                           children: [
-                                            SizedBox(
-                                              width: 100.0.w,
-                                              child: FittedBox(
-                                                child: LinearPercentIndicator(
-                                                  percent: currentPage > totalDays ? 1.0 : currentPage/totalDays,
-                                                  width: totalDays.toDouble(),
-                                                  lineHeight: 1.4.w,
-                                                  progressColor: Theme.of(context).primaryColor,
-                                                  backgroundColor: Theme.of(context).dividerColor,
-                                                  linearStrokeCap: LinearStrokeCap.roundAll,
-                                                  animation: true,
-                                                  animationDuration: 3000,
-                                                  animateFromLastPercent: true,
-                                                  curve: Curves.fastOutSlowIn,
-                                                  padding: EdgeInsets.fromLTRB(0.6.w, 2.2.w, 0.6.w, 2.2.w),
+                                            Padding(
+                                              padding: EdgeInsets.only(top: 2.2.w),
+                                              child: SizedBox(
+                                                width: 100.0.w,
+                                                child: FittedBox(
+                                                  child: LinearPercentIndicator(
+                                                    percent: currentPage > totalDays ? 1.0 : currentPage/totalDays,
+                                                    width: totalDays.toDouble(),
+                                                    lineHeight: 1.4.w,
+                                                    progressColor: Theme.of(context).primaryColor,
+                                                    backgroundColor: Theme.of(context).dividerColor,
+                                                    barRadius: const Radius.circular(16),
+                                                    animation: true,
+                                                    animationDuration: 3000,
+                                                    animateFromLastPercent: true,
+                                                    curve: Curves.fastOutSlowIn,
+                                                    padding: EdgeInsets.symmetric(horizontal: 0),
+                                                  ),
                                                 ),
                                               ),
                                             ),
@@ -779,7 +782,7 @@ class _MonitoringState extends State<Monitoring> {
                                                     BoxShadow(
                                                       color: Theme.of(context).shadowColor,
                                                       blurRadius: 6.0,
-                                                      offset: Offset(3,0),
+                                                      offset: Offset(0,3),
                                                     ),
                                                   ]
                                               ),
@@ -965,7 +968,7 @@ class _MonitoringState extends State<Monitoring> {
                                                                     BoxShadow(
                                                                       color: Theme.of(context).shadowColor,
                                                                       blurRadius: 6.0,
-                                                                      offset: Offset(3,0),
+                                                                      offset: Offset(0,3),
                                                                     ),
                                                                   ]
                                                               ),
@@ -1126,53 +1129,6 @@ class _MonitoringState extends State<Monitoring> {
                         ),
                       ],
                     ),
-                    // Column(
-                    //   children: [
-                    //     SizedBox(height: 5.6.h,),
-                    //     Padding(
-                    //       padding: EdgeInsets.only(right: 21.4.w,),
-                    //       child: InkWell(
-                    //         onTap: () {
-                    //           Navigator.pushReplacementNamed(context, '/babysname');
-                    //         },
-                    //         child: Stack(
-                    //           alignment: AlignmentDirectional.center,
-                    //           children: [
-                    //             Opacity(
-                    //               opacity: .8,
-                    //               child: Container(
-                    //                 width: 12.5.w,
-                    //                 height: 12.5.w,
-                    //                 decoration: BoxDecoration(
-                    //                   borderRadius: BorderRadius.all(
-                    //                     Radius.circular(30),
-                    //                   ),
-                    //                   color: Colors.white,
-                    //                   boxShadow: [
-                    //                     BoxShadow(
-                    //                       blurRadius: 6.0,
-                    //                       color: Theme.of(context).shadowColor,
-                    //                       offset: Offset(0, 3),
-                    //                     )
-                    //                   ],
-                    //                 ),
-                    //               ),
-                    //             ),
-                    //             Container(
-                    //               width: 5.6.w,
-                    //               height: 5.6.w,
-                    //               child: FittedBox(
-                    //                 child: Image.asset(
-                    //                   'images/ic_baby.png',
-                    //                 ),
-                    //               ),
-                    //             ),
-                    //           ],
-                    //         ),
-                    //       ),
-                    //     ),
-                    //   ],
-                    // ),
                     Row(
                       children: [
                         Column(
