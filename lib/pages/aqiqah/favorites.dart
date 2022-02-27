@@ -3,26 +3,24 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:intl/intl.dart';
-import 'package:sahabat_bumil_v2/db/prods_db.dart';
 import 'package:sizer/sizer.dart';
+import 'package:intl/intl.dart';
 import 'package:sahabat_bumil_v2/main.dart';
-import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
+import 'package:http/http.dart' as http;
+import '../../db/prods_db.dart';
 import '../../model/prods_model.dart';
 
 int prodId = 1;
 String waNumber;
 
-class Package extends StatefulWidget {
+class Favorites extends StatefulWidget {
   @override
-  _PackageState createState() => _PackageState();
+  _FavoritesState createState() => _FavoritesState();
 }
 
-class _PackageState extends State<Package> {
-  List dbPackage, dbSetup;
-  bool isFav = false;
-  String favIcon;
+class _FavoritesState extends State<Favorites> {
+  List dbFav, dbSetup;
   var prodsDb = ProdsDb();
 
   Future getSetup() async {
@@ -35,9 +33,9 @@ class _PackageState extends State<Package> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: WillPopScope(
-        onWillPop: () => Navigator.pushNamedAndRemoveUntil(context, '/aqiqah', (route) => false),
+        onWillPop: () => Navigator.pushReplacementNamed(context, '/closetofavorites'),
         child: FutureBuilder(
-          future: prodsDb.packages(int.parse(prefs.getIdPackage)),
+          future: prodsDb.favList(),
           builder: (context, snapshot) {
             if (!snapshot.hasData || snapshot.data == null || snapshot.hasError) {
               return Column(
@@ -50,7 +48,7 @@ class _PackageState extends State<Package> {
               );
             }
             if (snapshot.connectionState == ConnectionState.done) {
-              dbPackage = snapshot.data;
+              dbFav = snapshot.data;
             }
             return FutureBuilder(
               future: getSetup(),
@@ -73,7 +71,6 @@ class _PackageState extends State<Package> {
                     SingleChildScrollView(
                       physics: BouncingScrollPhysics(),
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Padding(
                             padding: EdgeInsets.symmetric(horizontal: 7.0.w),
@@ -82,262 +79,271 @@ class _PackageState extends State<Package> {
                               children: [
                                 SizedBox(height: 19.0.h,),
                                 Text(
-                                  dbPackage[0]['prods_package'],
+                                  'Aqiqah Favorit',
                                   style: TextStyle(
                                     color: Theme.of(context).backgroundColor,
                                     fontWeight: FontWeight.w700,
                                     fontSize: 24.0.sp,
                                   ),
                                 ),
-                                SizedBox(height: 0.6.h,),
-                                Text(
-                                  dbPackage[0]['prods_sub_title'],
-                                  style: TextStyle(
-                                    color: Theme.of(context).primaryColor,
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: 10.0.sp,
-                                  ),
-                                ),
-                                SizedBox(height: 4.4.h,),
-                              ],
-                            ),
-                          ),
-                          GridView.builder(
-                            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2,
-                              mainAxisSpacing: 4.4.h,
-                              crossAxisSpacing: 3.8.w,
-                              mainAxisExtent: dbPackage[0]['prods_desc'] == ''
-                                  ? 58.0.w : 62.0.w,
-                            ),
-                            itemCount: dbPackage.length,
-                            shrinkWrap: true,
-                            physics: NeverScrollableScrollPhysics(),
-                            padding: EdgeInsets.only(left: 3.9.w, right: 4.9.w),
-                            itemBuilder: (context, index) {
-                              return InkWell(
-                                child: Stack(
-                                  alignment: AlignmentDirectional.topStart,
-                                  children: [
-                                    Padding(
-                                      padding: EdgeInsets.only(left: 2.8.w,),
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Container(
-                                            width: 40.0.w,
-                                            height: 41.1.w,
-                                            decoration: BoxDecoration(
-                                                color: Colors.white,
-                                                borderRadius: BorderRadius.all(
-                                                  Radius.circular(12),
-                                                ),
-                                                boxShadow: [
-                                                  BoxShadow(
-                                                    color: Theme.of(context).shadowColor,
-                                                    blurRadius: 6.0,
-                                                    offset: Offset(0,3),
-                                                  ),
-                                                ]
-                                            ),
-                                            child: ClipRRect(
-                                              borderRadius: BorderRadius.all(Radius.circular(12),),
-                                              child: Container(
-                                                height: 41.1.w,
-                                                color: Theme.of(context).primaryColor,
-                                                child: Image.network(
-                                                  dbPackage[index]['prods_image'],
-                                                  width: 100.0.w,
-                                                  fit: BoxFit.cover,
-                                                  loadingBuilder: (context, child, loadingProgress) {
-                                                    if (loadingProgress == null) return child;
-                                                    return SizedBox(
-                                                      height: 41.1.w,
-                                                      child: Center(
-                                                        child: SpinKitPulse(
-                                                          color: Colors.white,
-                                                        ),
+                                SizedBox(height: 3.4.h,),
+                                dbFav.length > 0
+                                    ? SizedBox(
+                                  child: ListView.builder(
+                                    itemCount: dbFav.length,
+                                    physics: NeverScrollableScrollPhysics(),
+                                    shrinkWrap: true,
+                                    padding: EdgeInsets.only(top: 0),
+                                    itemBuilder: (context, index) {
+                                      return Padding(
+                                        padding: EdgeInsets.only(bottom: 6.7.w,),
+                                        child: InkWell(
+                                          child: Stack(
+                                            alignment: AlignmentDirectional.topEnd,
+                                            children: [
+                                              Row(
+                                                mainAxisAlignment: MainAxisAlignment.end,
+                                                crossAxisAlignment: CrossAxisAlignment.end,
+                                                children: [
+                                                  Expanded(
+                                                    child: SizedBox(
+                                                      child: Column(
+                                                        crossAxisAlignment: CrossAxisAlignment.end,
+                                                        children: [
+                                                          Text(
+                                                            dbFav[index]['prods_package'] + ' - ' +
+                                                                dbFav[index]['prods_name'],
+                                                            textAlign: TextAlign.right,
+                                                            style: TextStyle(
+                                                              fontSize: 13.0.sp,
+                                                              fontWeight: FontWeight.w700,
+                                                              color: Theme.of(context).backgroundColor,
+                                                            ),
+                                                          ),
+                                                          SizedBox(height: 1.1.w,),
+                                                          Html(
+                                                            data: dbFav[index]['prods_desc'],
+                                                            style: {
+                                                              'body': Style(
+                                                                color: Colors.black,
+                                                                fontSize: FontSize(8.0.sp),
+                                                                maxLines: 2,
+                                                                textAlign: TextAlign.right,
+                                                                textOverflow: TextOverflow.ellipsis,
+                                                                margin: EdgeInsets.all(0),
+                                                              )
+                                                            },
+                                                          ),
+                                                          SizedBox(height: 6.7.w,),
+                                                          Row(
+                                                            children: [
+                                                              dbFav[index]['prods_promo'] == ''
+                                                                  ? Container() : Container(
+                                                                child: Padding(
+                                                                  padding: EdgeInsets.symmetric(
+                                                                    horizontal: 4.4.w, vertical: 1.4.w,),
+                                                                  child: Text(
+                                                                    dbFav[index]['prods_promo'],
+                                                                    style: TextStyle(
+                                                                      fontSize: 8.0.sp,
+                                                                      color: Colors.white,
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                                decoration: BoxDecoration(
+                                                                  color: Theme.of(context).primaryColor,
+                                                                  borderRadius: BorderRadius.all(
+                                                                    Radius.circular(20),
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                              Expanded(child: SizedBox(),),
+                                                              Text(
+                                                                NumberFormat.currency(
+                                                                  locale: 'id',
+                                                                  symbol: 'Rp ',
+                                                                  decimalDigits: 0,
+                                                                ).format(dbFav[index]['prods_price']),
+                                                                textAlign: TextAlign.right,
+                                                                style: TextStyle(
+                                                                  fontSize: 10.0.sp,
+                                                                  color: Theme.of(context).backgroundColor,
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                          SizedBox(height: 1.1.w,),
+                                                        ],
                                                       ),
-                                                    );
+                                                    ),
+                                                  ),
+                                                  SizedBox(width: 4.4.w,),
+                                                  ClipRRect(
+                                                    borderRadius: BorderRadius.all(
+                                                      Radius.circular(12),
+                                                    ),
+                                                    child: Container(
+                                                      width: 31.1.w,
+                                                      height: 32.0.w,
+                                                      child: Image.network(
+                                                        dbFav[index]['prods_image'],
+                                                        fit: BoxFit.cover,
+                                                        loadingBuilder: (context, child, loadingProgress) {
+                                                          if (loadingProgress == null) return child;
+                                                          return SizedBox(
+                                                            height: 32.0.w,
+                                                            child: Center(
+                                                              child: SpinKitPulse(
+                                                                color: Colors.white,
+                                                              ),
+                                                            ),
+                                                          );
+                                                        },
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              Padding(
+                                                padding: EdgeInsets.only(right: 3.3.w, top: 3.3.w),
+                                                child: InkWell(
+                                                  child: Image.asset(
+                                                    dbFav[index]['prods_fav'] == 0 ? 'images/ic_unfav.png' : 'images/ic_fav.png',
+                                                    width: 4.4.w,
+                                                  ),
+                                                  onTap: () {
+                                                    setState(() {
+                                                      if (dbFav[index]['prods_fav'] == 1) {
+                                                        var fav = Prods(
+                                                          prods_id: dbFav[index]['prods_id'],
+                                                          prods_fav: 0,
+                                                        );
+                                                        prodsDb.updateFav(fav);
+                                                      } else {
+                                                        var fav = Prods(
+                                                          prods_id: dbFav[index]['prods_id'],
+                                                          prods_fav: 1,
+                                                        );
+                                                        prodsDb.updateFav(fav);
+                                                      }
+                                                    });
                                                   },
                                                 ),
-                                              ),
-                                            ),
-                                          ),
-                                          Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              SizedBox(height: 2.2.w,),
-                                              Text(
-                                                dbPackage[index]['prods_name'],
-                                                style: TextStyle(
-                                                  color: Theme.of(context).backgroundColor,
-                                                  fontSize: 11.0.sp,
-                                                  fontWeight: FontWeight.w700,
-                                                ),
-                                                maxLines: dbPackage[index]['prods_desc'] == ''
-                                                    ? 2 : 1,
-                                                overflow: dbPackage[index]['prods_desc'] == ''
-                                                    ? TextOverflow.visible : TextOverflow.ellipsis,
-                                              ),
-                                              dbPackage[index]['prods_desc'] == ''
-                                                  ? Container() : SizedBox(height: 1.6.w,),
-                                              dbPackage[index]['prods_desc'] == ''
-                                                  ? Container() : Html(
-                                                data: dbPackage[index]['prods_desc'],
-                                                style: {
-                                                  'body': Style(
-                                                    color: Colors.black,
-                                                    fontSize: FontSize(8.0.sp),
-                                                    maxLines: 2,
-                                                    textOverflow: TextOverflow.ellipsis,
-                                                    margin: EdgeInsets.all(0),
-                                                  )
-                                                },
-                                              ),
-                                              SizedBox(height: 2.2.w,),
-                                              Text(
-                                                NumberFormat.currency(
-                                                  locale: 'id',
-                                                  symbol: 'Rp ',
-                                                  decimalDigits: 0,
-                                                ).format(dbPackage[index]['prods_price']),
-                                                style: TextStyle(
-                                                  color: Theme.of(context).backgroundColor,
-                                                  fontSize: 10.0.sp,
-                                                ),
-                                              ),
+                                              )
                                             ],
                                           ),
-                                        ],
-                                      ),
-                                    ),
-                                    dbPackage[index]['prods_promo'] == '' ? Container() : Padding(
-                                      padding: EdgeInsets.only(top: 3.9.w,),
-                                      child: Image.asset(
-                                        'images/bg_label_light.png',
-                                        height: 7.9.w,
-                                      ),
-                                    ),
-                                    dbPackage[index]['prods_promo'] == '' ? Container() : Padding(
-                                      padding: EdgeInsets.fromLTRB(3.6.w, 5.3.w, 0, 0),
-                                      child: Text(
-                                        dbPackage[index]['prods_promo'],
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 9.0.sp,
+                                          onTap: () {
+                                            prodId = dbFav[index]['prods_id'];
+                                            waNumber = dbSetup[0]['wa_number'];
+                                            showModalBottomSheet(
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.only(
+                                                  topLeft: Radius.circular(40),
+                                                  topRight: Radius.circular(40),
+                                                ),
+                                              ),
+                                              backgroundColor: Colors.white,
+                                              constraints: BoxConstraints(
+                                                minHeight: 165.0.w,
+                                                maxHeight: 165.0.w,
+                                              ),
+                                              isScrollControlled: true,
+                                              context: context,
+                                              isDismissible: false,
+                                              builder: (context) => ViewProduct(),
+                                            );
+                                          },
                                         ),
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsets.only(left: 33.2.w, top: 4.4.w),
-                                      child: InkWell(
-                                        child: Image.asset(
-                                          dbPackage[index]['prods_fav'] == 0 ? 'images/ic_unfav.png' : 'images/ic_fav.png',
-                                          width: 5.6.w,
+                                      );
+                                    },
+                                  ),
+                                )
+                                    : Column(
+                                      children: [
+                                        SizedBox(height: 2.5.h,),
+                                        Image.asset(
+                                          'images/no_favs.png',
+                                          height: 62.0.w,
                                         ),
-                                        onTap: () {
-                                          setState(() {
-                                            if (dbPackage[index]['prods_fav'] == 1) {
-                                              var fav = Prods(
-                                                prods_id: dbPackage[index]['prods_id'],
-                                                prods_fav: 0,
-                                              );
-                                              prodsDb.updateFav(fav);
-                                            } else {
-                                              var fav = Prods(
-                                                prods_id: dbPackage[index]['prods_id'],
-                                                prods_fav: 1,
-                                              );
-                                              prodsDb.updateFav(fav);
-                                            }
-                                          });
-                                        },
-                                      ),
-                                    )
+                                        SizedBox(height: 3.4.h,),
+                                        Text(
+                                          'Buat daftar aqiqah favorit pertama Anda',
+                                          style: TextStyle(
+                                            color: Theme.of(context).backgroundColor,
+                                            fontWeight: FontWeight.w700,
+                                            fontSize: 12.0.sp,
+                                          ),
+                                        ),
+                                        SizedBox(height: 0.6.h,),
+                                        Padding(
+                                          padding: EdgeInsets.symmetric(horizontal: 2.2.w),
+                                          child: Text(
+                                            'Saat Anda mencari paket aqiqah, ketuk ikon hati '
+                                                'untuk menyimpan aqiqah favorit Anda ke daftar favorit.',
+                                            style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 10.0.sp,
+                                            ),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ),
                                   ],
                                 ),
-                                onTap: () {
-                                  prodId = dbPackage[index]['prods_id'];
-                                  waNumber = dbSetup[0]['wa_number'];
-                                  showModalBottomSheet(
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.only(
-                                        topLeft: Radius.circular(40),
-                                        topRight: Radius.circular(40),
-                                      ),
-                                    ),
-                                    backgroundColor: Colors.white,
-                                    constraints: BoxConstraints(
-                                      minHeight: 165.0.w,
-                                      maxHeight: 165.0.w,
-                                    ),
-                                    isScrollControlled: true,
-                                    context: context,
-                                    isDismissible: false,
-                                    builder: (context) => ViewProduct(),
-                                  );
-                                },
-                              );
-                            },
+                              ],
+                            ),
                           ),
                           SizedBox(height: 7.5.h,),
                         ],
                       ),
                     ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                    Stack(
                       children: [
-                        Stack(
+                        Column(
                           children: [
-                            Column(
+                            Container(
+                              height: 4.0.h,
+                              color: Colors.white,
+                            ),
+                            Container(
+                              height: 11.0.h,
+                              decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                    begin: Alignment.topCenter,
+                                    end: Alignment.bottomCenter,
+                                    colors: [
+                                      Colors.white, Colors.white.withOpacity(0.0),
+                                    ],
+                                  )
+                              ),
+                            ),
+                          ],
+                        ),
+                        InkWell(
+                          onTap: () => Navigator.pushNamedAndRemoveUntil(context, '/aqiqah', (route) => false),
+                          child: Container(
+                            width: 19.0.w,
+                            height: 15.0.h,
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).primaryColor,
+                              borderRadius: BorderRadius.only(
+                                bottomRight: Radius.circular(40),
+                              ),
+                            ),
+                            child: Stack(
+                              alignment: AlignmentDirectional.bottomCenter,
                               children: [
-                                Container(
-                                  height: 4.0.h,
-                                  color: Colors.white,
-                                ),
-                                Container(
-                                  height: 11.0.h,
-                                  decoration: BoxDecoration(
-                                      gradient: LinearGradient(
-                                        begin: Alignment.topCenter,
-                                        end: Alignment.bottomCenter,
-                                        colors: [
-                                          Colors.white, Colors.white.withOpacity(0.0),
-                                        ],
-                                      )
+                                SizedBox(
+                                  width: 19.0.w,
+                                  height: 19.0.w,
+                                  child: Icon(
+                                    Icons.arrow_back_ios_new_rounded,
+                                    color: Colors.white,
+                                    size: 5.2.w,
                                   ),
                                 ),
                               ],
                             ),
-                            InkWell(
-                              onTap: () => Navigator.pushNamedAndRemoveUntil(context, '/aqiqah', (route) => false),
-                              child: Container(
-                                width: 19.0.w,
-                                height: 15.0.h,
-                                decoration: BoxDecoration(
-                                  color: Theme.of(context).primaryColor,
-                                  borderRadius: BorderRadius.only(
-                                    bottomRight: Radius.circular(40),
-                                  ),
-                                ),
-                                child: Stack(
-                                  alignment: AlignmentDirectional.bottomCenter,
-                                  children: [
-                                    SizedBox(
-                                      width: 19.0.w,
-                                      height: 19.0.w,
-                                      child: Icon(
-                                        Icons.arrow_back_ios_new_rounded,
-                                        color: Colors.white,
-                                        size: 5.2.w,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ],
+                          ),
                         ),
                       ],
                     ),
@@ -364,7 +370,7 @@ class _ViewProductState extends State<ViewProduct> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () => Navigator.pushReplacementNamed(context, '/closetopackage'),
+      onWillPop: () => Navigator.pushReplacementNamed(context, '/closetofavorites'),
       child: FutureBuilder(
         future: prodsDb.single(prodId),
         builder: (context, snapshot) {
@@ -417,7 +423,7 @@ class _ViewProductState extends State<ViewProduct> {
                     children: [
                       InkWell(
                         onTap: () {
-                          Navigator.pushReplacementNamed(context, '/closetopackage');
+                          Navigator.pushReplacementNamed(context, '/closetofavorites');
                         },
                         child: Container(
                           width: 19.0.w,

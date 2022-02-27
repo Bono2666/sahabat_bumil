@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:sahabat_bumil_v2/db/prods_db.dart';
 import 'package:sahabat_bumil_v2/main.dart';
 import 'package:sizer/sizer.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -10,6 +11,9 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_html/flutter_html.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import '../../db/promo_db.dart';
+import '../../model/prods_model.dart';
 
 int prodId = 1;
 String waNumber;
@@ -22,9 +26,10 @@ class Aqiqah extends StatefulWidget {
 class _AqiqahState extends State<Aqiqah> {
   int currentPage = 0, prevPage = 0;
   PageController pageController = new PageController();
-  AsyncSnapshot<dynamic> dbBanner, dbPackages, dbPromo, dbRecomended,
-      dbRecomendedList, dbTopProducts;
-  List lsRecomended, dbSetup;
+  AsyncSnapshot<dynamic> dbPackages, dbRecomended;
+  List lsRecomended, dbSetup, dbTopProducts, dbRecomendedList, dbPromo, dbBanner;
+  var prodsDb = ProdsDb();
+  var promoDb = PromoDb();
 
   Future getBanner() async {
     var url = Uri.parse('https://sahabataqiqah.co.id/sahabat_bumil/api/get_banner.php');
@@ -38,26 +43,8 @@ class _AqiqahState extends State<Aqiqah> {
     return json.decode(response.body);
   }
 
-  Future getPromo() async {
-    var url = Uri.parse('https://sahabataqiqah.co.id/sahabat_bumil/api/get_promo.php');
-    var response = await http.get(url);
-    return json.decode(response.body);
-  }
-
   Future getRecomended() async {
     var url = Uri.parse('https://sahabataqiqah.co.id/sahabat_bumil/api/get_recomended.php');
-    var response = await http.get(url);
-    return json.decode(response.body);
-  }
-
-  Future getRecomendedList() async {
-    var url = Uri.parse('https://sahabataqiqah.co.id/sahabat_bumil/api/get_recomended_product.php');
-    var response = await http.get(url);
-    return json.decode(response.body);
-  }
-
-  Future getTopProducts() async {
-    var url = Uri.parse('https://sahabataqiqah.co.id/sahabat_bumil/api/get_top_products.php');
     var response = await http.get(url);
     return json.decode(response.body);
   }
@@ -75,7 +62,7 @@ class _AqiqahState extends State<Aqiqah> {
     Timer.periodic(Duration(seconds: 5), (Timer timer) {
       prevPage = currentPage;
 
-      if (currentPage < (dbBanner.data.length - 1)) {
+      if (currentPage < (dbBanner.length - 1)) {
         currentPage++;
       } else {
         currentPage = 0;
@@ -115,7 +102,7 @@ class _AqiqahState extends State<Aqiqah> {
               );
             }
             if (snapshot.connectionState == ConnectionState.done) {
-              dbBanner = snapshot;
+              dbBanner = snapshot.data;
             }
             return FutureBuilder(
               future: getPackages(),
@@ -134,7 +121,7 @@ class _AqiqahState extends State<Aqiqah> {
                   dbPackages = snapshot;
                 }
                 return FutureBuilder(
-                  future: getPromo(),
+                  future: promoDb.list(),
                   builder: (context, snapshot) {
                     if (!snapshot.hasData || snapshot.data == null || snapshot.hasError) {
                       return Column(
@@ -147,7 +134,7 @@ class _AqiqahState extends State<Aqiqah> {
                       );
                     }
                     if (snapshot.connectionState == ConnectionState.done) {
-                      dbPromo = snapshot;
+                      dbPromo = snapshot.data;
                     }
                     return FutureBuilder(
                       future: getRecomended(),
@@ -166,7 +153,7 @@ class _AqiqahState extends State<Aqiqah> {
                           dbRecomended = snapshot;
                         }
                         return FutureBuilder(
-                          future: getRecomendedList(),
+                          future: prodsDb.recomended(),
                           builder: (context, snapshot) {
                             if (!snapshot.hasData || snapshot.data == null || snapshot.hasError) {
                               return Column(
@@ -179,10 +166,10 @@ class _AqiqahState extends State<Aqiqah> {
                               );
                             }
                             if (snapshot.connectionState == ConnectionState.done) {
-                              dbRecomendedList = snapshot;
+                              dbRecomendedList = snapshot.data;
                             }
                             return FutureBuilder(
-                              future: getTopProducts(),
+                              future: prodsDb.topProds(),
                               builder: (context, snapshot) {
                                 if (!snapshot.hasData || snapshot.data == null || snapshot.hasError) {
                                   return Column(
@@ -195,8 +182,7 @@ class _AqiqahState extends State<Aqiqah> {
                                   );
                                 }
                                 if (snapshot.connectionState == ConnectionState.done) {
-                                  dbTopProducts = snapshot;
-                                  lsRecomended = dbRecomended.data;
+                                  dbTopProducts = snapshot.data;
                                 }
                                 return FutureBuilder(
                                   future: getSetup(),
@@ -213,6 +199,7 @@ class _AqiqahState extends State<Aqiqah> {
                                     }
                                     if (snapshot.connectionState == ConnectionState.done) {
                                       dbSetup = snapshot.data;
+                                      lsRecomended = dbRecomended.data;
                                     }
                                     return Stack(
                                       alignment: AlignmentDirectional.bottomEnd,
@@ -227,7 +214,7 @@ class _AqiqahState extends State<Aqiqah> {
                                                 children: [
                                                   Container(
                                                     child: PageView.builder(
-                                                      itemCount: dbBanner.data.length,
+                                                      itemCount: dbBanner.length,
                                                       controller: pageController,
                                                       onPageChanged: (index) {
                                                         setState(() {
@@ -235,23 +222,53 @@ class _AqiqahState extends State<Aqiqah> {
                                                         });
                                                       },
                                                       itemBuilder: (context, index) {
-                                                        List lsBanner = dbBanner.data;
-                                                        return Image.network(
-                                                          lsBanner[currentPage]['image'],
-                                                          fit: BoxFit.fitWidth,
-                                                          loadingBuilder: (context, child, loadingProgress) {
-                                                            if (loadingProgress == null) return child;
-                                                            return Column(
-                                                              mainAxisAlignment: MainAxisAlignment.start,
-                                                              children: [
-                                                                Padding(
-                                                                  padding: EdgeInsets.only(top: 22.8.h),
-                                                                  child: SpinKitPulse(
-                                                                    color: Colors.white,
+                                                        return InkWell(
+                                                          child: Image.network(
+                                                            dbBanner[currentPage]['image'],
+                                                            fit: BoxFit.fitWidth,
+                                                            loadingBuilder: (context, child, loadingProgress) {
+                                                              if (loadingProgress == null) return child;
+                                                              return Column(
+                                                                mainAxisAlignment: MainAxisAlignment.start,
+                                                                children: [
+                                                                  Padding(
+                                                                    padding: EdgeInsets.only(top: 22.8.h),
+                                                                    child: SpinKitPulse(
+                                                                      color: Colors.white,
+                                                                    ),
+                                                                  ),
+                                                                ],
+                                                              );
+                                                            },
+                                                          ),
+                                                          onTap: () {
+                                                            if (int.parse(dbBanner[index]['product']) > 0) {
+                                                              prodId = dbBanner[index]['product'];
+                                                              waNumber = dbSetup[0]['wa_number'];
+                                                              showModalBottomSheet(
+                                                                shape: RoundedRectangleBorder(
+                                                                  borderRadius: BorderRadius.only(
+                                                                    topLeft: Radius.circular(40),
+                                                                    topRight: Radius.circular(40),
                                                                   ),
                                                                 ),
-                                                              ],
-                                                            );
+                                                                backgroundColor: Colors.white,
+                                                                constraints: BoxConstraints(
+                                                                  minHeight: 165.0.w,
+                                                                  maxHeight: 165.0.w,
+                                                                ),
+                                                                isScrollControlled: true,
+                                                                context: context,
+                                                                builder: (context) => ViewProduct(),
+                                                              );
+                                                            }
+                                                            if (int.parse(dbBanner[index]['package']) > 0) {
+                                                              prefs.setIdPackage(dbBanner[index]['package'].toString());
+                                                              Navigator.pushNamed(context, '/package');
+                                                            }
+                                                            if (dbBanner[index]['link'] != '') {
+                                                              launch(dbBanner[index]['link']);
+                                                            }
                                                           },
                                                         );
                                                       },
@@ -275,7 +292,7 @@ class _AqiqahState extends State<Aqiqah> {
                                                           padding: EdgeInsets.only(bottom: 1.9.h),
                                                           child: SmoothPageIndicator(
                                                             controller: pageController,
-                                                            count: dbBanner.data.length,
+                                                            count: dbBanner.length,
                                                             effect: WormEffect(
                                                               dotWidth: 1.5.w,
                                                               dotHeight: 1.5.w,
@@ -446,7 +463,7 @@ class _AqiqahState extends State<Aqiqah> {
                                                         ),
                                                       ),
                                                       SizedBox(height: 3.8.h,),
-                                                      dbPromo.data.length < 1 ? Container() : Padding(
+                                                      dbPromo.length < 1 ? Container() : Padding(
                                                         padding: EdgeInsets.symmetric(horizontal: 6.6.w),
                                                         child: Column(
                                                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -461,7 +478,7 @@ class _AqiqahState extends State<Aqiqah> {
                                                             ),
                                                             SizedBox(height: 0.6.h,),
                                                             Text(
-                                                              'Manfaatkan promo sebelum kehabisan',
+                                                              'Manfaatkan promo jangan dilewatkan',
                                                               style: TextStyle(
                                                                 fontSize: 10.0.sp,
                                                                 fontWeight: FontWeight.w700,
@@ -471,16 +488,15 @@ class _AqiqahState extends State<Aqiqah> {
                                                           ],
                                                         ),
                                                       ),
-                                                      dbPromo.data.length < 1 ? Container() : SizedBox(height: 1.9.h,),
-                                                      dbPromo.data.length < 1 ? Container() : SizedBox(
+                                                      dbPromo.length < 1 ? Container() : SizedBox(height: 1.9.h,),
+                                                      dbPromo.length < 1 ? Container() : SizedBox(
                                                         height: 68.9.w,
                                                         child: ListView.builder(
-                                                          itemCount: dbPromo.data.length,
+                                                          itemCount: dbPromo.length,
                                                           scrollDirection: Axis.horizontal,
                                                           physics: BouncingScrollPhysics(),
                                                           padding: EdgeInsets.only(left: 3.9.w, right: 4.9.w),
                                                           itemBuilder: (context, index) {
-                                                            List lsPromo = dbPromo.data;
                                                             return Row(
                                                               children: [
                                                                 Padding(
@@ -518,7 +534,7 @@ class _AqiqahState extends State<Aqiqah> {
                                                                                   child: Container(
                                                                                     color: Theme.of(context).primaryColor,
                                                                                     child: Image.network(
-                                                                                      lsPromo[index]['image'],
+                                                                                      dbPromo[index]['promo_image'],
                                                                                       height: 40.0.w,
                                                                                       fit: BoxFit.cover,
                                                                                       loadingBuilder: (context, child, loadingProgress) {
@@ -541,7 +557,7 @@ class _AqiqahState extends State<Aqiqah> {
                                                                                     crossAxisAlignment: CrossAxisAlignment.start,
                                                                                     children: [
                                                                                       Text(
-                                                                                        lsPromo[index]['title'],
+                                                                                        dbPromo[index]['promo_title'],
                                                                                         style: TextStyle(
                                                                                           color: Theme.of(context).backgroundColor,
                                                                                           fontSize: 12.0.sp,
@@ -550,7 +566,7 @@ class _AqiqahState extends State<Aqiqah> {
                                                                                       ),
                                                                                       SizedBox(height: 1.1.w,),
                                                                                       Text(
-                                                                                        lsPromo[index]['description'],
+                                                                                        dbPromo[index]['promo_desc'],
                                                                                         style: TextStyle(
                                                                                           color: Theme.of(context).backgroundColor,
                                                                                           fontSize: 8.0.sp,
@@ -566,7 +582,7 @@ class _AqiqahState extends State<Aqiqah> {
                                                                         Padding(
                                                                           padding: EdgeInsets.fromLTRB(7.2.w, 0, 4.4.w, 4.4.w),
                                                                           child: Text(
-                                                                            lsPromo[index]['price'],
+                                                                            dbPromo[index]['promo_price'],
                                                                             style: TextStyle(
                                                                               color: Theme.of(context).backgroundColor,
                                                                               fontSize: 10.0.sp,
@@ -583,27 +599,18 @@ class _AqiqahState extends State<Aqiqah> {
                                                                         Padding(
                                                                           padding: EdgeInsets.fromLTRB(3.4.w, 0, 0, 58.1.w),
                                                                           child: Text(
-                                                                            lsPromo[index]['label'],
+                                                                            dbPromo[index]['promo_label'],
                                                                             style: TextStyle(
                                                                               color: Colors.white,
                                                                               fontSize: 9.0.sp,
                                                                             ),
                                                                           ),
                                                                         ),
-                                                                        Positioned(
-                                                                          left: 53.9.w,
-                                                                          bottom: 57.5.w,
-                                                                          child: int.parse(lsPromo[index]['package']) > 1
-                                                                              ? Container() : Image.asset(
-                                                                            'images/ic_unfav.png',
-                                                                            width: 5.6.w,
-                                                                          ),
-                                                                        )
                                                                       ],
                                                                     ),
                                                                     onTap: () {
-                                                                      if (int.parse(lsPromo[index]['product']) > 0) {
-                                                                        prodId = int.parse(lsPromo[index]['product']);
+                                                                      if (dbPromo[index]['promo_product'] > 0) {
+                                                                        prodId = dbPromo[index]['promo_product'];
                                                                         waNumber = dbSetup[0]['wa_number'];
                                                                         showModalBottomSheet(
                                                                           shape: RoundedRectangleBorder(
@@ -622,8 +629,8 @@ class _AqiqahState extends State<Aqiqah> {
                                                                           builder: (context) => ViewProduct(),
                                                                         );
                                                                       }
-                                                                      if (int.parse(lsPromo[index]['package']) > 0) {
-                                                                        prefs.setIdPackage(lsPromo[index]['package']);
+                                                                      if (dbPromo[index]['promo_package'] > 0) {
+                                                                        prefs.setIdPackage(dbPromo[index]['promo_package'].toString());
                                                                         Navigator.pushNamed(context, '/package');
                                                                       }
                                                                     },
@@ -635,7 +642,7 @@ class _AqiqahState extends State<Aqiqah> {
                                                           },
                                                         ),
                                                       ),
-                                                      dbPromo.data.length < 1 ? Container() : SizedBox(height: 3.8.h,),
+                                                      dbPromo.length < 1 ? Container() : SizedBox(height: 3.8.h,),
                                                       dbRecomended.data.length < 1 ? Container() : Padding(
                                                         padding: EdgeInsets.symmetric(horizontal: 6.6.w),
                                                         child: Column(
@@ -665,12 +672,11 @@ class _AqiqahState extends State<Aqiqah> {
                                                       dbRecomended.data.length < 1 ? Container() : SizedBox(
                                                         height: 58.9.w,
                                                         child: ListView.builder(
-                                                          itemCount: dbRecomendedList.data.length,
+                                                          itemCount: dbRecomendedList.length,
                                                           scrollDirection: Axis.horizontal,
                                                           physics: BouncingScrollPhysics(),
                                                           padding: EdgeInsets.only(left: 3.9.w, right: 3.8.w),
                                                           itemBuilder: (context, index) {
-                                                            List lsRecommendedList = dbRecomendedList.data;
                                                             return Row(
                                                               children: [
                                                                 Padding(
@@ -706,7 +712,7 @@ class _AqiqahState extends State<Aqiqah> {
                                                                                   child: Container(
                                                                                     color: Theme.of(context).primaryColor,
                                                                                     child: Image.network(
-                                                                                      lsRecommendedList[index]['image'],
+                                                                                      dbRecomendedList[index]['prods_image'],
                                                                                       height: 40.0.w,
                                                                                       fit: BoxFit.cover,
                                                                                       loadingBuilder: (context, child, loadingProgress) {
@@ -729,7 +735,7 @@ class _AqiqahState extends State<Aqiqah> {
                                                                                     crossAxisAlignment: CrossAxisAlignment.start,
                                                                                     children: [
                                                                                       Text(
-                                                                                        lsRecommendedList[index]['name'],
+                                                                                        dbRecomendedList[index]['prods_name'],
                                                                                         style: TextStyle(
                                                                                           color: Colors.white,
                                                                                           fontSize: 12.0.sp,
@@ -742,7 +748,7 @@ class _AqiqahState extends State<Aqiqah> {
                                                                                           locale: 'id',
                                                                                           symbol: 'Rp ',
                                                                                           decimalDigits: 0,
-                                                                                        ).format(int.parse(lsRecommendedList[index]['price'])),
+                                                                                        ).format(dbRecomendedList[index]['prods_price']),
                                                                                         style: TextStyle(
                                                                                           color: Colors.white,
                                                                                           fontSize: 10.0.sp,
@@ -755,38 +761,58 @@ class _AqiqahState extends State<Aqiqah> {
                                                                             ),
                                                                           ),
                                                                         ),
-                                                                        lsRecommendedList[index]['promo'] == ''
+                                                                        dbRecomendedList[index]['prods_promo'] == ''
                                                                             ? Container()
                                                                             : Padding(
-                                                                          padding: EdgeInsets.only(top: 3.3.w,),
-                                                                          child: Image.asset(
-                                                                            'images/bg_label.png',
-                                                                            height: 7.9.w,
-                                                                          ),
+                                                                              padding: EdgeInsets.only(top: 3.3.w,),
+                                                                              child: Image.asset(
+                                                                                'images/bg_label.png',
+                                                                                height: 7.9.w,
+                                                                              ),
                                                                         ),
-                                                                        lsRecommendedList[index]['promo'] == ''
+                                                                        dbRecomendedList[index]['prods_promo'] == ''
                                                                             ? Container()
                                                                             : Padding(
                                                                           padding: EdgeInsets.fromLTRB(3.4.w, 4.7.w, 0, 0),
-                                                                          child: Text(
-                                                                            lsRecommendedList[index]['promo'],
-                                                                            style: TextStyle(
-                                                                              color: Colors.white,
-                                                                              fontSize: 9.0.sp,
+                                                                              child: Text(
+                                                                                dbRecomendedList[index]['prods_promo'],
+                                                                                style: TextStyle(
+                                                                                  color: Colors.white,
+                                                                                  fontSize: 9.0.sp,
+                                                                                ),
+                                                                              ),
+                                                                        ),
+                                                                        InkWell(
+                                                                          child: Padding(
+                                                                            padding: EdgeInsets.only(left: 32.8.w, top: 3.3.w),
+                                                                            child: Image.asset(
+                                                                              dbRecomendedList[index]['prods_fav'] == 0 ? 'images/ic_unfav.png' : 'images/ic_fav.png',
+                                                                              width: 5.6.w,
                                                                             ),
                                                                           ),
-                                                                        ),
-                                                                        Positioned(
-                                                                          left: 32.8.w,
-                                                                          top: 3.3.w,
-                                                                          child: Image.asset(
-                                                                            'images/ic_unfav.png',
-                                                                            width: 5.6.w,
-                                                                          ),
+                                                                          onTap: () {
+                                                                            setState(() {
+                                                                              if (dbRecomendedList[index]['prods_fav'] == 1) {
+                                                                                var fav = Prods(
+                                                                                  prods_id: dbRecomendedList[index]['prods_id'],
+                                                                                  prods_fav: 0,
+                                                                                );
+                                                                                prodsDb.updateFav(fav);
+                                                                              } else {
+                                                                                var fav = Prods(
+                                                                                  prods_id: dbRecomendedList[index]['prods_id'],
+                                                                                  prods_fav: 1,
+                                                                                );
+                                                                                prodsDb.updateFav(fav);
+                                                                              }
+                                                                            });
+                                                                          },
                                                                         )
                                                                       ],
                                                                     ),
                                                                     onTap: () {
+                                                                      prodId = dbRecomendedList[index]['prods_id'];
+                                                                      waNumber = dbSetup[0]['wa_number'];
                                                                       showModalBottomSheet(
                                                                         shape: RoundedRectangleBorder(
                                                                           borderRadius: BorderRadius.only(
@@ -802,266 +828,7 @@ class _AqiqahState extends State<Aqiqah> {
                                                                         isScrollControlled: true,
                                                                         context: context,
                                                                         builder: (context) {
-                                                                          return Column(
-                                                                            mainAxisSize: MainAxisSize.min,
-                                                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                                                            children: [
-                                                                              Stack(
-                                                                                children: [
-                                                                                  ClipRRect(
-                                                                                    borderRadius: BorderRadius.only(
-                                                                                      topLeft: Radius.circular(40),
-                                                                                      topRight: Radius.circular(40),
-                                                                                    ),
-                                                                                    child: Container(
-                                                                                      color: Theme.of(context).primaryColor,
-                                                                                      height: 66.7.w,
-                                                                                      child: Image.network(
-                                                                                        lsRecommendedList[index]['image'],
-                                                                                        width: 100.0.w,
-                                                                                        fit: BoxFit.cover,
-                                                                                        loadingBuilder: (context, child, loadingProgress) {
-                                                                                          if (loadingProgress == null) return child;
-                                                                                          return SizedBox(
-                                                                                            height: 66.7.w,
-                                                                                            child: Center(
-                                                                                              child: SpinKitPulse(
-                                                                                                color: Colors.white,
-                                                                                              ),
-                                                                                            ),
-                                                                                          );
-                                                                                        },
-                                                                                      ),
-                                                                                    ),
-                                                                                  ),
-                                                                                  Row(
-                                                                                    children: [
-                                                                                      InkWell(
-                                                                                        onTap: () {
-                                                                                          Navigator.pop(context);
-                                                                                        },
-                                                                                        child: Container(
-                                                                                          width: 19.0.w,
-                                                                                          height: 14.6.h,
-                                                                                          decoration: BoxDecoration(
-                                                                                            color: Theme.of(context).primaryColor,
-                                                                                            borderRadius: BorderRadius.only(
-                                                                                              bottomRight: Radius.circular(40),
-                                                                                              topLeft: Radius.circular(40),
-                                                                                            ),
-                                                                                          ),
-                                                                                          child: Stack(
-                                                                                            alignment:
-                                                                                            AlignmentDirectional.bottomCenter,
-                                                                                            children: [
-                                                                                              SizedBox(
-                                                                                                width: 19.0.w,
-                                                                                                height: 19.0.w,
-                                                                                                child: Icon(
-                                                                                                  Icons.close,
-                                                                                                  color: Colors.white,
-                                                                                                  size: 7.0.w,
-                                                                                                ),
-                                                                                              ),
-                                                                                            ],
-                                                                                          ),
-                                                                                        ),
-                                                                                      ),
-                                                                                      Expanded(child: SizedBox(),),
-                                                                                      Positioned(
-                                                                                        top: 7.8.w,
-                                                                                        child: Image.asset(
-                                                                                          'images/ic_unfav.png',
-                                                                                          width: 6.7.w,
-                                                                                        ),
-                                                                                      ),
-                                                                                      SizedBox(width: 7.8.w,),
-                                                                                    ],
-                                                                                  ),
-                                                                                ],
-                                                                              ),
-                                                                              Stack(
-                                                                                children: [
-                                                                                  SizedBox(
-                                                                                    height: 98.0.w,
-                                                                                    child: SingleChildScrollView(
-                                                                                      child: Padding(
-                                                                                        padding: EdgeInsets.symmetric(horizontal: 6.9.w,),
-                                                                                        child: Column(
-                                                                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                                                                          children: [
-                                                                                            SizedBox(height: 11.0.w,),
-                                                                                            Text(
-                                                                                              lsRecommendedList[index]['package'],
-                                                                                              style: TextStyle(
-                                                                                                fontSize: 10.0.sp,
-                                                                                                fontWeight: FontWeight.w500,
-                                                                                                color: Theme.of(context).primaryColor,
-                                                                                              ),
-                                                                                            ),
-                                                                                            Text(
-                                                                                              lsRecommendedList[index]['name'],
-                                                                                              style: TextStyle(
-                                                                                                fontSize: 23.0.sp,
-                                                                                                fontWeight: FontWeight.w700,
-                                                                                                color: Theme.of(context).backgroundColor,
-                                                                                              ),
-                                                                                            ),
-                                                                                            SizedBox(height: 6.7.w,),
-                                                                                            Row(
-                                                                                              crossAxisAlignment: CrossAxisAlignment.center,
-                                                                                              children: [
-                                                                                                Text(
-                                                                                                  NumberFormat.currency(
-                                                                                                    locale: 'id',
-                                                                                                    symbol: 'Rp ',
-                                                                                                    decimalDigits: 0,
-                                                                                                  ).format(int.parse(lsRecommendedList[index]['price'])),
-                                                                                                  style: TextStyle(
-                                                                                                    fontSize: 16.0.sp,
-                                                                                                    fontWeight: FontWeight.w700,
-                                                                                                    color: Theme.of(context).backgroundColor,
-                                                                                                  ),
-                                                                                                ),
-                                                                                                Expanded(child: SizedBox(),),
-                                                                                                lsRecommendedList[index]['promo'] == ''
-                                                                                                    ? Container() : Container(
-                                                                                                  child: Padding(
-                                                                                                    padding: EdgeInsets.symmetric(
-                                                                                                      horizontal: 4.4.w, vertical: 1.4.w,),
-                                                                                                    child: Text(
-                                                                                                      lsRecommendedList[index]['promo'],
-                                                                                                      style: TextStyle(
-                                                                                                        fontSize: 8.0.sp,
-                                                                                                        color: Colors.white,
-                                                                                                      ),
-                                                                                                    ),
-                                                                                                  ),
-                                                                                                  decoration: BoxDecoration(
-                                                                                                    color: Theme.of(context).primaryColor,
-                                                                                                    borderRadius: BorderRadius.all(
-                                                                                                      Radius.circular(20),
-                                                                                                    ),
-                                                                                                  ),
-                                                                                                ),
-                                                                                              ],
-                                                                                            ),
-                                                                                            SizedBox(height: 5.2.w,),
-                                                                                            Html(
-                                                                                              data: lsRecommendedList[index]['description'],
-                                                                                              style: {
-                                                                                                'body': Style(
-                                                                                                  color: Colors.black,
-                                                                                                  fontSize: FontSize(11.0.sp),
-                                                                                                  margin: EdgeInsets.all(0),
-                                                                                                )
-                                                                                              },
-                                                                                            ),
-                                                                                            SizedBox(height: 35.5.w,),
-                                                                                          ],
-                                                                                        ),
-                                                                                      ),
-                                                                                      physics: BouncingScrollPhysics(),
-                                                                                    ),
-                                                                                  ),
-                                                                                  Column(
-                                                                                    children: [
-                                                                                      Container(
-                                                                                        height: 16.4.w,
-                                                                                        decoration: BoxDecoration(
-                                                                                            gradient: LinearGradient(
-                                                                                              begin: Alignment.topCenter,
-                                                                                              end: Alignment.bottomCenter,
-                                                                                              colors: [
-                                                                                                Colors.white, Colors.white.withOpacity(0.0),
-                                                                                              ],
-                                                                                            )
-                                                                                        ),
-                                                                                      ),
-                                                                                      SizedBox(height: 47.5.w,),
-                                                                                      Stack(
-                                                                                        alignment: AlignmentDirectional.bottomEnd,
-                                                                                        children: [
-                                                                                          Container(
-                                                                                            height: 34.4.w,
-                                                                                            decoration: BoxDecoration(
-                                                                                                gradient: LinearGradient(
-                                                                                                  begin: Alignment.bottomCenter,
-                                                                                                  end: Alignment.topCenter,
-                                                                                                  colors: [
-                                                                                                    Colors.white, Colors.white.withOpacity(0.0),
-                                                                                                  ],
-                                                                                                )
-                                                                                            ),
-                                                                                          ),
-                                                                                          InkWell(
-                                                                                            onTap: () {
-                                                                                              prefs.setIdProduct(lsRecommendedList[index]['id']);
-                                                                                              Navigator.pushNamed(context, '/checkout');
-                                                                                            },
-                                                                                            child: Stack(
-                                                                                              alignment: AlignmentDirectional.centerEnd,
-                                                                                              children: [
-                                                                                                Container(
-                                                                                                  width: 53.6.w,
-                                                                                                  height: 20.8.w,
-                                                                                                  color: Theme.of(context).primaryColor,
-                                                                                                ),
-                                                                                                SizedBox(
-                                                                                                  width: 42.8.w,
-                                                                                                  child: Center(
-                                                                                                    child: Text(
-                                                                                                      'Pesan',
-                                                                                                      style: TextStyle(
-                                                                                                        color: Colors.white,
-                                                                                                        fontWeight: FontWeight.w500,
-                                                                                                        fontSize: 13.0.sp,
-                                                                                                      ),
-                                                                                                    ),
-                                                                                                  ),
-                                                                                                ),
-                                                                                              ],
-                                                                                            ),
-                                                                                          ),
-                                                                                          Padding(
-                                                                                            padding: EdgeInsets.only(right: 42.8.w),
-                                                                                            child: InkWell(
-                                                                                              onTap: () {
-                                                                                                launch('https://api.whatsapp.com/send?phone=' + dbSetup[0]['wa_number'] +
-                                                                                                    '&text=Assalamualaikum%2C+saya+dapat+info+dari+aplikasi+'
-                                                                                                        '*Sahabat+Bumil*%2C+dan+ingin+bertanya+tentang+Aqiqah+anak+saya');
-                                                                                              },
-                                                                                              child: Container(
-                                                                                                width: 40.5.w,
-                                                                                                height: 20.8.w,
-                                                                                                decoration: BoxDecoration(
-                                                                                                  color: Theme.of(context).backgroundColor,
-                                                                                                  borderRadius: BorderRadius.only(
-                                                                                                    topLeft: Radius.circular(40),
-                                                                                                    bottomRight: Radius.circular(40),
-                                                                                                  ),
-                                                                                                ),
-                                                                                                child: Center(
-                                                                                                  child: Text(
-                                                                                                    'Chat',
-                                                                                                    style: TextStyle(
-                                                                                                      color: Colors.white,
-                                                                                                      fontWeight: FontWeight.w500,
-                                                                                                      fontSize: 13.0.sp,
-                                                                                                    ),
-                                                                                                  ),
-                                                                                                ),
-                                                                                              ),
-                                                                                            ),
-                                                                                          ),
-                                                                                        ],
-                                                                                      ),
-                                                                                    ],
-                                                                                  ),
-                                                                                ],
-                                                                              ),
-                                                                            ],
-                                                                          );
+                                                                          return ViewProduct();
                                                                         },
                                                                       );
                                                                     },
@@ -1102,12 +869,11 @@ class _AqiqahState extends State<Aqiqah> {
                                                       SizedBox(
                                                         height: 68.9.w,
                                                         child: ListView.builder(
-                                                          itemCount: dbTopProducts.data.length,
+                                                          itemCount: dbTopProducts.length,
                                                           scrollDirection: Axis.horizontal,
                                                           physics: BouncingScrollPhysics(),
                                                           padding: EdgeInsets.only(left: 3.9.w, right: 4.9.w),
                                                           itemBuilder: (context, index) {
-                                                            List lsTopProducts = dbTopProducts.data;
                                                             return Row(
                                                               children: [
                                                                 Padding(
@@ -1146,7 +912,7 @@ class _AqiqahState extends State<Aqiqah> {
                                                                                     height: 40.0.w,
                                                                                     color: Theme.of(context).primaryColor,
                                                                                     child: Image.network(
-                                                                                      lsTopProducts[index]['image'],
+                                                                                      dbTopProducts[index]['prods_image'],
                                                                                       width: 100.0.w,
                                                                                       fit: BoxFit.cover,
                                                                                       loadingBuilder: (context, child, loadingProgress) {
@@ -1169,8 +935,8 @@ class _AqiqahState extends State<Aqiqah> {
                                                                                     crossAxisAlignment: CrossAxisAlignment.start,
                                                                                     children: [
                                                                                       Text(
-                                                                                        lsTopProducts[index]['package'] + ' - '
-                                                                                            + lsTopProducts[index]['name'],
+                                                                                        dbTopProducts[index]['prods_package'] + ' - ' +
+                                                                                            dbTopProducts[index]['prods_name'],
                                                                                         style: TextStyle(
                                                                                           color: Theme.of(context).backgroundColor,
                                                                                           fontSize: 12.0.sp,
@@ -1179,7 +945,7 @@ class _AqiqahState extends State<Aqiqah> {
                                                                                       ),
                                                                                       SizedBox(height: 1.1.w,),
                                                                                       Html(
-                                                                                        data: lsTopProducts[index]['description'],
+                                                                                        data: dbTopProducts[index]['prods_desc'],
                                                                                         style: {
                                                                                           'body': Style(
                                                                                             color: Theme.of(context).backgroundColor,
@@ -1204,41 +970,61 @@ class _AqiqahState extends State<Aqiqah> {
                                                                               locale: 'id',
                                                                               symbol: 'Rp ',
                                                                               decimalDigits: 0,
-                                                                            ).format(int.parse(lsTopProducts[index]['price'])),
+                                                                            ).format(dbTopProducts[index]['prods_price']),
                                                                             style: TextStyle(
                                                                               color: Theme.of(context).backgroundColor,
                                                                               fontSize: 10.0.sp,
                                                                             ),
                                                                           ),
                                                                         ),
-                                                                        lsTopProducts[index]['promo'] == '' ? Container() : Padding(
+                                                                        dbTopProducts[index]['prods_promo'] == '' ? Container() : Padding(
                                                                           padding: EdgeInsets.only(bottom: 54.9.w,),
                                                                           child: Image.asset(
                                                                             'images/bg_label.png',
                                                                             height: 7.9.w,
                                                                           ),
                                                                         ),
-                                                                        lsTopProducts[index]['promo'] == '' ? Container() : Padding(
+                                                                        dbTopProducts[index]['prods_promo'] == '' ? Container() : Padding(
                                                                           padding: EdgeInsets.fromLTRB(3.4.w, 0, 0, 58.1.w),
                                                                           child: Text(
-                                                                            lsTopProducts[index]['promo'],
+                                                                            dbTopProducts[index]['prods_promo'],
                                                                             style: TextStyle(
                                                                               color: Colors.white,
                                                                               fontSize: 9.0.sp,
                                                                             ),
                                                                           ),
                                                                         ),
-                                                                        Positioned(
-                                                                          left: 53.9.w,
-                                                                          bottom: 57.5.w,
-                                                                          child: Image.asset(
-                                                                            'images/ic_unfav.png',
-                                                                            width: 5.6.w,
+                                                                        Padding(
+                                                                          padding: EdgeInsets.only(left: 53.9.w, bottom: 57.5.w),
+                                                                          child: InkWell(
+                                                                            child: Image.asset(
+                                                                              dbTopProducts[index]['prods_fav'] == 0 ? 'images/ic_unfav.png' : 'images/ic_fav.png',
+                                                                              width: 5.6.w,
+                                                                            ),
+                                                                            onTap: () {
+                                                                              setState(() {
+                                                                                if (dbTopProducts[index]['prods_fav'] == 1) {
+                                                                                  var fav = Prods(
+                                                                                    prods_id: dbTopProducts[index]['prods_id'],
+                                                                                    prods_fav: 0,
+                                                                                  );
+                                                                                  prodsDb.updateFav(fav);
+                                                                                } else {
+                                                                                  var fav = Prods(
+                                                                                    prods_id: dbTopProducts[index]['prods_id'],
+                                                                                    prods_fav: 1,
+                                                                                  );
+                                                                                  prodsDb.updateFav(fav);
+                                                                                }
+                                                                              });
+                                                                            },
                                                                           ),
                                                                         )
                                                                       ],
                                                                     ),
                                                                     onTap: () {
+                                                                      prodId = dbTopProducts[index]['prods_id'];
+                                                                      waNumber = dbSetup[0]['wa_number'];
                                                                       showModalBottomSheet(
                                                                         shape: RoundedRectangleBorder(
                                                                           borderRadius: BorderRadius.only(
@@ -1254,266 +1040,7 @@ class _AqiqahState extends State<Aqiqah> {
                                                                         isScrollControlled: true,
                                                                         context: context,
                                                                         builder: (context) {
-                                                                          return Column(
-                                                                            mainAxisSize: MainAxisSize.min,
-                                                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                                                            children: [
-                                                                              Stack(
-                                                                                children: [
-                                                                                  ClipRRect(
-                                                                                    borderRadius: BorderRadius.only(
-                                                                                      topLeft: Radius.circular(40),
-                                                                                      topRight: Radius.circular(40),
-                                                                                    ),
-                                                                                    child: Container(
-                                                                                      color: Theme.of(context).primaryColor,
-                                                                                      height: 66.7.w,
-                                                                                      child: Image.network(
-                                                                                        lsTopProducts[index]['image'],
-                                                                                        width: 100.0.w,
-                                                                                        fit: BoxFit.cover,
-                                                                                        loadingBuilder: (context, child, loadingProgress) {
-                                                                                          if (loadingProgress == null) return child;
-                                                                                          return SizedBox(
-                                                                                            height: 66.7.w,
-                                                                                            child: Center(
-                                                                                              child: SpinKitPulse(
-                                                                                                color: Colors.white,
-                                                                                              ),
-                                                                                            ),
-                                                                                          );
-                                                                                        },
-                                                                                      ),
-                                                                                    ),
-                                                                                  ),
-                                                                                  Row(
-                                                                                    children: [
-                                                                                      InkWell(
-                                                                                        onTap: () {
-                                                                                          Navigator.pop(context);
-                                                                                        },
-                                                                                        child: Container(
-                                                                                          width: 19.0.w,
-                                                                                          height: 14.6.h,
-                                                                                          decoration: BoxDecoration(
-                                                                                            color: Theme.of(context).primaryColor,
-                                                                                            borderRadius: BorderRadius.only(
-                                                                                              bottomRight: Radius.circular(40),
-                                                                                              topLeft: Radius.circular(40),
-                                                                                            ),
-                                                                                          ),
-                                                                                          child: Stack(
-                                                                                            alignment:
-                                                                                            AlignmentDirectional.bottomCenter,
-                                                                                            children: [
-                                                                                              SizedBox(
-                                                                                                width: 19.0.w,
-                                                                                                height: 19.0.w,
-                                                                                                child: Icon(
-                                                                                                  Icons.close,
-                                                                                                  color: Colors.white,
-                                                                                                  size: 7.0.w,
-                                                                                                ),
-                                                                                              ),
-                                                                                            ],
-                                                                                          ),
-                                                                                        ),
-                                                                                      ),
-                                                                                      Expanded(child: SizedBox(),),
-                                                                                      Positioned(
-                                                                                        top: 7.8.w,
-                                                                                        child: Image.asset(
-                                                                                          'images/ic_unfav.png',
-                                                                                          width: 6.7.w,
-                                                                                        ),
-                                                                                      ),
-                                                                                      SizedBox(width: 7.8.w,),
-                                                                                    ],
-                                                                                  ),
-                                                                                ],
-                                                                              ),
-                                                                              Stack(
-                                                                                children: [
-                                                                                  SizedBox(
-                                                                                    height: 98.0.w,
-                                                                                    child: SingleChildScrollView(
-                                                                                      child: Padding(
-                                                                                        padding: EdgeInsets.symmetric(horizontal: 6.9.w,),
-                                                                                        child: Column(
-                                                                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                                                                          children: [
-                                                                                            SizedBox(height: 11.0.w,),
-                                                                                            Text(
-                                                                                              lsTopProducts[index]['package'],
-                                                                                              style: TextStyle(
-                                                                                                fontSize: 10.0.sp,
-                                                                                                fontWeight: FontWeight.w500,
-                                                                                                color: Theme.of(context).primaryColor,
-                                                                                              ),
-                                                                                            ),
-                                                                                            Text(
-                                                                                              lsTopProducts[index]['name'],
-                                                                                              style: TextStyle(
-                                                                                                fontSize: 23.0.sp,
-                                                                                                fontWeight: FontWeight.w700,
-                                                                                                color: Theme.of(context).backgroundColor,
-                                                                                              ),
-                                                                                            ),
-                                                                                            SizedBox(height: 6.7.w,),
-                                                                                            Row(
-                                                                                              crossAxisAlignment: CrossAxisAlignment.center,
-                                                                                              children: [
-                                                                                                Text(
-                                                                                                  NumberFormat.currency(
-                                                                                                    locale: 'id',
-                                                                                                    symbol: 'Rp ',
-                                                                                                    decimalDigits: 0,
-                                                                                                  ).format(int.parse(lsTopProducts[index]['price'])),
-                                                                                                  style: TextStyle(
-                                                                                                    fontSize: 16.0.sp,
-                                                                                                    fontWeight: FontWeight.w700,
-                                                                                                    color: Theme.of(context).backgroundColor,
-                                                                                                  ),
-                                                                                                ),
-                                                                                                Expanded(child: SizedBox(),),
-                                                                                                lsTopProducts[index]['promo'] == ''
-                                                                                                    ? Container() : Container(
-                                                                                                  child: Padding(
-                                                                                                    padding: EdgeInsets.symmetric(
-                                                                                                      horizontal: 4.4.w, vertical: 1.4.w,),
-                                                                                                    child: Text(
-                                                                                                      lsTopProducts[index]['promo'],
-                                                                                                      style: TextStyle(
-                                                                                                        fontSize: 8.0.sp,
-                                                                                                        color: Colors.white,
-                                                                                                      ),
-                                                                                                    ),
-                                                                                                  ),
-                                                                                                  decoration: BoxDecoration(
-                                                                                                    color: Theme.of(context).primaryColor,
-                                                                                                    borderRadius: BorderRadius.all(
-                                                                                                      Radius.circular(20),
-                                                                                                    ),
-                                                                                                  ),
-                                                                                                ),
-                                                                                              ],
-                                                                                            ),
-                                                                                            SizedBox(height: 5.2.w,),
-                                                                                            Html(
-                                                                                              data: lsTopProducts[index]['description'],
-                                                                                              style: {
-                                                                                                'body': Style(
-                                                                                                  color: Colors.black,
-                                                                                                  fontSize: FontSize(11.0.sp),
-                                                                                                  margin: EdgeInsets.all(0),
-                                                                                                )
-                                                                                              },
-                                                                                            ),
-                                                                                            SizedBox(height: 35.5.w,),
-                                                                                          ],
-                                                                                        ),
-                                                                                      ),
-                                                                                      physics: BouncingScrollPhysics(),
-                                                                                    ),
-                                                                                  ),
-                                                                                  Column(
-                                                                                    children: [
-                                                                                      Container(
-                                                                                        height: 16.4.w,
-                                                                                        decoration: BoxDecoration(
-                                                                                            gradient: LinearGradient(
-                                                                                              begin: Alignment.topCenter,
-                                                                                              end: Alignment.bottomCenter,
-                                                                                              colors: [
-                                                                                                Colors.white, Colors.white.withOpacity(0.0),
-                                                                                              ],
-                                                                                            )
-                                                                                        ),
-                                                                                      ),
-                                                                                      SizedBox(height: 47.5.w,),
-                                                                                      Stack(
-                                                                                        alignment: AlignmentDirectional.bottomEnd,
-                                                                                        children: [
-                                                                                          Container(
-                                                                                            height: 34.4.w,
-                                                                                            decoration: BoxDecoration(
-                                                                                                gradient: LinearGradient(
-                                                                                                  begin: Alignment.bottomCenter,
-                                                                                                  end: Alignment.topCenter,
-                                                                                                  colors: [
-                                                                                                    Colors.white, Colors.white.withOpacity(0.0),
-                                                                                                  ],
-                                                                                                )
-                                                                                            ),
-                                                                                          ),
-                                                                                          InkWell(
-                                                                                            onTap: () {
-                                                                                              prefs.setIdProduct(lsTopProducts[index]['id']);
-                                                                                              Navigator.pushNamed(context, '/checkout');
-                                                                                            },
-                                                                                            child: Stack(
-                                                                                              alignment: AlignmentDirectional.centerEnd,
-                                                                                              children: [
-                                                                                                Container(
-                                                                                                  width: 53.6.w,
-                                                                                                  height: 20.8.w,
-                                                                                                  color: Theme.of(context).primaryColor,
-                                                                                                ),
-                                                                                                SizedBox(
-                                                                                                  width: 42.8.w,
-                                                                                                  child: Center(
-                                                                                                    child: Text(
-                                                                                                      'Pesan',
-                                                                                                      style: TextStyle(
-                                                                                                        color: Colors.white,
-                                                                                                        fontWeight: FontWeight.w500,
-                                                                                                        fontSize: 13.0.sp,
-                                                                                                      ),
-                                                                                                    ),
-                                                                                                  ),
-                                                                                                ),
-                                                                                              ],
-                                                                                            ),
-                                                                                          ),
-                                                                                          Padding(
-                                                                                            padding: EdgeInsets.only(right: 42.8.w),
-                                                                                            child: InkWell(
-                                                                                              onTap: () {
-                                                                                                launch('https://api.whatsapp.com/send?phone=' + dbSetup[0]['wa_number'] +
-                                                                                                    '&text=Assalamualaikum%2C+saya+dapat+info+dari+aplikasi+'
-                                                                                                        '*Sahabat+Bumil*%2C+dan+ingin+bertanya+tentang+Aqiqah+anak+saya');
-                                                                                              },
-                                                                                              child: Container(
-                                                                                                width: 40.5.w,
-                                                                                                height: 20.8.w,
-                                                                                                decoration: BoxDecoration(
-                                                                                                  color: Theme.of(context).backgroundColor,
-                                                                                                  borderRadius: BorderRadius.only(
-                                                                                                    topLeft: Radius.circular(40),
-                                                                                                    bottomRight: Radius.circular(40),
-                                                                                                  ),
-                                                                                                ),
-                                                                                                child: Center(
-                                                                                                  child: Text(
-                                                                                                    'Chat',
-                                                                                                    style: TextStyle(
-                                                                                                      color: Colors.white,
-                                                                                                      fontWeight: FontWeight.w500,
-                                                                                                      fontSize: 13.0.sp,
-                                                                                                    ),
-                                                                                                  ),
-                                                                                                ),
-                                                                                              ),
-                                                                                            ),
-                                                                                          ),
-                                                                                        ],
-                                                                                      ),
-                                                                                    ],
-                                                                                  ),
-                                                                                ],
-                                                                              ),
-                                                                            ],
-                                                                          );
+                                                                          return ViewProduct();
                                                                         },
                                                                       );
                                                                     },
@@ -1586,7 +1113,7 @@ class _AqiqahState extends State<Aqiqah> {
                                               padding: EdgeInsets.only(right: 21.4.w,),
                                               child: InkWell(
                                                 onTap: () {
-                                                  // Navigator.pushReplacementNamed(context, '/babysname');
+                                                  Navigator.pushNamed(context, '/favorites');
                                                 },
                                                 child: Stack(
                                                   alignment: AlignmentDirectional.center,
@@ -1691,18 +1218,12 @@ class ViewProduct extends StatefulWidget {
 
 class _ViewProductState extends State<ViewProduct> {
   List dbSingle;
-
-  Future getSingleProduct() async {
-    var url = Uri.parse('https://sahabataqiqah.co.id/sahabat_bumil/api/get_single_product.php?id=' +
-        prodId.toString());
-    var response = await http.get(url);
-    return json.decode(response.body);
-  }
+  var prodsDb = ProdsDb();
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: getSingleProduct(),
+      future: prodsDb.single(prodId),
       builder: (context, snapshot) {
         if (!snapshot.hasData || snapshot.data == null || snapshot.hasError) {
           return Column(
@@ -1732,7 +1253,7 @@ class _ViewProductState extends State<ViewProduct> {
                     color: Theme.of(context).primaryColor,
                     height: 66.7.w,
                     child: Image.network(
-                      dbSingle[0]['image'],
+                      dbSingle[0]['prods_image'],
                       width: 100.0.w,
                       fit: BoxFit.cover,
                       loadingBuilder: (context, child, loadingProgress) {
@@ -1783,12 +1304,28 @@ class _ViewProductState extends State<ViewProduct> {
                       ),
                     ),
                     Expanded(child: SizedBox(),),
-                    Positioned(
-                      top: 7.8.w,
+                    InkWell(
                       child: Image.asset(
-                        'images/ic_unfav.png',
+                        dbSingle[0]['prods_fav'] == 0 ? 'images/ic_unfav.png' : 'images/ic_fav.png',
                         width: 6.7.w,
                       ),
+                      onTap: () {
+                        setState(() {
+                          if (dbSingle[0]['prods_fav'] == 1) {
+                            var fav = Prods(
+                              prods_id: dbSingle[0]['prods_id'],
+                              prods_fav: 0,
+                            );
+                            prodsDb.updateFav(fav);
+                          } else {
+                            var fav = Prods(
+                              prods_id: dbSingle[0]['prods_id'],
+                              prods_fav: 1,
+                            );
+                            prodsDb.updateFav(fav);
+                          }
+                        });
+                      },
                     ),
                     SizedBox(width: 7.8.w,),
                   ],
@@ -1808,7 +1345,7 @@ class _ViewProductState extends State<ViewProduct> {
                         children: [
                           SizedBox(height: 11.0.w,),
                           Text(
-                            dbSingle[0]['package'],
+                            dbSingle[0]['prods_package'],
                             style: TextStyle(
                               fontSize: 10.0.sp,
                               fontWeight: FontWeight.w500,
@@ -1816,7 +1353,7 @@ class _ViewProductState extends State<ViewProduct> {
                             ),
                           ),
                           Text(
-                            dbSingle[0]['name'],
+                            dbSingle[0]['prods_name'],
                             style: TextStyle(
                               fontSize: 23.0.sp,
                               fontWeight: FontWeight.w700,
@@ -1832,7 +1369,7 @@ class _ViewProductState extends State<ViewProduct> {
                                   locale: 'id',
                                   symbol: 'Rp ',
                                   decimalDigits: 0,
-                                ).format(int.parse(dbSingle[0]['price'])),
+                                ).format(dbSingle[0]['prods_price']),
                                 style: TextStyle(
                                   fontSize: 16.0.sp,
                                   fontWeight: FontWeight.w700,
@@ -1840,13 +1377,13 @@ class _ViewProductState extends State<ViewProduct> {
                                 ),
                               ),
                               Expanded(child: SizedBox(),),
-                              dbSingle[0]['promo'] == ''
+                              dbSingle[0]['prods_promo'] == ''
                                   ? Container() : Container(
                                 child: Padding(
                                   padding: EdgeInsets.symmetric(
                                     horizontal: 4.4.w, vertical: 1.4.w,),
                                   child: Text(
-                                    dbSingle[0]['promo'],
+                                    dbSingle[0]['prods_promo'],
                                     style: TextStyle(
                                       fontSize: 8.0.sp,
                                       color: Colors.white,
@@ -1864,7 +1401,7 @@ class _ViewProductState extends State<ViewProduct> {
                           ),
                           SizedBox(height: 5.2.w,),
                           Html(
-                            data: dbSingle[0]['description'],
+                            data: dbSingle[0]['prods_desc'],
                             style: {
                               'body': Style(
                                 color: Colors.black,
