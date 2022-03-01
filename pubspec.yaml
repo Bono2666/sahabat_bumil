@@ -50,7 +50,6 @@ dependencies:
   url_launcher:
   http:
   path_provider:
-  whatsapp_unilink:
 
 dev_dependencies:
   flutter_test:
