@@ -1,14 +1,18 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:http/http.dart';
 import 'package:sahabat_bumil_v2/db/prods_db.dart';
 import 'package:sizer/sizer.dart';
 import 'package:intl/intl.dart';
 import 'package:sahabat_bumil_v2/main.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:http/http.dart' as http;
+import '../../db/history_db.dart';
+import 'package:path_provider/path_provider.dart';
 
 class Checkout extends StatefulWidget {
   @override
@@ -20,6 +24,7 @@ class _CheckoutState extends State<Checkout> {
   int jmlPesan = 1;
   int totOrder = 0;
   var prodsDb = ProdsDb();
+  var historyDb = HistoryDb();
 
   Future getSetup() async {
     var url = Uri.parse('https://sahabataqiqah.co.id/sahabat_bumil/api/get_setup.php');
@@ -323,7 +328,23 @@ class _CheckoutState extends State<Checkout> {
                                 ],
                               ),
                               InkWell(
-                                onTap: () {
+                                onTap: () async {
+                                  // Simpan ke History
+                                  var response = await get(Uri.parse(dbProduct[0]['prods_image']));
+                                  var docDir = await getApplicationDocumentsDirectory();
+                                  var path = docDir.path + '/img';
+                                  var pathAndName = docDir.path + '/img/' + dbProduct[0]['prods_id'].toString() +
+                                      '.' + dbProduct[0]['prods_image'].toString()
+                                      .substring(dbProduct[0]['prods_image'].toString().length - 3);
+
+                                  await Directory(path).create(recursive: true);
+                                  File file = new File(pathAndName);
+                                  file.writeAsBytesSync(response.bodyBytes);
+
+                                  historyDb.insert(dbProduct[0]['prods_id'], dbProduct[0]['prods_name'], dbProduct[0]['prods_desc'],
+                                      dbProduct[0]['prods_price'], dbProduct[0]['prods_package'], pathAndName);
+
+                                  // Pesan Sekarang via WA
                                   String hrg =
                                   NumberFormat.currency(
                                     locale: 'id',
@@ -331,11 +352,12 @@ class _CheckoutState extends State<Checkout> {
                                     decimalDigits: 0,
                                   ).format(dbProduct[0]['prods_price']);
 
-                                  launch('https://api.whatsapp.com/send?phone=' + dbSetup[0]['wa_number'] +
-                                      '&text=Assalamualaikum%2C%0D%0A%0D%0ASaya+melihat+di+aplikasi+Sahabat+Bumil%2C+'
-                                          'dan+tertarik+dengan%0D%0A%0D%0A*' + dbProduct[0]['prods_package'] + ' - ' +
+                                  String msg = 'https://api.whatsapp.com/send?phone=' + dbSetup[0]['wa_number'] +
+                                  '&text=Assalamualaikum%2C%0D%0A%0D%0ASaya+melihat+di+aplikasi+Sahabat+Bumil%2C+'
+                                      'dan+tertarik+dengan%0D%0A%0D%0A*' + dbProduct[0]['prods_package'] + ' - ' +
                                       dbProduct[0]['prods_name'] + '*%0D%0A*Harga:*+' + hrg + '%0D%0A*Jumlah+Paket:*+' +
-                                      jmlPesan.toString() + '%0D%0A%0D%0ATerima+kasih!' + '%0D%0A%0D%0A' + dbProduct[0]['prods_link']);
+                                      jmlPesan.toString() + '%0D%0A%0D%0ATerima+kasih!' + '%0D%0A%0D%0A' + dbProduct[0]['prods_link'];
+                                  launch('$msg', forceSafariVC: false);
 
                                   totOrder = int.parse(dbTotalOrder[0]['total_order']) + jmlPesan;
                                   updTotalOrder();

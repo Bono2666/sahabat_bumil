@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -12,6 +11,7 @@ import 'package:sahabat_bumil_v2/model/fav_model.dart';
 import 'package:sahabat_bumil_v2/pages/aqiqah/aqiqah.dart';
 import 'package:sahabat_bumil_v2/pages/aqiqah/checkout.dart';
 import 'package:sahabat_bumil_v2/pages/aqiqah/favorites.dart';
+import 'package:sahabat_bumil_v2/pages/aqiqah/history.dart';
 import 'package:sahabat_bumil_v2/pages/aqiqah/package.dart';
 import 'package:sahabat_bumil_v2/pages/babysname/babysname.dart';
 import 'package:sahabat_bumil_v2/pages/babysname/favname.dart';
@@ -143,7 +143,7 @@ class MyTheme extends StatelessWidget {
               prefs.setLastNameUpd(DateTime.now().toIso8601String());
             }
             return FutureBuilder(
-              future: prodsDb.favList(),
+              future: getPackages(),
               builder: (context, snapshot) {
                 if (!snapshot.hasData || snapshot.data == null || snapshot.hasError) {
                   return Container(
@@ -159,10 +159,19 @@ class MyTheme extends StatelessWidget {
                   );
                 }
                 if (snapshot.connectionState == ConnectionState.done) {
-                  dbFavProds = snapshot.data;
+                  dbPackages = snapshot;
+                  packagesDb.delete();
+                  for (int i=0; i < dbPackages.data.length; i++) {
+                    packagesDb.insert(
+                        int.parse(dbPackages.data[i]['id']),
+                        dbPackages.data[i]['name'],
+                        dbPackages.data[i]['sub_title'],
+                        dbPackages.data[i]['image'],
+                        int.parse(dbPackages.data[i]['recomended']));
+                  }
                 }
                 return FutureBuilder(
-                  future: getProducts(),
+                  future: prodsDb.favList(),
                   builder: (context, snapshot) {
                     if (!snapshot.hasData || snapshot.data == null || snapshot.hasError) {
                       return Container(
@@ -178,27 +187,10 @@ class MyTheme extends StatelessWidget {
                       );
                     }
                     if (snapshot.connectionState == ConnectionState.done) {
-                      dbProds = snapshot;
-                      favProdsDb.delete();
-                      for (int i=0; i < dbFavProds.length; i++) {
-                        favProdsDb.insert(dbFavProds[i]['prods_id']);
-                      }
-                      prodsDb.delete();
-                      for (int i=0; i < dbProds.data.length; i++) {
-                        prodsDb.insert(
-                            int.parse(dbProds.data[i]['id']),
-                            dbProds.data[i]['name'],
-                            dbProds.data[i]['description'],
-                            int.parse(dbProds.data[i]['price']),
-                            dbProds.data[i]['promo'],
-                            int.parse(dbProds.data[i]['category']),
-                            dbProds.data[i]['image'],
-                            int.parse(dbProds.data[i]['total_order']),
-                            dbProds.data[i]['link']);
-                      }
+                      dbFavProds = snapshot.data;
                     }
                     return FutureBuilder(
-                      future: favProdsDb.list(),
+                      future: getProducts(),
                       builder: (context, snapshot) {
                         if (!snapshot.hasData || snapshot.data == null || snapshot.hasError) {
                           return Container(
@@ -214,17 +206,27 @@ class MyTheme extends StatelessWidget {
                           );
                         }
                         if (snapshot.connectionState == ConnectionState.done) {
-                          dbFavProdsTmp = snapshot.data;
-                          for (int i=0; i < dbFavProdsTmp.length; i++) {
-                            var fav = Prods(
-                              prods_id: dbFavProdsTmp[i]['prods_id'],
-                              prods_fav: 1,
-                            );
-                            prodsDb.updateFav(fav);
+                          dbProds = snapshot;
+                          favProdsDb.delete();
+                          for (int i=0; i < dbFavProds.length; i++) {
+                            favProdsDb.insert(dbFavProds[i]['prods_id']);
+                          }
+                          prodsDb.delete();
+                          for (int i=0; i < dbProds.data.length; i++) {
+                            prodsDb.insert(
+                                int.parse(dbProds.data[i]['id']),
+                                dbProds.data[i]['name'],
+                                dbProds.data[i]['description'],
+                                int.parse(dbProds.data[i]['price']),
+                                dbProds.data[i]['promo'],
+                                int.parse(dbProds.data[i]['category']),
+                                dbProds.data[i]['image'],
+                                int.parse(dbProds.data[i]['total_order']),
+                                dbProds.data[i]['link']);
                           }
                         }
                         return FutureBuilder(
-                          future: getPackages(),
+                          future: favProdsDb.list(),
                           builder: (context, snapshot) {
                             if (!snapshot.hasData || snapshot.data == null || snapshot.hasError) {
                               return Container(
@@ -240,15 +242,13 @@ class MyTheme extends StatelessWidget {
                               );
                             }
                             if (snapshot.connectionState == ConnectionState.done) {
-                              dbPackages = snapshot;
-                              packagesDb.delete();
-                              for (int i=0; i < dbPackages.data.length; i++) {
-                                packagesDb.insert(
-                                    int.parse(dbPackages.data[i]['id']),
-                                    dbPackages.data[i]['name'],
-                                    dbPackages.data[i]['sub_title'],
-                                    dbPackages.data[i]['image'],
-                                    int.parse(dbPackages.data[i]['recomended']));
+                              dbFavProdsTmp = snapshot.data;
+                              for (int i=0; i < dbFavProdsTmp.length; i++) {
+                                var fav = Prods(
+                                  prods_id: dbFavProdsTmp[i]['prods_id'],
+                                  prods_fav: 1,
+                                );
+                                prodsDb.updateFav(fav);
                               }
                             }
                             return FutureBuilder(
@@ -368,6 +368,8 @@ class MyTheme extends StatelessWidget {
                                             return SlideLeftRoute(page: Favorites());
                                           case '/closetofavorites':
                                             return SlideDownRoute(page: Favorites());
+                                          case '/history':
+                                            return SlideLeftRoute(page: History());
                                         }
                                       },
                                     );

@@ -278,8 +278,8 @@ class _FavoritesState extends State<Favorites> {
                                         Padding(
                                           padding: EdgeInsets.symmetric(horizontal: 2.2.w),
                                           child: Text(
-                                            'Saat Anda mencari paket aqiqah, ketuk ikon hati '
-                                                'untuk menyimpan aqiqah favorit Anda ke daftar favorit.',
+                                            'Saat Ayah/Bunda mencari paket aqiqah, ketuk ikon hati '
+                                                'untuk menyimpan aqiqah favorit Ayah/Bunda ke daftar favorit.',
                                             style: TextStyle(
                                               color: Colors.black,
                                               fontSize: 10.0.sp,

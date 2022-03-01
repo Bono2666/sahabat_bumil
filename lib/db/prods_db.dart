@@ -98,6 +98,13 @@ class ProdsDb {
     return result.toList();
   }
 
+  Future<int> count(int id) async {
+    var dbClient = await db;
+    var result = Sqflite.firstIntValue(await dbClient.rawQuery('SELECT COUNT(*) FROM $tableName '
+        'WHERE $column_id = ' + id.toString()));
+    return result;
+  }
+
   Future<List> list() async {
     var dbClient = await db;
     var result = await dbClient.rawQuery('SELECT * FROM $tableName');

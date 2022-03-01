@@ -11,7 +11,6 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_html/flutter_html.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 import '../../db/promo_db.dart';
 import '../../model/prods_model.dart';
 
@@ -942,6 +941,8 @@ class _AqiqahState extends State<Aqiqah> {
                                                                                           fontSize: 12.0.sp,
                                                                                           fontWeight: FontWeight.w700,
                                                                                         ),
+                                                                                        maxLines: dbTopProducts[index]['prods_desc'] == '' ? 2 : 1,
+                                                                                        overflow: TextOverflow.ellipsis,
                                                                                       ),
                                                                                       SizedBox(height: 1.1.w,),
                                                                                       Html(
@@ -1144,6 +1145,53 @@ class _AqiqahState extends State<Aqiqah> {
                                                       child: FittedBox(
                                                         child: Image.asset(
                                                           'images/ic_fav.png',
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        Column(
+                                          children: [
+                                            SizedBox(height: 5.6.h,),
+                                            Padding(
+                                              padding: EdgeInsets.only(right: 36.1.w,),
+                                              child: InkWell(
+                                                onTap: () {
+                                                  Navigator.pushNamed(context, '/history');
+                                                },
+                                                child: Stack(
+                                                  alignment: AlignmentDirectional.center,
+                                                  children: [
+                                                    Opacity(
+                                                      opacity: .8,
+                                                      child: Container(
+                                                        width: 12.5.w,
+                                                        height: 12.5.w,
+                                                        decoration: BoxDecoration(
+                                                          borderRadius: BorderRadius.all(
+                                                            Radius.circular(30),
+                                                          ),
+                                                          color: Colors.white,
+                                                          boxShadow: [
+                                                            BoxShadow(
+                                                              blurRadius: 6.0,
+                                                              color: Theme.of(context).shadowColor,
+                                                              offset: Offset(0, 3),
+                                                            )
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Container(
+                                                      width: 5.6.w,
+                                                      height: 5.6.w,
+                                                      child: FittedBox(
+                                                        child: Image.asset(
+                                                          'images/ic_history.png',
                                                         ),
                                                       ),
                                                     ),
