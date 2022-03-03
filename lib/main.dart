@@ -13,6 +13,7 @@ import 'package:sahabat_bumil_v2/pages/aqiqah/checkout.dart';
 import 'package:sahabat_bumil_v2/pages/aqiqah/favorites.dart';
 import 'package:sahabat_bumil_v2/pages/aqiqah/history.dart';
 import 'package:sahabat_bumil_v2/pages/aqiqah/package.dart';
+import 'package:sahabat_bumil_v2/pages/aqiqah/testimoni.dart';
 import 'package:sahabat_bumil_v2/pages/babysname/babysname.dart';
 import 'package:sahabat_bumil_v2/pages/babysname/favname.dart';
 import 'package:sahabat_bumil_v2/pages/babysname/namecollection.dart';
@@ -370,6 +371,8 @@ class MyTheme extends StatelessWidget {
                                             return SlideDownRoute(page: Favorites());
                                           case '/history':
                                             return SlideLeftRoute(page: History());
+                                          case '/testimoni':
+                                            return SlideLeftRoute(page: Testimoni());
                                         }
                                       },
                                     );
