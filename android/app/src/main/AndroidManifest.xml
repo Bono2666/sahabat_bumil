@@ -1,6 +1,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="id.co.sahabataqiqah.sahabat_bumil_v2">
-   <application
+
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+
+    <application
         android:label="Sahabat Bumil"
         android:icon="@mipmap/ic_launcher">
         <activity
@@ -39,5 +42,8 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyDz0w2Qd89nsIJUre03M9dVMzCfO-tcOkI" />
     </application>
 </manifest>

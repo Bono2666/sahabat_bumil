@@ -50,6 +50,9 @@ dependencies:
   url_launcher:
   http:
   path_provider:
+  google_maps_flutter:
+  geolocator:
+  permission_handler:
 
 dev_dependencies:
   flutter_test:

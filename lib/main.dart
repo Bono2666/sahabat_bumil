@@ -2,6 +2,9 @@ import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:sahabat_bumil_v2/db/branch_db.dart';
 import 'package:sahabat_bumil_v2/db/fav_db.dart';
 import 'package:sahabat_bumil_v2/db/fav_prods_db.dart';
 import 'package:sahabat_bumil_v2/db/packages_db.dart';
@@ -9,6 +12,7 @@ import 'package:sahabat_bumil_v2/db/prods_db.dart';
 import 'package:sahabat_bumil_v2/db/promo_db.dart';
 import 'package:sahabat_bumil_v2/model/fav_model.dart';
 import 'package:sahabat_bumil_v2/pages/aqiqah/aqiqah.dart';
+import 'package:sahabat_bumil_v2/pages/aqiqah/branch.dart';
 import 'package:sahabat_bumil_v2/pages/aqiqah/checkout.dart';
 import 'package:sahabat_bumil_v2/pages/aqiqah/favorites.dart';
 import 'package:sahabat_bumil_v2/pages/aqiqah/history.dart';
@@ -30,7 +34,6 @@ import 'package:sahabat_bumil_v2/pages/viewarticle.dart';
 import 'package:sizer/sizer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
-
 import 'model/prods_model.dart';
 
 Future<void> main() async {
@@ -41,6 +44,29 @@ Future<void> main() async {
 }
 
 class MyTheme extends StatelessWidget {
+  var lat, long;
+
+  Future<void> checkPermission() async {
+    final status = await Permission.locationWhenInUse.request();
+    if (status == PermissionStatus.granted) {
+      print('Permission granted');
+    } else if (status == PermissionStatus.denied) {
+      print('Permission denied. Show a dialog and again ask for the permission');
+    } else if (status == PermissionStatus.permanentlyDenied) {
+      print('Take the user to the settings page.');
+      await openAppSettings();
+    }
+
+    if (status.isGranted) {
+      var position = await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.best);
+      lat = position.latitude;
+      long = position.longitude;
+      prefs.setCurrLat(lat);
+      prefs.setCurrLong(long);
+      print(prefs.getCurrLat.toString() + ', ' + prefs.getCurrLong.toString());
+    }
+  }
 
   Future getProducts() async {
     var url = Uri.parse('https://sahabataqiqah.co.id/sahabat_bumil/api/get_products.php');
@@ -60,18 +86,25 @@ class MyTheme extends StatelessWidget {
     return json.decode(response.body);
   }
 
+  Future getBranches() async {
+    var url = Uri.parse('https://sahabataqiqah.co.id/sahabat_bumil/api/get_branches.php');
+    var response = await http.get(url);
+    return json.decode(response.body);
+  }
+
   @override
   Widget build(BuildContext context) {
     final appName = 'Sahabat Bumil';
     List<QueryDocumentSnapshot> nameupdate;
     AsyncSnapshot<dynamic> dbListAll, dbProds, dbPackages, dbPromo;
-    List dbFavProds, dbFavProdsTmp;
+    List dbFavProds, dbFavProdsTmp, dbBranches;
     bool dbListEmpty = true;
     var favDb = FavDb();
     var prodsDb = ProdsDb();
     var packagesDb = PackagesDb();
     var promoDb = PromoDb();
     var favProdsDb = FavProdsDb();
+    var branchesDb = BranchDb();
 
     return FutureBuilder(
       future: favDb.listAll(),
@@ -283,97 +316,137 @@ class MyTheme extends StatelessWidget {
                                         int.parse(dbPromo.data[i]['product']));
                                   }
                                 }
-                                return Sizer(
-                                  builder: (context, orientation, deviceType) {
-                                    return MaterialApp(
-                                      title: appName,
-                                      theme: ThemeData(
-                                        fontFamily: 'Ubuntu',
-
-                                        highlightColor: Color(0xffFDDCC7),
-                                        secondaryHeaderColor: Color(0xffFFC5A0),
-                                        primaryColorLight: Color(0xffFFA971),
-                                        primaryColor: Color(0xffFF8C42),
-                                        backgroundColor: Color(0xff410B13),
-                                        dividerColor: Color(0xffD1D3D4),
-                                        hintColor: Color(0xffCDCDCD),
-                                        disabledColor: Color(0xffA7A7A7),
-                                        shadowColor: Color(0x32000000),
-                                        dialogBackgroundColor: Color(0x30000000),
-                                        unselectedWidgetColor: Color(0xff757575),
-                                        primaryColorDark: Color(0xff484848),
-                                        toggleableActiveColor: Color(0x38000000),
-
-                                        textSelectionTheme: TextSelectionThemeData(
-                                          cursorColor: Colors.black,
-                                          selectionColor: Color(0xffFFC5A0),
-                                          selectionHandleColor: Color(0xff410B13),
+                                return FutureBuilder(
+                                  future: getBranches(),
+                                  builder: (context, snapshot) {
+                                    if (!snapshot.hasData || snapshot.data == null || snapshot.hasError) {
+                                      return Container(
+                                        color: Color(0xffFF8C42),
+                                        child: Column(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            SpinKitPulse(
+                                              color: Colors.white,
+                                            ),
+                                          ],
                                         ),
+                                      );
+                                    }
+                                    if (snapshot.connectionState == ConnectionState.done) {
+                                      dbBranches = snapshot.data;
+                                      checkPermission();
+                                      branchesDb.delete();
+                                      for (int i=0; i < dbBranches.length; i++) {
+                                        branchesDb.insert(
+                                            int.parse(dbBranches[i]['id']),
+                                            dbBranches[i]['name'],
+                                            dbBranches[i]['description'],
+                                            dbBranches[i]['address_1'],
+                                            dbBranches[i]['address_2'],
+                                            dbBranches[i]['phone_1'],
+                                            dbBranches[i]['phone_2'],
+                                            dbBranches[i]['email_1'],
+                                            dbBranches[i]['email_2'],
+                                            dbBranches[i]['image'],
+                                            dbBranches[i]['latitude'],
+                                            dbBranches[i]['longitude']);
+                                      }
+                                    }
+                                    return Sizer(
+                                      builder: (context, orientation, deviceType) {
+                                        return MaterialApp(
+                                          title: appName,
+                                          theme: ThemeData(
+                                            fontFamily: 'Ubuntu',
 
-                                        inputDecorationTheme: InputDecorationTheme(
-                                          enabledBorder: UnderlineInputBorder(
-                                            borderSide: BorderSide(
-                                              color: Theme.of(context).dividerColor,
-                                            ),
-                                          ),
-                                          border: UnderlineInputBorder(
-                                            borderSide: BorderSide(
-                                              color: Theme.of(context).dividerColor,
-                                            ),
-                                          ),
-                                          focusedBorder: UnderlineInputBorder(
-                                            borderSide: BorderSide(
-                                              color: Color(0xff410B13),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
+                                            highlightColor: Color(0xffFDDCC7),
+                                            secondaryHeaderColor: Color(0xffFFC5A0),
+                                            primaryColorLight: Color(0xffFFA971),
+                                            primaryColor: Color(0xffFF8C42),
+                                            backgroundColor: Color(0xff410B13),
+                                            dividerColor: Color(0xffD1D3D4),
+                                            hintColor: Color(0xffCDCDCD),
+                                            disabledColor: Color(0xffA7A7A7),
+                                            shadowColor: Color(0x32000000),
+                                            dialogBackgroundColor: Color(0x30000000),
+                                            unselectedWidgetColor: Color(0xff757575),
+                                            primaryColorDark: Color(0xff484848),
+                                            toggleableActiveColor: Color(0x38000000),
 
-                                      initialRoute: prefs.getFirstlaunch == false ? '/home' : '/',
-                                      // ignore: missing_return
-                                      onGenerateRoute: (RouteSettings settings) {
-                                        switch (settings.name) {
-                                          case '/':
-                                            return SlideLeftRoute(page: Onboarding());
-                                          case '/addpregnancy':
-                                            return SlideUpRoute(page: addPregnancy());
-                                          case '/updpregnancy':
-                                            return SlideUpRoute(page: updPregnancy());
-                                          case '/monitoring':
-                                            return SlideUpRoute(page: Monitoring());
-                                          case '/viewarticle':
-                                            return SlideLeftRoute(page: ViewArticle());
-                                          case '/babysname':
-                                            return SlideUpRoute(page: BabysName());
-                                          case '/nameresult':
-                                            return SlideLeftRoute(page: NameResult());
-                                          case '/namecollection':
-                                            return SlideLeftRoute(page: NameCollection());
-                                          case '/favname':
-                                            return SlideLeftRoute(page: FavName());
-                                          case '/home':
-                                            return SlideUpRoute(page: Home());
-                                          case '/features':
-                                            return SlideDownRoute(page: Features());
-                                          case '/search':
-                                            return NoSlideRoute(page: Search());
-                                          case '/aqiqah':
-                                            return SlideUpRoute(page: Aqiqah());
-                                          case '/checkout':
-                                            return SlideLeftRoute(page: Checkout());
-                                          case '/package':
-                                            return SlideLeftRoute(page: Package());
-                                          case '/closetopackage':
-                                            return SlideDownRoute(page: Package());
-                                          case '/favorites':
-                                            return SlideLeftRoute(page: Favorites());
-                                          case '/closetofavorites':
-                                            return SlideDownRoute(page: Favorites());
-                                          case '/history':
-                                            return SlideLeftRoute(page: History());
-                                          case '/testimoni':
-                                            return SlideLeftRoute(page: Testimoni());
-                                        }
+                                            textSelectionTheme: TextSelectionThemeData(
+                                              cursorColor: Colors.black,
+                                              selectionColor: Color(0xffFFC5A0),
+                                              selectionHandleColor: Color(0xff410B13),
+                                            ),
+
+                                            inputDecorationTheme: InputDecorationTheme(
+                                              enabledBorder: UnderlineInputBorder(
+                                                borderSide: BorderSide(
+                                                  color: Theme.of(context).dividerColor,
+                                                ),
+                                              ),
+                                              border: UnderlineInputBorder(
+                                                borderSide: BorderSide(
+                                                  color: Theme.of(context).dividerColor,
+                                                ),
+                                              ),
+                                              focusedBorder: UnderlineInputBorder(
+                                                borderSide: BorderSide(
+                                                  color: Color(0xff410B13),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+
+                                          initialRoute: prefs.getFirstlaunch == false ? '/home' : '/',
+                                          // ignore: missing_return
+                                          onGenerateRoute: (RouteSettings settings) {
+                                            switch (settings.name) {
+                                              case '/':
+                                                return SlideLeftRoute(page: Onboarding());
+                                              case '/addpregnancy':
+                                                return SlideUpRoute(page: addPregnancy());
+                                              case '/updpregnancy':
+                                                return SlideUpRoute(page: updPregnancy());
+                                              case '/monitoring':
+                                                return SlideUpRoute(page: Monitoring());
+                                              case '/viewarticle':
+                                                return SlideLeftRoute(page: ViewArticle());
+                                              case '/babysname':
+                                                return SlideUpRoute(page: BabysName());
+                                              case '/nameresult':
+                                                return SlideLeftRoute(page: NameResult());
+                                              case '/namecollection':
+                                                return SlideLeftRoute(page: NameCollection());
+                                              case '/favname':
+                                                return SlideLeftRoute(page: FavName());
+                                              case '/home':
+                                                return SlideUpRoute(page: Home());
+                                              case '/features':
+                                                return SlideDownRoute(page: Features());
+                                              case '/search':
+                                                return NoSlideRoute(page: Search());
+                                              case '/aqiqah':
+                                                return SlideUpRoute(page: Aqiqah());
+                                              case '/checkout':
+                                                return SlideLeftRoute(page: Checkout());
+                                              case '/package':
+                                                return SlideLeftRoute(page: Package());
+                                              case '/closetopackage':
+                                                return SlideDownRoute(page: Package());
+                                              case '/favorites':
+                                                return SlideLeftRoute(page: Favorites());
+                                              case '/closetofavorites':
+                                                return SlideDownRoute(page: Favorites());
+                                              case '/history':
+                                                return SlideLeftRoute(page: History());
+                                              case '/testimoni':
+                                                return SlideLeftRoute(page: Testimoni());
+                                              case '/branch':
+                                                return SlideLeftRoute(page: Branch());
+                                            }
+                                          },
+                                        );
                                       },
                                     );
                                   },
@@ -432,6 +505,9 @@ class SharedPrefs {
   String get getGoRoute => _prefs.getString('goroute') ?? '';
   String get getIdProduct => _prefs.getString('idproduct') ?? '';
   String get getIdPackage => _prefs.getString('idpackage') ?? '';
+  String get getBranchId => _prefs.getString('branchid') ?? '';
+  double get getCurrLat => _prefs.getDouble('currlat') ?? 0;
+  double get getCurrLong => _prefs.getDouble('currlong') ?? 0;
 
   setFirstlaunch(bool value) => _prefs.setBool('firstlaunch', value);
   setName(String value) => _prefs.setString('name', value);
@@ -459,6 +535,9 @@ class SharedPrefs {
   setGoRoute(String value) => _prefs.setString('goroute', value);
   setIdProduct(String value) => _prefs.setString('idproduct', value);
   setIdPackage(String value) => _prefs.setString('idpackage', value);
+  setBranchId(String value) => _prefs.setString('branchid', value);
+  setCurrLat(double value) => _prefs.setDouble('currlat', value);
+  setCurrLong(double value) => _prefs.setDouble('currlong', value);
 }
 
 class SlideUpRoute extends PageRouteBuilder {
