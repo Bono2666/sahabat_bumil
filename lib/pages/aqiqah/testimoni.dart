@@ -33,7 +33,7 @@ class _TestimoniState extends State<Testimoni> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 SpinKitPulse(
-                  color: Colors.white,
+                  color: Theme.of(context).primaryColor,
                 ),
               ],
             );
@@ -174,12 +174,15 @@ class _TestimoniState extends State<Testimoni> {
                                                 ),
                                               ),
                                               SizedBox(height: 2.2.w,),
-                                              Text(
-                                                dbTestimoni[index]['message'],
-                                                style: TextStyle(
-                                                  color: Theme.of(context).primaryColorDark,
-                                                  fontSize: 13.0.sp,
-                                                ),
+                                              Html(
+                                                data: dbTestimoni[index]['message'],
+                                                style: {
+                                                  'body': Style(
+                                                    color: Theme.of(context).primaryColorDark,
+                                                    fontSize: FontSize(13.0.sp),
+                                                    margin: EdgeInsets.all(0),
+                                                  ),
+                                                },
                                               ),
                                             ],
                                           ),

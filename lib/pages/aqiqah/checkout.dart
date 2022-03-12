@@ -56,7 +56,7 @@ class _CheckoutState extends State<Checkout> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 SpinKitPulse(
-                  color: Colors.white,
+                  color: Theme.of(context).primaryColor,
                 ),
               ],
             );
@@ -72,7 +72,7 @@ class _CheckoutState extends State<Checkout> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     SpinKitPulse(
-                      color: Colors.white,
+                      color: Theme.of(context).primaryColor,
                     ),
                   ],
                 );
@@ -88,7 +88,7 @@ class _CheckoutState extends State<Checkout> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         SpinKitPulse(
-                          color: Colors.white,
+                          color: Theme.of(context).primaryColor,
                         ),
                       ],
                     );

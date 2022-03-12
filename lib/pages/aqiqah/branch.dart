@@ -19,12 +19,25 @@ class _BranchState extends State<Branch> {
   String grp1, grp2, grp3, grp4, grp5, grp6;
   GoogleMapController mapController;
   CameraPosition branchPin;
+  final Set<Marker> marker = {};
 
   Future getSingleBranch() async {
     var url = Uri.parse('https://sahabataqiqah.co.id/sahabat_bumil/api/get_single_branch.php?id=' +
         prefs.getBranchId);
     var response = await http.get(url);
     return json.decode(response.body);
+  }
+
+  @override
+  void initState() {
+    marker.add(
+      Marker(
+        markerId: MarkerId('kantor'),
+        position: LatLng(prefs.getBranchLat, prefs.getBranchLong),
+        icon: BitmapDescriptor.defaultMarker,
+      ),
+    );
+    super.initState();
   }
 
   @override
@@ -87,9 +100,11 @@ class _BranchState extends State<Branch> {
                           initialCameraPosition: branchPin,
                           onMapCreated: (GoogleMapController controller) {
                             mapController = controller;
+                            // mapController.animateCamera(CameraUpdate.newCameraPosition(branchPin));
                           },
                           zoomControlsEnabled: false,
                           myLocationButtonEnabled: false,
+                          markers: marker,
                         ),
                       ),
                     ),

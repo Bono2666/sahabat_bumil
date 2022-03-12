@@ -33,6 +33,7 @@ class _AqiqahState extends State<Aqiqah> {
   var prodsDb = ProdsDb();
   var promoDb = PromoDb();
   var branchDb = BranchDb();
+  bool onOpen = true;
 
   Future getBanner() async {
     var url = Uri.parse('https://sahabataqiqah.co.id/sahabat_bumil/api/get_banner.php');
@@ -63,6 +64,8 @@ class _AqiqahState extends State<Aqiqah> {
     var response = await http.get(url);
     return json.decode(response.body);
   }
+
+  Future getDummy() {}
 
   Future getInfo() async {
     var url = Uri.parse('https://sahabataqiqah.co.id/sahabat_bumil/api/get_info.php');
@@ -217,20 +220,25 @@ class _AqiqahState extends State<Aqiqah> {
                                       lsRecomended = dbRecomended.data;
                                     }
                                     return FutureBuilder(
-                                      future: getTestimoni(),
+                                      future: onOpen ? getTestimoni() : getDummy(),
                                       builder: (context, snapshot) {
-                                        if (!snapshot.hasData || snapshot.data == null || snapshot.hasError) {
-                                          return Column(
-                                            mainAxisAlignment: MainAxisAlignment.center,
-                                            children: [
-                                              SpinKitPulse(
-                                                color: Colors.white,
-                                              ),
-                                            ],
-                                          );
-                                        }
-                                        if (snapshot.connectionState == ConnectionState.done) {
-                                          dbTestimoni = snapshot.data;
+                                        if (onOpen) {
+                                          if (!snapshot.hasData || snapshot.data == null || snapshot.hasError) {
+                                            return Column(
+                                              mainAxisAlignment: MainAxisAlignment
+                                                  .center,
+                                              children: [
+                                                SpinKitPulse(
+                                                  color: Colors.white,
+                                                ),
+                                              ],
+                                            );
+                                          }
+                                          if (snapshot.connectionState == ConnectionState.done) {
+                                            dbTestimoni = snapshot.data;
+                                            dbTestimoni.shuffle();
+                                            onOpen = false;
+                                          }
                                         }
                                         return FutureBuilder(
                                           future: getInfo(),
@@ -415,29 +423,204 @@ class _AqiqahState extends State<Aqiqah> {
                                                                           ],
                                                                         ),
                                                                         SizedBox(height: 6.0.h,),
-                                                                        Row(
-                                                                          mainAxisAlignment: MainAxisAlignment.start,
-                                                                          crossAxisAlignment: CrossAxisAlignment.center,
-                                                                          children: [
-                                                                            Image.asset(
-                                                                              'images/ic_package.png',
-                                                                              height: 2.8.w,
-                                                                            ),
-                                                                            SizedBox(width: 1.4.w,),
-                                                                            Text(
-                                                                              'Paket',
-                                                                              style: TextStyle(
-                                                                                fontSize: 10.0.sp,
-                                                                                fontWeight: FontWeight.w700,
-                                                                                color: Theme.of(context).backgroundColor,
-                                                                              ),
-                                                                            ),
-                                                                          ],
-                                                                        ),
-                                                                        SizedBox(height: 1.9.h,),
                                                                       ],
                                                                     ),
                                                                   ),
+                                                                  Padding(
+                                                                    padding: EdgeInsets.symmetric(horizontal: 6.6.w),
+                                                                    child: Text(
+                                                                      'Apa kata mereka?',
+                                                                      style: TextStyle(
+                                                                        fontSize: 20.0.sp,
+                                                                        fontWeight: FontWeight.w700,
+                                                                        color: Theme.of(context).backgroundColor,
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                  SizedBox(height: 2.5.h,),
+                                                                  ListView.builder(
+                                                                    shrinkWrap: true,
+                                                                    itemCount: dbTestimoni.length > 3 ? 3 : dbTestimoni.length,
+                                                                    physics: NeverScrollableScrollPhysics(),
+                                                                    padding: EdgeInsets.only(top: 0),
+                                                                    itemBuilder: (context, index) {
+                                                                      DateTime _date = DateTime.parse(dbTestimoni[index]['time']);
+                                                                      String _nm = '<b>' + dbTestimoni[index]['name'] + '</b>';
+                                                                      String _desc = ' | ' + dbTestimoni[index]['description'];
+                                                                      return Column(
+                                                                        children: [
+                                                                          Container(
+                                                                            width: 86.6.w,
+                                                                            decoration: BoxDecoration(
+                                                                                color: Colors.white,
+                                                                                borderRadius: BorderRadius.all(
+                                                                                  Radius.circular(12),
+                                                                                ),
+                                                                                boxShadow: [
+                                                                                  BoxShadow(
+                                                                                    color: Theme.of(context).shadowColor,
+                                                                                    blurRadius: 6.0,
+                                                                                    offset: Offset(0,3),
+                                                                                  ),
+                                                                                ]
+                                                                            ),
+                                                                            child: Column(
+                                                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                                                              children: [
+                                                                                dbTestimoni[index]['image'] == '' ? Container() : ClipRRect(
+                                                                                  borderRadius: BorderRadius.only(
+                                                                                    topLeft: Radius.circular(12),
+                                                                                    topRight: Radius.circular(12),
+                                                                                  ),
+                                                                                  child: Container(
+                                                                                    child: Image.network(
+                                                                                      dbTestimoni[index]['image'],
+                                                                                      height: 43.0.w,
+                                                                                      width: 86.6.w,
+                                                                                      fit: BoxFit.cover,
+                                                                                      loadingBuilder: (context, child, loadingProgress) {
+                                                                                        if (loadingProgress == null) return child;
+                                                                                        return SizedBox(
+                                                                                          height: 43.0.w,
+                                                                                          child: Center(
+                                                                                            child: SpinKitPulse(
+                                                                                              color: Colors.white,
+                                                                                            ),
+                                                                                          ),
+                                                                                        );
+                                                                                      },
+                                                                                    ),
+                                                                                    color: Theme.of(context).primaryColor,
+                                                                                  ),
+                                                                                ),
+                                                                                Padding(
+                                                                                  padding: EdgeInsets.symmetric(horizontal: 4.4.w, vertical: 5.6.w,),
+                                                                                  child: Column(
+                                                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                                                    children: [
+                                                                                      Row(
+                                                                                        children: [
+                                                                                          Stack(
+                                                                                            alignment: AlignmentDirectional.center,
+                                                                                            children: [
+                                                                                              Container(
+                                                                                                width: 6.7.w,
+                                                                                                height: 6.7.w,
+                                                                                                decoration: BoxDecoration(
+                                                                                                  borderRadius: BorderRadius.all(
+                                                                                                    Radius.circular(30),
+                                                                                                  ),
+                                                                                                  color: Theme.of(context).primaryColor,
+                                                                                                ),
+                                                                                              ),
+                                                                                              Container(
+                                                                                                width: 3.1.w,
+                                                                                                height: 3.1.w,
+                                                                                                child: FittedBox(
+                                                                                                  child: Image.asset(
+                                                                                                    'images/ic_profil.png',
+                                                                                                  ),
+                                                                                                ),
+                                                                                              ),
+                                                                                            ],
+                                                                                          ),
+                                                                                          SizedBox(width: 1.7.w,),
+                                                                                          Flexible(
+                                                                                            child: Html(
+                                                                                              data: dbTestimoni[index]['description'] == '' ? _nm : _nm + _desc,
+                                                                                              style: {
+                                                                                                'body': Style(
+                                                                                                  color: Theme.of(context).backgroundColor,
+                                                                                                  fontSize: FontSize(10.0.sp),
+                                                                                                  maxLines: 1,
+                                                                                                  textOverflow: TextOverflow.ellipsis,
+                                                                                                  margin: EdgeInsets.all(0),
+                                                                                                ),
+                                                                                              },
+                                                                                            ),
+                                                                                          ),
+                                                                                        ],
+                                                                                      ),
+                                                                                      SizedBox(height: 2.2.w,),
+                                                                                      Text(
+                                                                                        Waktu(_date).yMMMd() + ' ' + DateFormat.Hm().format(_date),
+                                                                                        style: TextStyle(
+                                                                                          color: Theme.of(context).unselectedWidgetColor,
+                                                                                          fontSize: 7.0.sp,
+                                                                                        ),
+                                                                                      ),
+                                                                                      SizedBox(height: 2.2.w,),
+                                                                                      Html(
+                                                                                        data: dbTestimoni[index]['message'],
+                                                                                        style: {
+                                                                                          'body': Style(
+                                                                                            color: Theme.of(context).primaryColorDark,
+                                                                                            fontSize: FontSize(13.0.sp),
+                                                                                            margin: EdgeInsets.all(0),
+                                                                                          ),
+                                                                                        },
+                                                                                      ),
+                                                                                    ],
+                                                                                  ),
+                                                                                ),
+                                                                              ],
+                                                                            ),
+                                                                          ),
+                                                                          SizedBox(height: 3.1.h,)
+                                                                        ],
+                                                                      );
+                                                                    },
+                                                                  ),
+                                                                  SizedBox(height: 6.7.w,),
+                                                                  Padding(
+                                                                    padding: EdgeInsets.symmetric(horizontal: 6.7.w),
+                                                                    child: InkWell(
+                                                                      onTap: () => Navigator.pushNamed(context, '/testimoni'),
+                                                                      child: Container(
+                                                                        height: 11.7.w,
+                                                                        width: 100.0.w,
+                                                                        decoration: BoxDecoration(
+                                                                          borderRadius: BorderRadius.all(Radius.circular(24)),
+                                                                          border: Border.all(
+                                                                            color: Theme.of(context).backgroundColor,
+                                                                          ),
+                                                                        ),
+                                                                        child: Center(
+                                                                          child: Text(
+                                                                            'Lihat semua testimoni',
+                                                                            style: TextStyle(
+                                                                              fontSize: 10.0.sp,
+                                                                              color: Theme.of(context).backgroundColor,
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                  SizedBox(height: 5.6.h,),
+                                                                  Padding(
+                                                                    padding: EdgeInsets.symmetric(horizontal: 6.6.w),
+                                                                    child: Row(
+                                                                      mainAxisAlignment: MainAxisAlignment.start,
+                                                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                                                      children: [
+                                                                        Image.asset(
+                                                                          'images/ic_package.png',
+                                                                          height: 2.8.w,
+                                                                        ),
+                                                                        SizedBox(width: 1.4.w,),
+                                                                        Text(
+                                                                          'Paket',
+                                                                          style: TextStyle(
+                                                                            fontSize: 10.0.sp,
+                                                                            fontWeight: FontWeight.w700,
+                                                                            color: Theme.of(context).backgroundColor,
+                                                                          ),
+                                                                        ),
+                                                                      ],
+                                                                    ),
+                                                                  ),
+                                                                  SizedBox(height: 1.9.h,),
                                                                   SizedBox(
                                                                     height: 34.0.w,
                                                                     child: ListView.builder(
@@ -456,6 +639,10 @@ class _AqiqahState extends State<Aqiqah> {
                                                                                   width: 31.1.w,
                                                                                   height: 31.1.w,
                                                                                   decoration: BoxDecoration(
+                                                                                      border: Border.all(
+                                                                                          width: 0.5,
+                                                                                          color: Theme.of(context).backgroundColor,
+                                                                                      ),
                                                                                       color: Colors.white,
                                                                                       borderRadius: BorderRadius.all(
                                                                                         Radius.circular(12),
@@ -1118,175 +1305,6 @@ class _AqiqahState extends State<Aqiqah> {
                                                                     ),
                                                                   ),
                                                                   SizedBox(height: 5.0.h,),
-                                                                  Padding(
-                                                                    padding: EdgeInsets.symmetric(horizontal: 6.6.w),
-                                                                    child: Text(
-                                                                      'Testimoni',
-                                                                      style: TextStyle(
-                                                                        fontSize: 20.0.sp,
-                                                                        fontWeight: FontWeight.w700,
-                                                                        color: Theme.of(context).backgroundColor,
-                                                                      ),
-                                                                    ),
-                                                                  ),
-                                                                  SizedBox(height: 2.5.h,),
-                                                                  ListView.builder(
-                                                                    shrinkWrap: true,
-                                                                    itemCount: dbTestimoni.length > 3 ? 3 : dbTestimoni.length,
-                                                                    physics: NeverScrollableScrollPhysics(),
-                                                                    padding: EdgeInsets.only(top: 0),
-                                                                    itemBuilder: (context, index) {
-                                                                      DateTime _date = DateTime.parse(dbTestimoni[index]['time']);
-                                                                      String _nm = '<b>' + dbTestimoni[index]['name'] + '</b>';
-                                                                      String _desc = ' | ' + dbTestimoni[index]['description'];
-                                                                      return Column(
-                                                                        children: [
-                                                                          Container(
-                                                                            width: 86.6.w,
-                                                                            decoration: BoxDecoration(
-                                                                                color: Colors.white,
-                                                                                borderRadius: BorderRadius.all(
-                                                                                  Radius.circular(12),
-                                                                                ),
-                                                                                boxShadow: [
-                                                                                  BoxShadow(
-                                                                                    color: Theme.of(context).shadowColor,
-                                                                                    blurRadius: 6.0,
-                                                                                    offset: Offset(0,3),
-                                                                                  ),
-                                                                                ]
-                                                                            ),
-                                                                            child: Column(
-                                                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                                                              children: [
-                                                                                dbTestimoni[index]['image'] == '' ? Container() : ClipRRect(
-                                                                                  borderRadius: BorderRadius.only(
-                                                                                    topLeft: Radius.circular(12),
-                                                                                    topRight: Radius.circular(12),
-                                                                                  ),
-                                                                                  child: Container(
-                                                                                    child: Image.network(
-                                                                                      dbTestimoni[index]['image'],
-                                                                                      height: 43.0.w,
-                                                                                      width: 86.6.w,
-                                                                                      fit: BoxFit.cover,
-                                                                                      loadingBuilder: (context, child, loadingProgress) {
-                                                                                        if (loadingProgress == null) return child;
-                                                                                        return SizedBox(
-                                                                                          height: 43.0.w,
-                                                                                          child: Center(
-                                                                                            child: SpinKitPulse(
-                                                                                              color: Colors.white,
-                                                                                            ),
-                                                                                          ),
-                                                                                        );
-                                                                                      },
-                                                                                    ),
-                                                                                    color: Theme.of(context).primaryColor,
-                                                                                  ),
-                                                                                ),
-                                                                                Padding(
-                                                                                  padding: EdgeInsets.symmetric(horizontal: 4.4.w, vertical: 5.6.w,),
-                                                                                  child: Column(
-                                                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                                                    children: [
-                                                                                      Row(
-                                                                                        children: [
-                                                                                          Stack(
-                                                                                            alignment: AlignmentDirectional.center,
-                                                                                            children: [
-                                                                                              Container(
-                                                                                                width: 6.7.w,
-                                                                                                height: 6.7.w,
-                                                                                                decoration: BoxDecoration(
-                                                                                                  borderRadius: BorderRadius.all(
-                                                                                                    Radius.circular(30),
-                                                                                                  ),
-                                                                                                  color: Theme.of(context).primaryColor,
-                                                                                                ),
-                                                                                              ),
-                                                                                              Container(
-                                                                                                width: 3.1.w,
-                                                                                                height: 3.1.w,
-                                                                                                child: FittedBox(
-                                                                                                  child: Image.asset(
-                                                                                                    'images/ic_profil.png',
-                                                                                                  ),
-                                                                                                ),
-                                                                                              ),
-                                                                                            ],
-                                                                                          ),
-                                                                                          SizedBox(width: 1.7.w,),
-                                                                                          Flexible(
-                                                                                            child: Html(
-                                                                                              data: dbTestimoni[index]['description'] == '' ? _nm : _nm + _desc,
-                                                                                              style: {
-                                                                                                'body': Style(
-                                                                                                  color: Theme.of(context).backgroundColor,
-                                                                                                  fontSize: FontSize(10.0.sp),
-                                                                                                  maxLines: 1,
-                                                                                                  textOverflow: TextOverflow.ellipsis,
-                                                                                                  margin: EdgeInsets.all(0),
-                                                                                                ),
-                                                                                              },
-                                                                                            ),
-                                                                                          ),
-                                                                                        ],
-                                                                                      ),
-                                                                                      SizedBox(height: 2.2.w,),
-                                                                                      Text(
-                                                                                        Waktu(_date).yMMMd() + ' ' + DateFormat.Hm().format(_date),
-                                                                                        style: TextStyle(
-                                                                                          color: Theme.of(context).unselectedWidgetColor,
-                                                                                          fontSize: 7.0.sp,
-                                                                                        ),
-                                                                                      ),
-                                                                                      SizedBox(height: 2.2.w,),
-                                                                                      Text(
-                                                                                        dbTestimoni[index]['message'],
-                                                                                        style: TextStyle(
-                                                                                          color: Theme.of(context).primaryColorDark,
-                                                                                          fontSize: 13.0.sp,
-                                                                                        ),
-                                                                                      ),
-                                                                                    ],
-                                                                                  ),
-                                                                                ),
-                                                                              ],
-                                                                            ),
-                                                                          ),
-                                                                          SizedBox(height: 3.1.h,)
-                                                                        ],
-                                                                      );
-                                                                    },
-                                                                  ),
-                                                                  SizedBox(height: 6.7.w,),
-                                                                  Padding(
-                                                                    padding: EdgeInsets.symmetric(horizontal: 6.7.w),
-                                                                    child: InkWell(
-                                                                      onTap: () => Navigator.pushNamed(context, '/testimoni'),
-                                                                      child: Container(
-                                                                        height: 11.7.w,
-                                                                        width: 100.0.w,
-                                                                        decoration: BoxDecoration(
-                                                                          borderRadius: BorderRadius.all(Radius.circular(24)),
-                                                                          border: Border.all(
-                                                                            color: Theme.of(context).backgroundColor,
-                                                                          ),
-                                                                        ),
-                                                                        child: Center(
-                                                                          child: Text(
-                                                                            'Lihat semua testimoni',
-                                                                            style: TextStyle(
-                                                                              fontSize: 10.0.sp,
-                                                                              color: Theme.of(context).backgroundColor,
-                                                                            ),
-                                                                          ),
-                                                                        ),
-                                                                      ),
-                                                                    ),
-                                                                  ),
-                                                                  SizedBox(height: 5.6.h,),
                                                                   ListView.builder(
                                                                     shrinkWrap: true,
                                                                     itemCount: dbInfo.length,
@@ -1447,6 +1465,8 @@ class _AqiqahState extends State<Aqiqah> {
                                                                       return InkWell(
                                                                         onTap: () {
                                                                           prefs.setBranchId(dbBranch[index]['branch_id'].toString());
+                                                                          prefs.setBranchLat(double.parse(dbBranch[index]['branch_latitude']));
+                                                                          prefs.setBranchLong(double.parse(dbBranch[index]['branch_longitude']));
                                                                           Navigator.pushNamed(context, '/branch');
                                                                         },
                                                                         child: Padding(
@@ -1544,6 +1564,32 @@ class _AqiqahState extends State<Aqiqah> {
                                                                         ),
                                                                       );
                                                                     },
+                                                                  ),
+                                                                  SizedBox(height: 6.7.w,),
+                                                                  Padding(
+                                                                    padding: EdgeInsets.symmetric(horizontal: 6.7.w),
+                                                                    child: InkWell(
+                                                                      onTap: () => Navigator.pushNamed(context, '/branchlist'),
+                                                                      child: Container(
+                                                                        height: 11.7.w,
+                                                                        width: 100.0.w,
+                                                                        decoration: BoxDecoration(
+                                                                          borderRadius: BorderRadius.all(Radius.circular(24)),
+                                                                          border: Border.all(
+                                                                            color: Theme.of(context).backgroundColor,
+                                                                          ),
+                                                                        ),
+                                                                        child: Center(
+                                                                          child: Text(
+                                                                            'Lihat semua cabang',
+                                                                            style: TextStyle(
+                                                                              fontSize: 10.0.sp,
+                                                                              color: Theme.of(context).backgroundColor,
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                    ),
                                                                   ),
                                                                   SizedBox(height: 11.2.h,),
                                                                 ],

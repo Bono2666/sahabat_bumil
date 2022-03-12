@@ -42,7 +42,7 @@ class _FavoritesState extends State<Favorites> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   SpinKitPulse(
-                    color: Colors.white,
+                    color: Theme.of(context).primaryColor,
                   ),
                 ],
               );
@@ -58,7 +58,7 @@ class _FavoritesState extends State<Favorites> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       SpinKitPulse(
-                        color: Colors.white,
+                        color: Theme.of(context).primaryColor,
                       ),
                     ],
                   );

@@ -44,7 +44,7 @@ class _PackageState extends State<Package> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   SpinKitPulse(
-                    color: Colors.white,
+                    color: Theme.of(context).primaryColor,
                   ),
                 ],
               );
@@ -60,7 +60,7 @@ class _PackageState extends State<Package> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       SpinKitPulse(
-                        color: Colors.white,
+                        color: Theme.of(context).primaryColor,
                       ),
                     ],
                   );

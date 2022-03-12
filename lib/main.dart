@@ -13,6 +13,7 @@ import 'package:sahabat_bumil_v2/db/promo_db.dart';
 import 'package:sahabat_bumil_v2/model/fav_model.dart';
 import 'package:sahabat_bumil_v2/pages/aqiqah/aqiqah.dart';
 import 'package:sahabat_bumil_v2/pages/aqiqah/branch.dart';
+import 'package:sahabat_bumil_v2/pages/aqiqah/branchlist.dart';
 import 'package:sahabat_bumil_v2/pages/aqiqah/checkout.dart';
 import 'package:sahabat_bumil_v2/pages/aqiqah/favorites.dart';
 import 'package:sahabat_bumil_v2/pages/aqiqah/history.dart';
@@ -444,6 +445,8 @@ class MyTheme extends StatelessWidget {
                                                 return SlideLeftRoute(page: Testimoni());
                                               case '/branch':
                                                 return SlideLeftRoute(page: Branch());
+                                              case '/branchlist':
+                                                return SlideLeftRoute(page: BranchList());
                                             }
                                           },
                                         );
@@ -508,6 +511,8 @@ class SharedPrefs {
   String get getBranchId => _prefs.getString('branchid') ?? '';
   double get getCurrLat => _prefs.getDouble('currlat') ?? 0;
   double get getCurrLong => _prefs.getDouble('currlong') ?? 0;
+  double get getBranchLat => _prefs.getDouble('branchlat') ?? 0;
+  double get getBranchLong => _prefs.getDouble('branchlong') ?? 0;
 
   setFirstlaunch(bool value) => _prefs.setBool('firstlaunch', value);
   setName(String value) => _prefs.setString('name', value);
@@ -538,6 +543,8 @@ class SharedPrefs {
   setBranchId(String value) => _prefs.setString('branchid', value);
   setCurrLat(double value) => _prefs.setDouble('currlat', value);
   setCurrLong(double value) => _prefs.setDouble('currlong', value);
+  setBranchLat(double value) => _prefs.setDouble('branchlat', value);
+  setBranchLong(double value) => _prefs.setDouble('branchlong', value);
 }
 
 class SlideUpRoute extends PageRouteBuilder {

@@ -25,26 +25,6 @@ class _HomeState extends State<Home> {
   var branchDb = BranchDb();
   var lat, long;
 
-  // void getCurrentLocation() async {
-  //   final status = await Permission.locationWhenInUse.request();
-  //   if (status == PermissionStatus.granted) {
-  //     print('Permission granted');
-  //   } else if (status == PermissionStatus.denied) {
-  //     print('Permission denied. Show a dialog and again ask for the permission');
-  //   } else if (status == PermissionStatus.permanentlyDenied) {
-  //     print('Take the user to the settings page.');
-  //     await openAppSettings();
-  //   }
-  //
-  //   if (status.isGranted) {
-  //     var position = await Geolocator.getCurrentPosition(
-  //         desiredAccuracy: LocationAccuracy.best);
-  //     lat = position.latitude;
-  //     long = position.longitude;
-  //     print('Posisi : $lat, $long');
-  //   }
-  // }
-
   @override
   void initState() {
     super.initState();
