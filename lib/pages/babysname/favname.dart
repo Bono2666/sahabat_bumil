@@ -73,7 +73,7 @@ class _FavNameState extends State<FavName> {
                 Padding(
                   padding: EdgeInsets.only(left: 6.6.w, top: 19.0.h, right: 6.6.w),
                   child: Text(
-                    'Nama Favorit Anda',
+                    'Nama Favorit',
                     style: TextStyle(
                       color: Theme.of(context).backgroundColor,
                       fontWeight: FontWeight.w700,
@@ -83,7 +83,8 @@ class _FavNameState extends State<FavName> {
                 ),
                 Padding(
                   padding: EdgeInsets.only(left: 6.6.w, top: 27.5.h, right: 6.6.w),
-                  child: Row(
+                  child: dbFav.data.length > 0
+                      ? Row(
                     children: [
                       SizedBox(
                         child: Text(
@@ -103,12 +104,43 @@ class _FavNameState extends State<FavName> {
                         ),
                       ),
                     ],
+                  )
+                      : Column(
+                    children: [
+                      SizedBox(height: 2.5.h,),
+                      Image.asset(
+                        'images/no_fav_name.png',
+                        height: 62.0.w,
+                      ),
+                      SizedBox(height: 3.4.h,),
+                      Text(
+                        'Buat daftar nama favorit pertama Anda',
+                        style: TextStyle(
+                          color: Theme.of(context).backgroundColor,
+                          fontWeight: FontWeight.w700,
+                          fontSize: 12.0.sp,
+                        ),
+                      ),
+                      SizedBox(height: 0.6.h,),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 2.2.w),
+                        child: Text(
+                          'Saat Ayah/Bunda mencari nama dede bayi, ketuk ikon hati '
+                              'untuk menyimpan nama favorit Ayah/Bunda ke daftar favorit.',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 10.0.sp,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 Padding(
                   padding: EdgeInsets.only(left: 6.6.w, top: 30.9.h, right: 6.6.w),
                   child: SizedBox(
-                    child: ListView.builder(
+                    child: dbFav.data.length > 0 ? ListView.builder(
                       itemCount: dbFav.data.length,
                       physics: BouncingScrollPhysics(),
                       padding: EdgeInsets.fromLTRB(0, 0, 0, 4.0.h),
@@ -178,7 +210,7 @@ class _FavNameState extends State<FavName> {
                           ),
                         );
                       },
-                    ),
+                    ) : Container(),
                   ),
                 ),
               ],
