@@ -41,7 +41,12 @@ class _FeaturesState extends State<Features> {
                                 InkWell(
                                   onTap: () {
                                     prefs.setRoute('/home');
-                                    Navigator.pushNamed(context, '/monitoring');
+                                    if (prefs.getBasecount == '') {
+                                      prefs.setGoRoute('/monitoring');
+                                      Navigator.pushNamed(context, '/addpregnancy');
+                                    }
+                                    else
+                                      Navigator.pushNamed(context, '/monitoring');
                                   },
                                   child: Stack(
                                     alignment: AlignmentDirectional.center,
