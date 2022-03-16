@@ -805,6 +805,15 @@ class _CriteriaState extends State<Criteria>
                                     fontSize: 24.0.sp,
                                   ),
                                 ),
+                                SizedBox(height: 0.6.h,),
+                                Text(
+                                  'Gulirkan ke bawah untuk melihat kriteria',
+                                  style: TextStyle(
+                                    fontSize: 10.0.sp,
+                                    fontWeight: FontWeight.w700,
+                                    color: Theme.of(context).primaryColor,
+                                  ),
+                                ),
                                 SizedBox(height: 4.4.h,),
                               ],
                             ),
@@ -837,7 +846,7 @@ class _CriteriaState extends State<Criteria>
                                     ),
                                   ],
                                 ),
-                                SizedBox(height: 5.5.w,),
+                                SizedBox(height: 4.4.w,),
                                 Padding(
                                   padding: EdgeInsets.only(left: 1.6.w),
                                   child: Container(
@@ -869,7 +878,7 @@ class _CriteriaState extends State<Criteria>
                                               selected = criteriaItem.fav_cat),
                                           child: Column(
                                             children: [
-                                              SizedBox(height: 5.5.w,),
+                                              SizedBox(height: 4.4.w,),
                                               Padding(padding: EdgeInsets.only(right: 1.6.w),
                                                 child: Row(
                                                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -898,7 +907,7 @@ class _CriteriaState extends State<Criteria>
                                                   ],
                                                 ),
                                               ),
-                                              SizedBox(height: 5.5.w,),
+                                              SizedBox(height: 4.4.w,),
                                               Padding(
                                                 padding: EdgeInsets.symmetric(horizontal: 1.6.w),
                                                 child: Container(
