@@ -1,3 +1,4 @@
+// @dart=2.9
 import 'dart:async';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
@@ -9,14 +10,14 @@ class PromoDb {
 
   final String dbName = 'sahabat_bumil.db';
   final String tableName = 'promo';
-  final String column_id = 'promo_id';
-  final String column_title = 'promo_title';
-  final String column_desc = 'promo_desc';
-  final String column_price = 'promo_price';
-  final String column_label = 'promo_label';
-  final String column_image = 'promo_image';
-  final String column_package = 'promo_package';
-  final String column_product = 'promo_product';
+  final String columnId = 'promo_id';
+  final String columnTitle = 'promo_title';
+  final String columnDesc = 'promo_desc';
+  final String columnPrice = 'promo_price';
+  final String columnLabel = 'promo_label';
+  final String columnImage = 'promo_image';
+  final String columnPackage = 'promo_package';
+  final String columnProduct = 'promo_product';
 
   static Database _db;
 
@@ -36,14 +37,14 @@ class PromoDb {
     String path = join(dbPath, dbName);
     var db = await openDatabase(path, version: 1);
     await db.execute('create table IF NOT EXISTS $tableName('
-        '$column_id int primary key, '
-        '$column_title varchar(50), '
-        '$column_desc varchar(80), '
-        '$column_price varchar(30), '
-        '$column_label varchar(15), '
-        '$column_image varchar(120), '
-        '$column_package int, '
-        '$column_product int)');
+        '$columnId int primary key, '
+        '$columnTitle varchar(50), '
+        '$columnDesc varchar(80), '
+        '$columnPrice varchar(30), '
+        '$columnLabel varchar(15), '
+        '$columnImage varchar(120), '
+        '$columnPackage int, '
+        '$columnProduct int)');
     return db;
   }
 
@@ -51,8 +52,8 @@ class PromoDb {
       String image, int package, int product) async {
     var dbClient = await db;
     var result = await dbClient.rawQuery('INSERT INTO $tableName '
-        '($column_id, $column_title, $column_desc, $column_price, $column_label, '
-        '$column_image, $column_package, $column_product) '
+        '($columnId, $columnTitle, $columnDesc, $columnPrice, $columnLabel, '
+        '$columnImage, $columnPackage, $columnProduct) '
         'VALUES (' + id.toString() + ', "' + title + '", "' + desc + '", "' + price +
         '", "' + label + '", "' + image + '", ' + package.toString() + ', ' + product.toString() + ')');
     return result.toList();
@@ -60,7 +61,7 @@ class PromoDb {
 
   Future<List> list() async {
     var dbClient = await db;
-    var result = await dbClient.rawQuery('SELECT * FROM $tableName ORDER BY $column_id');
+    var result = await dbClient.rawQuery('SELECT * FROM $tableName ORDER BY $columnId');
     return result.toList();
   }
 

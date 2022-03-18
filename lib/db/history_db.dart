@@ -1,3 +1,4 @@
+// @dart=2.9
 import 'dart:async';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
@@ -9,13 +10,13 @@ class HistoryDb {
 
   final String dbName = 'sahabat_bumil.db';
   final String tableName = 'history';
-  final String column_id = 'prods_id';
-  final String column_date = 'prods_date';
-  final String column_package = 'prods_package';
-  final String column_name = 'prods_name';
-  final String column_desc = 'prods_desc';
-  final String column_price = 'prods_price';
-  final String column_image = 'prods_image';
+  final String columnId = 'prods_id';
+  final String columnDate = 'prods_date';
+  final String columnPackage = 'prods_package';
+  final String columnName = 'prods_name';
+  final String columnDesc = 'prods_desc';
+  final String columnPrice = 'prods_price';
+  final String columnImage = 'prods_image';
 
   static Database _db;
 
@@ -35,13 +36,13 @@ class HistoryDb {
     String path = join(dbPath, dbName);
     var db = await openDatabase(path, version: 1);
     await db.execute('create table IF NOT EXISTS $tableName('
-        '$column_id int, '
-        '$column_date date, '
-        '$column_package varchar(30), '
-        '$column_name varchar(40), '
-        '$column_desc varchar(200), '
-        '$column_price int, '
-        '$column_image varchar(120), PRIMARY KEY ($column_id, $column_date))');
+        '$columnId int, '
+        '$columnDate date, '
+        '$columnPackage varchar(30), '
+        '$columnName varchar(40), '
+        '$columnDesc varchar(200), '
+        '$columnPrice int, '
+        '$columnImage varchar(120), PRIMARY KEY ($columnId, $columnDate))');
     return db;
   }
 
@@ -49,8 +50,8 @@ class HistoryDb {
       String image) async {
     var dbClient = await db;
     var result = await dbClient.rawQuery('INSERT INTO $tableName '
-        '($column_id, $column_name, $column_desc, $column_price, $column_package, '
-        '$column_image) '
+        '($columnId, $columnName, $columnDesc, $columnPrice, $columnPackage, '
+        '$columnImage) '
         'VALUES (' + id.toString() + ', "' + name + '", "' + desc + '", ' +
         price.toString() + ', "' + package.toString() + '", "' + image + '")');
     return result.toList();

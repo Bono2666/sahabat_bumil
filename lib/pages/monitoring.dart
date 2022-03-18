@@ -1,3 +1,4 @@
+// @dart=2.9
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/percent_indicator.dart';
@@ -25,7 +26,6 @@ class _MonitoringState extends State<Monitoring> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     DateTime hpht = DateTime(
@@ -879,11 +879,11 @@ class _MonitoringState extends State<Monitoring> {
                                         checkListData = snapshot.data.docs;
                                         for (int i=0; i < checkListData.length; i++) {
                                           var checklist = new Checklist(
-                                            cl_id: checkListData[i].id,
-                                            cl_week: checkListData[i].get('week'),
-                                            cl_title: checkListData[i].get('title'),
-                                            cl_image: checkListData[i].get('image'),
-                                            cl_checked: 0,
+                                            clId: checkListData[i].id,
+                                            clWeek: checkListData[i].get('week'),
+                                            clTitle: checkListData[i].get('title'),
+                                            clImage: checkListData[i].get('image'),
+                                            clChecked: 0,
                                           );
                                           db.insert(checklist);
                                         }
@@ -985,7 +985,7 @@ class _MonitoringState extends State<Monitoring> {
                                                                         ),
                                                                         child: Container(
                                                                           child: Image.network(
-                                                                            checkListItem.cl_image,
+                                                                            checkListItem.clImage,
                                                                             height: 40.0.w,
                                                                             fit: BoxFit.cover,
                                                                             loadingBuilder: (context, child, loadingProgress) {
@@ -1015,7 +1015,7 @@ class _MonitoringState extends State<Monitoring> {
                                                                           ),
                                                                           child: Center(
                                                                             child: Image.asset(
-                                                                              checkListItem.cl_checked == 1
+                                                                              checkListItem.clChecked == 1
                                                                                   ? 'images/ic_checkedlist.png'
                                                                                   : 'images/ic_unchecklist.png',
                                                                               width: 3.3.w,
@@ -1028,7 +1028,7 @@ class _MonitoringState extends State<Monitoring> {
                                                                   Padding(
                                                                     padding: EdgeInsets.fromLTRB(2.2.w,3.0.w,2.2.w,0),
                                                                     child: Text(
-                                                                      checkListItem.cl_title,
+                                                                      checkListItem.clTitle,
                                                                       style: TextStyle(
                                                                         color: Colors.white,
                                                                         fontSize: 12.0.sp,
@@ -1040,22 +1040,22 @@ class _MonitoringState extends State<Monitoring> {
                                                               ),
                                                             ),
                                                             onTap: () {
-                                                              if (checkListItem.cl_checked == 1) {
+                                                              if (checkListItem.clChecked == 1) {
                                                                 var checklist = Checklist(
-                                                                  cl_id: checkListItem.cl_id,
-                                                                  cl_week: checkListItem.cl_week,
-                                                                  cl_title: checkListItem.cl_title,
-                                                                  cl_image: checkListItem.cl_image,
-                                                                  cl_checked: 0,
+                                                                  clId: checkListItem.clId,
+                                                                  clWeek: checkListItem.clWeek,
+                                                                  clTitle: checkListItem.clTitle,
+                                                                  clImage: checkListItem.clImage,
+                                                                  clChecked: 0,
                                                                 );
                                                                 db.update(checklist);
                                                               } else {
                                                                 var checklist = Checklist(
-                                                                  cl_id: checkListItem.cl_id,
-                                                                  cl_week: checkListItem.cl_week,
-                                                                  cl_title: checkListItem.cl_title,
-                                                                  cl_image: checkListItem.cl_image,
-                                                                  cl_checked: 1,
+                                                                  clId: checkListItem.clId,
+                                                                  clWeek: checkListItem.clWeek,
+                                                                  clTitle: checkListItem.clTitle,
+                                                                  clImage: checkListItem.clImage,
+                                                                  clChecked: 1,
                                                                 );
                                                                 db.update(checklist);
                                                               }

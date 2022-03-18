@@ -53,6 +53,7 @@ dependencies:
   google_maps_flutter:
   geolocator:
   permission_handler:
+  keyboard_dismisser:
 
 dev_dependencies:
   flutter_test:

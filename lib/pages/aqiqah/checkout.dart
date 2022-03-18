@@ -1,6 +1,6 @@
+// @dart=2.9
 import 'dart:convert';
 import 'dart:io';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';

@@ -1,8 +1,10 @@
+// @dart=2.9
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:sahabat_bumil_v2/main.dart';
 import 'package:sizer/sizer.dart';
+import 'package:keyboard_dismisser/keyboard_dismisser.dart';
 
 class Search extends StatefulWidget {
   @override
@@ -16,8 +18,12 @@ class _SearchState extends State<Search> {
   int articleCount = 0;
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
+  Widget build(BuildContext context) => KeyboardDismisser(
+    gestures: [
+      GestureType.onTap,
+      GestureType.onVerticalDragDown,
+    ],
+    child: Scaffold(
       body: FutureBuilder(
         future: FirebaseFirestore.instance.collection('article').get(),
         builder: (context, snapshot) {
@@ -69,74 +75,74 @@ class _SearchState extends State<Search> {
                         if ((listArticle[index].get('title').toString().toLowerCase()
                             .contains(keySearch.toLowerCase()) ||
                             listArticle[index].get('content').toString().toLowerCase()
-                            .contains(keySearch.toLowerCase())) && keySearch != '') {
+                                .contains(keySearch.toLowerCase())) && keySearch != '') {
                           return Column(
-                                children: [
-                                  InkWell(
-                                    child: Padding(
-                                      padding: EdgeInsets.only(left: 6.7.w, right: 7.2.w,),
-                                      child: Row(
-                                        crossAxisAlignment: CrossAxisAlignment.center,
-                                        children: [
-                                          ClipRRect(
-                                            borderRadius: BorderRadius.all(Radius.circular(12)),
-                                            child: Container(
-                                              child: Image.network(
-                                                listArticle[index].get('image'),
+                            children: [
+                              InkWell(
+                                child: Padding(
+                                  padding: EdgeInsets.only(left: 6.7.w, right: 7.2.w,),
+                                  child: Row(
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      ClipRRect(
+                                        borderRadius: BorderRadius.all(Radius.circular(12)),
+                                        child: Container(
+                                          child: Image.network(
+                                            listArticle[index].get('image'),
+                                            height: 13.3.w,
+                                            width: 13.3.w,
+                                            fit: BoxFit.cover,
+                                            loadingBuilder: (context, child, loadingProgress) {
+                                              if (loadingProgress == null) return child;
+                                              return SizedBox(
                                                 height: 13.3.w,
-                                                width: 13.3.w,
-                                                fit: BoxFit.cover,
-                                                loadingBuilder: (context, child, loadingProgress) {
-                                                  if (loadingProgress == null) return child;
-                                                  return SizedBox(
-                                                    height: 13.3.w,
-                                                    child: Center(
-                                                      child: SpinKitPulse(
-                                                        color: Colors.white,
-                                                      ),
-                                                    ),
-                                                  );
-                                                },
-                                              ),
-                                              color: Theme.of(context).primaryColor,
-                                            ),
+                                                child: Center(
+                                                  child: SpinKitPulse(
+                                                    color: Colors.white,
+                                                  ),
+                                                ),
+                                              );
+                                            },
                                           ),
-                                          SizedBox(width: 4.4.w,),
-                                          Flexible(
-                                            child: Text(
-                                              listArticle[index].get('title'),
-                                              overflow: TextOverflow.ellipsis,
-                                              maxLines: 2,
-                                              style: TextStyle(
-                                                color: Theme.of(context).backgroundColor,
-                                                fontSize: 13.0.sp,
-                                              ),
-                                            ),
-                                          ),
-                                        ],
+                                          color: Theme.of(context).primaryColor,
+                                        ),
                                       ),
-                                    ),
-                                    onTap: () {
-                                      prefs.setArticleId(listArticle[index].id);
-                                      Navigator.pushNamed(context, '/viewarticle');
-                                    },
-                                  ),
-                                  SizedBox(height: 2.2.h,),
-                                  Padding(
-                                    padding: EdgeInsets.only(left: 6.7.w, right: 7.2.w,),
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        border: Border(
-                                          bottom: BorderSide(
-                                            color: Theme.of(context).secondaryHeaderColor,
+                                      SizedBox(width: 4.4.w,),
+                                      Flexible(
+                                        child: Text(
+                                          listArticle[index].get('title'),
+                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 2,
+                                          style: TextStyle(
+                                            color: Theme.of(context).backgroundColor,
+                                            fontSize: 13.0.sp,
                                           ),
                                         ),
                                       ),
+                                    ],
+                                  ),
+                                ),
+                                onTap: () {
+                                  prefs.setArticleId(listArticle[index].id);
+                                  Navigator.pushNamed(context, '/viewarticle');
+                                },
+                              ),
+                              SizedBox(height: 2.2.h,),
+                              Padding(
+                                padding: EdgeInsets.only(left: 6.7.w, right: 7.2.w,),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    border: Border(
+                                      bottom: BorderSide(
+                                        color: Theme.of(context).secondaryHeaderColor,
+                                      ),
                                     ),
                                   ),
-                                  SizedBox(height: 3.0.h,),
-                                ],
-                              );
+                                ),
+                              ),
+                              SizedBox(height: 3.0.h,),
+                            ],
+                          );
                         } else {
                           return Container();
                         }
@@ -238,7 +244,6 @@ class _SearchState extends State<Search> {
                                     color: Theme.of(context).toggleableActiveColor,
                                   ),
                                 ),
-
                               ),
                             ],
                           ),
@@ -326,6 +331,6 @@ class _SearchState extends State<Search> {
           );
         },
       ),
-    );
-  }
+    ),
+  );
 }

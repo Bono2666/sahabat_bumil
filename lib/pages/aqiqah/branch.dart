@@ -1,6 +1,6 @@
+// @dart=2.9
 import 'dart:async';
 import 'dart:convert';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:sizer/sizer.dart';

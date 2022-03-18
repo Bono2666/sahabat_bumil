@@ -1,3 +1,4 @@
+// @dart=2.9
 import 'dart:async';
 import 'package:path/path.dart';
 import 'package:sahabat_bumil_v2/model/checklist_model.dart';
@@ -10,11 +11,11 @@ class ChecklistDb {
 
   final String dbName = 'sahabat_bumil.db';
   final String tableName = 'checklist';
-  final String column_id = 'cl_id';
-  final String column_week = 'cl_week';
-  final String column_title = 'cl_title';
-  final String column_image = 'cl_image';
-  final String column_checked = 'cl_checked';
+  final String columnId = 'cl_id';
+  final String columnWeek = 'cl_week';
+  final String columnTitle = 'cl_title';
+  final String columnImage = 'cl_image';
+  final String columnChecked = 'cl_checked';
 
   static Database _db;
 
@@ -34,11 +35,11 @@ class ChecklistDb {
     String path = join(dbPath, dbName);
     var db = await openDatabase(path, version: 1);
     await db.execute('create table IF NOT EXISTS $tableName('
-        '$column_id varchar(3) primary key, '
-        '$column_week integer, '
-        '$column_title varchar(50), '
-        '$column_image varchar(255), '
-        '$column_checked integer)');
+        '$columnId varchar(3) primary key, '
+        '$columnWeek integer, '
+        '$columnTitle varchar(50), '
+        '$columnImage varchar(255), '
+        '$columnChecked integer)');
     return db;
   }
 
@@ -51,7 +52,7 @@ class ChecklistDb {
   Future<List> list(int week) async {
     var dbClient = await db;
     var result = await dbClient.rawQuery(
-        'SELECT * FROM $tableName WHERE $column_week = $week'
+        'SELECT * FROM $tableName WHERE $columnWeek = $week'
     );
     return result.toList();
   }
@@ -59,7 +60,7 @@ class ChecklistDb {
   Future<int> update(Checklist checklist) async {
     var dbClient = await db;
     var result = await dbClient.update(
-      tableName, checklist.set(), where: '$column_id = ?', whereArgs: [checklist.cl_id],
+      tableName, checklist.set(), where: '$columnId = ?', whereArgs: [checklist.clId],
     );
     return result;
   }

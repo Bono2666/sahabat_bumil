@@ -1,5 +1,5 @@
+// @dart=2.9
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sahabat_bumil_v2/db/fav_db.dart';
 import 'package:sahabat_bumil_v2/model/fav_model.dart';
@@ -871,11 +871,11 @@ class _CriteriaState extends State<Criteria>
                                 padding: EdgeInsets.only(left: 5.2.w, right: 5.2.w, bottom: 14.0.h),
                                 itemBuilder: (context, index) {
                                   Fav criteriaItem = Fav.get(snapshot.data[index]);
-                                  return criteriaItem.fav_cat == currCat
+                                  return criteriaItem.favCat == currCat
                                       ? Container()
                                       : InkWell(
                                           onTap: () => setState(() =>
-                                              selected = criteriaItem.fav_cat),
+                                              selected = criteriaItem.favCat),
                                           child: Column(
                                             children: [
                                               SizedBox(height: 4.4.w,),
@@ -886,7 +886,7 @@ class _CriteriaState extends State<Criteria>
                                                     Expanded(
                                                       child: SizedBox(
                                                         child: Html(
-                                                          data: criteriaItem.fav_cat,
+                                                          data: criteriaItem.favCat,
                                                           style: {
                                                             'body': Style(
                                                               fontSize: FontSize(17.0.sp),
@@ -899,7 +899,7 @@ class _CriteriaState extends State<Criteria>
                                                     ),
                                                     // Expanded(child: SizedBox(),),
                                                     Image.asset(
-                                                      criteriaItem.fav_cat == selected
+                                                      criteriaItem.favCat == selected
                                                           ? 'images/ic_checked.png'
                                                           : 'images/ic_radio.png',
                                                       height: 8.9.w,

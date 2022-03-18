@@ -1,56 +1,57 @@
+// @dart=2.9
 class Fav {
-  String fav_id, fav_name, fav_sex, fav_desc, fav_cat, fav_filter, fav_status;
-  int fav_no_cat, fav_prefix, fav_middle, fav_sufix, fav_check;
+  String favId, favName, favSex, favDesc, favCat, favFilter, favStatus;
+  int favNoCat, favPrefix, favMiddle, favSuffix, favCheck;
 
-  Fav({this.fav_id, this.fav_name, this.fav_sex, this.fav_desc, this.fav_no_cat, this.fav_cat,
-    this.fav_filter, this.fav_prefix, this.fav_middle, this.fav_sufix, this.fav_check, this.fav_status});
+  Fav({this.favId, this.favName, this.favSex, this.favDesc, this.favNoCat, this.favCat,
+    this.favFilter, this.favPrefix, this.favMiddle, this.favSuffix, this.favCheck, this.favStatus});
 
   factory Fav.get(Map<String, dynamic> data) => new Fav(
-    fav_id: data['fav_id'],
-    fav_name: data['fav_name'],
-    fav_sex: data['fav_sex'],
-    fav_desc: data['fav_desc'],
-    fav_no_cat: data['fav_no_cat'],
-    fav_cat: data['fav_cat'],
-    fav_filter: data['fav_filter'],
-    fav_prefix: data['fav_prefix'],
-    fav_middle: data['fav_middle'],
-    fav_sufix: data['fav_sufix'],
-    fav_check: data['fav_check'],
-    fav_status: data['fav_status'],
+    favId: data['fav_id'],
+    favName: data['fav_name'],
+    favSex: data['fav_sex'],
+    favDesc: data['fav_desc'],
+    favNoCat: data['fav_no_cat'],
+    favCat: data['fav_cat'],
+    favFilter: data['fav_filter'],
+    favPrefix: data['fav_prefix'],
+    favMiddle: data['fav_middle'],
+    favSuffix: data['fav_sufix'],
+    favCheck: data['fav_check'],
+    favStatus: data['fav_status'],
   );
 
   Map<String, dynamic> set() => {
-    'fav_id': fav_id,
-    'fav_name': fav_name,
-    'fav_sex': fav_sex,
-    'fav_desc': fav_desc,
-    'fav_no_cat': fav_no_cat,
-    'fav_cat': fav_cat,
-    'fav_filter': fav_filter,
-    'fav_prefix': fav_prefix,
-    'fav_middle': fav_middle,
-    'fav_sufix': fav_sufix,
-    'fav_check': fav_check,
-    'fav_status': fav_status,
+    'fav_id': favId,
+    'fav_name': favName,
+    'fav_sex': favSex,
+    'fav_desc': favDesc,
+    'fav_no_cat': favNoCat,
+    'fav_cat': favCat,
+    'fav_filter': favFilter,
+    'fav_prefix': favPrefix,
+    'fav_middle': favMiddle,
+    'fav_sufix': favSuffix,
+    'fav_check': favCheck,
+    'fav_status': favStatus,
   };
 
   Map<String, dynamic> update() => {
-    'fav_id': fav_id,
-    'fav_name': fav_name,
-    'fav_sex': fav_sex,
-    'fav_desc': fav_desc,
-    'fav_no_cat': fav_no_cat,
-    'fav_cat': fav_cat,
-    'fav_filter': fav_filter,
-    'fav_prefix': fav_prefix,
-    'fav_middle': fav_middle,
-    'fav_sufix': fav_sufix,
-    'fav_status': fav_status,
+    'fav_id': favId,
+    'fav_name': favName,
+    'fav_sex': favSex,
+    'fav_desc': favDesc,
+    'fav_no_cat': favNoCat,
+    'fav_cat': favCat,
+    'fav_filter': favFilter,
+    'fav_prefix': favPrefix,
+    'fav_middle': favMiddle,
+    'fav_sufix': favSuffix,
+    'fav_status': favStatus,
   };
 
   Map<String, dynamic> updateFav() => {
-    'fav_id': fav_id,
-    'fav_check': fav_check,
+    'fav_id': favId,
+    'fav_check': favCheck,
   };
 }

@@ -1,11 +1,12 @@
+// @dart=2.9
 class Branch {
-  int branch_id;
-  double branch_distance;
+  int branchId;
+  double branchDistance;
 
-  Branch({this.branch_id, this.branch_distance});
+  Branch({this.branchId, this.branchDistance});
 
   Map<String, dynamic> updateDistance() => {
-    'branch_id': branch_id,
-    'branch_distance': branch_distance,
+    'branch_id': branchId,
+    'branch_distance': branchDistance,
   };
 }

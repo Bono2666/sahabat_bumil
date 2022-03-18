@@ -1,3 +1,4 @@
+// @dart=2.9
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 import 'package:sahabat_bumil_v2/main.dart';

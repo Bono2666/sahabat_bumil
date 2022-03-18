@@ -1,3 +1,4 @@
+// @dart=2.9
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -131,8 +132,8 @@ class _HomeState extends State<Home> {
                                   startLat, startLong, endLat, endLong);
 
                               var _distance = Branch(
-                                branch_id: dbBranch[i]['branch_id'],
-                                branch_distance: distance,
+                                branchId: dbBranch[i]['branch_id'],
+                                branchDistance: distance,
                               );
                               branchDb.updateDistance(_distance);
                             }

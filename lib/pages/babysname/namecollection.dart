@@ -1,6 +1,5 @@
-import 'package:flutter/cupertino.dart';
+// @dart=2.9
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:sahabat_bumil_v2/db/fav_db.dart';
@@ -64,7 +63,7 @@ class _NameCollectionState extends State<NameCollection> {
           if (snapshot.connectionState == ConnectionState.done) {
             dbFirstCap = snapshot;
             if (category != 'Semua' && selectedCap == 0)
-              cap = Fav.get(dbFirstCap.data[0]).fav_name.substring(0, 1);
+              cap = Fav.get(dbFirstCap.data[0]).favName.substring(0, 1);
           }
           return FutureBuilder(
             future: favDb.listCat(sex),
@@ -260,15 +259,15 @@ class _NameCollectionState extends State<NameCollection> {
                                 itemBuilder: (context, index) {
                                   Fav filterItem = Fav.get(dbCat.data[index]);
                                   var cat;
-                                  switch (filterItem.fav_filter.substring(filterItem.fav_filter.length - 5)) {
+                                  switch (filterItem.favFilter.substring(filterItem.favFilter.length - 5)) {
                                     case 'Allah':
-                                      cat = Runes(filterItem.fav_filter + ' \ufdfb');
+                                      cat = Runes(filterItem.favFilter + ' \ufdfb');
                                       break;
                                     case 'Nabi ':
-                                      cat = Runes(filterItem.fav_filter + '\ufdfa');
+                                      cat = Runes(filterItem.favFilter + '\ufdfa');
                                       break;
                                     default:
-                                      cat = Runes(filterItem.fav_filter);
+                                      cat = Runes(filterItem.favFilter);
                                       break;
                                   }
                                   return Row(
@@ -304,7 +303,7 @@ class _NameCollectionState extends State<NameCollection> {
                                               category = 'Semua';
                                               cap = 'A';
                                             } else {
-                                              category = filterItem.fav_cat;
+                                              category = filterItem.favCat;
                                             }
                                             selectedCap = 0;
                                           });
@@ -338,7 +337,7 @@ class _NameCollectionState extends State<NameCollection> {
                                       onTap: () {
                                         setState(() {
                                           selectedCap = index;
-                                          cap = capsCatItem.fav_name.substring(0,1);
+                                          cap = capsCatItem.favName.substring(0,1);
                                         });
                                       },
                                       child: Container(
@@ -354,7 +353,7 @@ class _NameCollectionState extends State<NameCollection> {
                                           padding: EdgeInsets.all(3.3.w),
                                           child: Center(
                                             child: Text(
-                                              capsCatItem.fav_name.substring(0,1),
+                                              capsCatItem.favName.substring(0,1),
                                               style: TextStyle(
                                                 fontSize: 10.0.sp,
                                                 color: Colors.white,
@@ -420,7 +419,7 @@ class _NameCollectionState extends State<NameCollection> {
                                             padding: EdgeInsets.only(top: 1.8.h,),
                                             child: SizedBox(
                                               child: Text(
-                                                nameItem.fav_name,
+                                                nameItem.favName,
                                                 style: TextStyle(
                                                   fontSize: 12.0.sp,
                                                   color: Theme.of(context).backgroundColor,
@@ -433,7 +432,7 @@ class _NameCollectionState extends State<NameCollection> {
                                             child: Padding(
                                               padding: EdgeInsets.only(top: 0.5.h),
                                               child: Html(
-                                                data: nameItem.fav_desc,
+                                                data: nameItem.favDesc,
                                                 style: {
                                                   'body': Style(
                                                     fontSize: FontSize(12.0.sp),
@@ -448,22 +447,22 @@ class _NameCollectionState extends State<NameCollection> {
                                             child: Padding(
                                               padding: EdgeInsets.only(top: 1.8.h),
                                               child: Image.asset(
-                                                nameItem.fav_check == 0 ? 'images/ic_unfav.png' : 'images/ic_fav.png',
+                                                nameItem.favCheck == 0 ? 'images/ic_unfav.png' : 'images/ic_fav.png',
                                                 width: 5.6.w,
                                               ),
                                             ),
                                             onTap: () {
                                               setState(() {
-                                                if (nameItem.fav_check == 1) {
+                                                if (nameItem.favCheck == 1) {
                                                   var check = Fav(
-                                                    fav_id: nameItem.fav_id,
-                                                    fav_check: 0,
+                                                    favId: nameItem.favId,
+                                                    favCheck: 0,
                                                   );
                                                   favDb.updateFav(check);
                                                 } else {
                                                   var check = Fav(
-                                                    fav_id: nameItem.fav_id,
-                                                    fav_check: 1,
+                                                    favId: nameItem.favId,
+                                                    favCheck: 1,
                                                   );
                                                   favDb.updateFav(check);
                                                 }

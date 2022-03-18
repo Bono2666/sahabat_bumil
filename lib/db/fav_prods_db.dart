@@ -1,3 +1,4 @@
+// @dart=2.9
 import 'dart:async';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
@@ -9,7 +10,7 @@ class FavProdsDb {
 
   final String dbName = 'sahabat_bumil.db';
   final String tableName = 'fav_prods';
-  final String column_id = 'prods_id';
+  final String columnId = 'prods_id';
 
   static Database _db;
 
@@ -29,14 +30,14 @@ class FavProdsDb {
     String path = join(dbPath, dbName);
     var db = await openDatabase(path, version: 1);
     await db.execute('create table IF NOT EXISTS $tableName('
-        '$column_id int primary key)');
+        '$columnId int primary key)');
     return db;
   }
 
   Future<List> insert(int id) async {
     var dbClient = await db;
     var result = await dbClient.rawQuery('INSERT INTO $tableName '
-        '($column_id) VALUES (' + id.toString() + ')');
+        '($columnId) VALUES (' + id.toString() + ')');
     return result.toList();
   }
 

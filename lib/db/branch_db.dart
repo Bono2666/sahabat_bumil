@@ -1,3 +1,4 @@
+// @dart=2.9
 import 'dart:async';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
@@ -11,20 +12,20 @@ class BranchDb {
 
   final String dbName = 'sahabat_bumil.db';
   final String tableName = 'branch';
-  final String column_id = 'branch_id';
-  final String column_name = 'branch_name';
-  final String column_desc = 'branch_desc';
-  final String column_address_1 = 'branch_address_1';
-  final String column_address_2 = 'branch_address_2';
-  final String column_phone_1 = 'branch_phone_1';
-  final String column_phone_2 = 'branch_phone_2';
-  final String column_email_1 = 'branch_email_1';
-  final String column_email_2 = 'branch_email_2';
-  final String column_image = 'branch_image';
-  final String column_latitude = 'branch_latitude';
-  final String column_longitude = 'branch_longitude';
-  final String column_direction = 'branch_direction';
-  final String column_distance = 'branch_distance';
+  final String columnId = 'branch_id';
+  final String columnName = 'branch_name';
+  final String columnDesc = 'branch_desc';
+  final String columnAddress1 = 'branch_address_1';
+  final String columnAddress2 = 'branch_address_2';
+  final String columnPhone1 = 'branch_phone_1';
+  final String columnPhone2 = 'branch_phone_2';
+  final String columnEmail1 = 'branch_email_1';
+  final String columnEmail2 = 'branch_email_2';
+  final String columnImage = 'branch_image';
+  final String columnLatitude = 'branch_latitude';
+  final String columnLongitude = 'branch_longitude';
+  final String columnDirection = 'branch_direction';
+  final String columnDistance = 'branch_distance';
 
   static Database _db;
 
@@ -44,20 +45,20 @@ class BranchDb {
     String path = join(dbPath, dbName);
     var db = await openDatabase(path, version: 1);
     await db.execute('create table IF NOT EXISTS $tableName('
-        '$column_id int primary key, '
-        '$column_name varchar(50), '
-        '$column_desc varchar(200), '
-        '$column_address_1 varchar(120), '
-        '$column_address_2 varchar(120), '
-        '$column_phone_1 varchar(15), '
-        '$column_phone_2 varchar(15), '
-        '$column_email_1 varchar(30), '
-        '$column_email_2 varchar(30), '
-        '$column_image varchar(120), '
-        '$column_latitude varchar(15), '
-        '$column_longitude varchar(15), '
-        '$column_direction varchar(500),'
-        '$column_distance double)');
+        '$columnId int primary key, '
+        '$columnName varchar(50), '
+        '$columnDesc varchar(200), '
+        '$columnAddress1 varchar(120), '
+        '$columnAddress2 varchar(120), '
+        '$columnPhone1 varchar(15), '
+        '$columnPhone2 varchar(15), '
+        '$columnEmail1 varchar(30), '
+        '$columnEmail2 varchar(30), '
+        '$columnImage varchar(120), '
+        '$columnLatitude varchar(15), '
+        '$columnLongitude varchar(15), '
+        '$columnDirection varchar(500),'
+        '$columnDistance double)');
     return db;
   }
 
@@ -66,9 +67,9 @@ class BranchDb {
       String latitude, String longitude) async {
     var dbClient = await db;
     var result = await dbClient.rawQuery('INSERT INTO $tableName '
-        '($column_id, $column_name, $column_desc, $column_address_1, $column_address_2, '
-        '$column_phone_1, $column_phone_2, $column_email_1, $column_email_2, $column_image, '
-        '$column_latitude, $column_longitude) '
+        '($columnId, $columnName, $columnDesc, $columnAddress1, $columnAddress2, '
+        '$columnPhone1, $columnPhone2, $columnEmail1, $columnEmail2, $columnImage, '
+        '$columnLatitude, $columnLongitude) '
         'VALUES (' + id.toString() + ', "' + name + '", "' + desc + '", "' + address_1 +
         '", "' + address_2 + '", "' + phone_1 + '", "' + phone_2 + '", "' + email_1 +
         '", "' + email_2 + '", "' + image + '", "' + latitude + '", "' + longitude + '")');
@@ -77,14 +78,14 @@ class BranchDb {
 
   Future<List> list() async {
     var dbClient = await db;
-    var result = await dbClient.rawQuery('SELECT * FROM $tableName ORDER BY $column_distance');
+    var result = await dbClient.rawQuery('SELECT * FROM $tableName ORDER BY $columnDistance');
     return result.toList();
   }
 
   Future<int> updateDistance(Branch branch) async {
     var dbClient = await db;
     var result = await dbClient.update(
-      tableName, branch.updateDistance(), where: '$column_id = ?', whereArgs: [branch.branch_id],
+      tableName, branch.updateDistance(), where: '$columnId = ?', whereArgs: [branch.branchId],
     );
     return result;
   }

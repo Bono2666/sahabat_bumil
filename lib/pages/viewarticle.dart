@@ -1,8 +1,7 @@
+// @dart=2.9
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
-import 'package:flutter_html/shims/dart_ui_real.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:sahabat_bumil_v2/main.dart';
 import 'package:sizer/sizer.dart';

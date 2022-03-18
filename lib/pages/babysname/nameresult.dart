@@ -1,3 +1,4 @@
+// @dart=2.9
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';

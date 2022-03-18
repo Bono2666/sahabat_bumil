@@ -1,3 +1,4 @@
+// @dart=2.9
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -20,7 +21,6 @@ class _OnboardingState extends State<Onboarding>
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
       Timer.periodic(Duration(seconds: 10), (Timer timer) {
@@ -42,7 +42,6 @@ class _OnboardingState extends State<Onboarding>
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     pageController.dispose();
   }
@@ -218,6 +217,7 @@ class _OnboardingState extends State<Onboarding>
   }
 }
 
+// ignore: must_be_immutable
 class SlideItem extends StatelessWidget {
   String imageUrl;
 

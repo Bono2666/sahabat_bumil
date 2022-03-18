@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+// @dart=2.9
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 import 'package:fswitch/fswitch.dart';
@@ -7,12 +7,12 @@ import 'package:format_indonesia/format_indonesia.dart';
 import 'package:intl/intl.dart';
 import 'package:sahabat_bumil_v2/main.dart';
 
-class addPregnancy extends StatefulWidget {
+class AddPregnancy extends StatefulWidget {
   @override
-  _addPregnancyState createState() => _addPregnancyState();
+  _AddPregnancyState createState() => _AddPregnancyState();
 }
 
-class _addPregnancyState extends State<addPregnancy> {
+class _AddPregnancyState extends State<AddPregnancy> {
   String name = '';
   String basecount = '';
   String title = 'Bunda';
@@ -490,7 +490,7 @@ class _addPregnancyState extends State<addPregnancy> {
     if ((hplText.text == '') && (hphtText.text == '')) {
       showDialog(
         context: context,
-        builder: (_) => alert(),
+        builder: (_) => Alert(),
         barrierDismissible: false,
       );
     } else {
@@ -505,18 +505,17 @@ class _addPregnancyState extends State<addPregnancy> {
   }
 }
 
-class alert extends StatefulWidget {
+class Alert extends StatefulWidget {
   @override
-  _alertState createState() => _alertState();
+  _AlertState createState() => _AlertState();
 }
 
-class _alertState extends State<alert> with SingleTickerProviderStateMixin {
+class _AlertState extends State<Alert> with SingleTickerProviderStateMixin {
   AnimationController controller;
   Animation<double> scaleAnimation;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     controller = AnimationController(

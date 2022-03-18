@@ -1,3 +1,4 @@
+// @dart=2.9
 import 'dart:async';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
@@ -9,11 +10,11 @@ class PackagesDb {
 
   final String dbName = 'sahabat_bumil.db';
   final String tableName = 'packages';
-  final String column_id = 'packages_id';
-  final String column_name = 'packages_name';
-  final String column_sub_title = 'packages_sub_title';
-  final String column_image = 'packages_image';
-  final String column_recomended = 'packages_recomended';
+  final String columnId = 'packages_id';
+  final String columnName = 'packages_name';
+  final String columnSubTitle = 'packages_sub_title';
+  final String columnImage = 'packages_image';
+  final String columnRecomended = 'packages_recomended';
 
   static Database _db;
 
@@ -33,19 +34,19 @@ class PackagesDb {
     String path = join(dbPath, dbName);
     var db = await openDatabase(path, version: 1);
     await db.execute('create table IF NOT EXISTS $tableName('
-        '$column_id int primary key, '
-        '$column_name varchar(30), '
-        '$column_sub_title varchar(60), '
-        '$column_image varchar(120), '
-        '$column_recomended int)');
+        '$columnId int primary key, '
+        '$columnName varchar(30), '
+        '$columnSubTitle varchar(60), '
+        '$columnImage varchar(120), '
+        '$columnRecomended int)');
     return db;
   }
 
-  Future<List> insert(int id, String name, String sub_title, String image, int recomended) async {
+  Future<List> insert(int id, String name, String subTitle, String image, int recomended) async {
     var dbClient = await db;
     var result = await dbClient.rawQuery('INSERT INTO $tableName '
-        '($column_id, $column_name, $column_sub_title, $column_image, $column_recomended) '
-        'VALUES (' + id.toString() + ', "' + name + '", "' + sub_title + '", "' + image + '", ' +
+        '($columnId, $columnName, $columnSubTitle, $columnImage, $columnRecomended) '
+        'VALUES (' + id.toString() + ', "' + name + '", "' + subTitle + '", "' + image + '", ' +
         recomended.toString() + ')');
     return result.toList();
   }

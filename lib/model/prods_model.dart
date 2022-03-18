@@ -1,10 +1,11 @@
+// @dart=2.9
 class Prods {
-  int prods_id, prods_fav;
+  int prodsId, prodsFav;
 
-  Prods({this.prods_id, this.prods_fav});
+  Prods({this.prodsId, this.prodsFav});
 
   Map<String, dynamic> updateFav() => {
-    'prods_id': prods_id,
-    'prods_fav': prods_fav,
+    'prods_id': prodsId,
+    'prods_fav': prodsFav,
   };
 }

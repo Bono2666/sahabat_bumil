@@ -240,14 +240,14 @@ class _PackageState extends State<Package> {
                                           setState(() {
                                             if (dbPackage[index]['prods_fav'] == 1) {
                                               var fav = Prods(
-                                                prods_id: dbPackage[index]['prods_id'],
-                                                prods_fav: 0,
+                                                prodsId: dbPackage[index]['prods_id'],
+                                                prodsFav: 0,
                                               );
                                               prodsDb.updateFav(fav);
                                             } else {
                                               var fav = Prods(
-                                                prods_id: dbPackage[index]['prods_id'],
-                                                prods_fav: 1,
+                                                prodsId: dbPackage[index]['prods_id'],
+                                                prodsFav: 1,
                                               );
                                               prodsDb.updateFav(fav);
                                             }
@@ -456,14 +456,14 @@ class _ViewProductState extends State<ViewProduct> {
                           setState(() {
                             if (dbSingle[0]['prods_fav'] == 1) {
                               var fav = Prods(
-                                prods_id: dbSingle[0]['prods_id'],
-                                prods_fav: 0,
+                                prodsId: dbSingle[0]['prods_id'],
+                                prodsFav: 0,
                               );
                               prodsDb.updateFav(fav);
                             } else {
                               var fav = Prods(
-                                prods_id: dbSingle[0]['prods_id'],
-                                prods_fav: 1,
+                                prodsId: dbSingle[0]['prods_id'],
+                                prodsFav: 1,
                               );
                               prodsDb.updateFav(fav);
                             }

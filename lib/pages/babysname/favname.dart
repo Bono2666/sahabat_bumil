@@ -1,6 +1,5 @@
-import 'package:flutter/cupertino.dart';
+// @dart=2.9
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:sahabat_bumil_v2/db/fav_db.dart';
@@ -164,7 +163,7 @@ class _FavNameState extends State<FavName> {
                                   padding: EdgeInsets.only(top: 1.8.h,),
                                   child: SizedBox(
                                     child: Text(
-                                      favItem.fav_name,
+                                      favItem.favName,
                                       style: TextStyle(
                                         fontSize: 12.0.sp,
                                         color: Theme.of(context).backgroundColor,
@@ -177,7 +176,7 @@ class _FavNameState extends State<FavName> {
                                   child: Padding(
                                     padding: EdgeInsets.only(top: 0.5.h),
                                     child: Html(
-                                      data: favItem.fav_desc,
+                                      data: favItem.favDesc,
                                       style: {
                                         'body': Style(
                                           fontSize: FontSize(12.0.sp),
@@ -198,8 +197,8 @@ class _FavNameState extends State<FavName> {
                                   ),
                                   onTap: () {
                                     var check = Fav(
-                                      fav_id: favItem.fav_id,
-                                      fav_check: 0,
+                                      favId: favItem.favId,
+                                      favCheck: 0,
                                     );
                                     favDb.updateFav(check);
                                     setState(() {});

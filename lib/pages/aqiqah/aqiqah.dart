@@ -1,6 +1,6 @@
+// @dart=2.9
 import 'dart:async';
 import 'dart:convert';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:sahabat_bumil_v2/db/branch_db.dart';
@@ -65,7 +65,7 @@ class _AqiqahState extends State<Aqiqah> {
     return json.decode(response.body);
   }
 
-  Future getDummy() {}
+  Future getDummy() async {}
 
   Future getInfo() async {
     var url = Uri.parse('https://sahabataqiqah.co.id/sahabat_bumil/api/get_info.php');
@@ -1044,14 +1044,14 @@ class _AqiqahState extends State<Aqiqah> {
                                                                                         setState(() {
                                                                                           if (dbRecomendedList[index]['prods_fav'] == 1) {
                                                                                             var fav = Prods(
-                                                                                              prods_id: dbRecomendedList[index]['prods_id'],
-                                                                                              prods_fav: 0,
+                                                                                              prodsId: dbRecomendedList[index]['prods_id'],
+                                                                                              prodsFav: 0,
                                                                                             );
                                                                                             prodsDb.updateFav(fav);
                                                                                           } else {
                                                                                             var fav = Prods(
-                                                                                              prods_id: dbRecomendedList[index]['prods_id'],
-                                                                                              prods_fav: 1,
+                                                                                              prodsId: dbRecomendedList[index]['prods_id'],
+                                                                                              prodsFav: 1,
                                                                                             );
                                                                                             prodsDb.updateFav(fav);
                                                                                           }
@@ -1257,14 +1257,14 @@ class _AqiqahState extends State<Aqiqah> {
                                                                                           setState(() {
                                                                                             if (dbTopProducts[index]['prods_fav'] == 1) {
                                                                                               var fav = Prods(
-                                                                                                prods_id: dbTopProducts[index]['prods_id'],
-                                                                                                prods_fav: 0,
+                                                                                                prodsId: dbTopProducts[index]['prods_id'],
+                                                                                                prodsFav: 0,
                                                                                               );
                                                                                               prodsDb.updateFav(fav);
                                                                                             } else {
                                                                                               var fav = Prods(
-                                                                                                prods_id: dbTopProducts[index]['prods_id'],
-                                                                                                prods_fav: 1,
+                                                                                                prodsId: dbTopProducts[index]['prods_id'],
+                                                                                                prodsFav: 1,
                                                                                               );
                                                                                               prodsDb.updateFav(fav);
                                                                                             }
@@ -1905,14 +1905,14 @@ class _ViewProductState extends State<ViewProduct> {
                         setState(() {
                           if (dbSingle[0]['prods_fav'] == 1) {
                             var fav = Prods(
-                              prods_id: dbSingle[0]['prods_id'],
-                              prods_fav: 0,
+                              prodsId: dbSingle[0]['prods_id'],
+                              prodsFav: 0,
                             );
                             prodsDb.updateFav(fav);
                           } else {
                             var fav = Prods(
-                              prods_id: dbSingle[0]['prods_id'],
-                              prods_fav: 1,
+                              prodsId: dbSingle[0]['prods_id'],
+                              prodsFav: 1,
                             );
                             prodsDb.updateFav(fav);
                           }

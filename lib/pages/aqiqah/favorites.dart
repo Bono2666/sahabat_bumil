@@ -215,14 +215,14 @@ class _FavoritesState extends State<Favorites> {
                                                     setState(() {
                                                       if (dbFav[index]['prods_fav'] == 1) {
                                                         var fav = Prods(
-                                                          prods_id: dbFav[index]['prods_id'],
-                                                          prods_fav: 0,
+                                                          prodsId: dbFav[index]['prods_id'],
+                                                          prodsFav: 0,
                                                         );
                                                         prodsDb.updateFav(fav);
                                                       } else {
                                                         var fav = Prods(
-                                                          prods_id: dbFav[index]['prods_id'],
-                                                          prods_fav: 1,
+                                                          prodsId: dbFav[index]['prods_id'],
+                                                          prodsFav: 1,
                                                         );
                                                         prodsDb.updateFav(fav);
                                                       }
@@ -462,14 +462,14 @@ class _ViewProductState extends State<ViewProduct> {
                           setState(() {
                             if (dbSingle[0]['prods_fav'] == 1) {
                               var fav = Prods(
-                                prods_id: dbSingle[0]['prods_id'],
-                                prods_fav: 0,
+                                prodsId: dbSingle[0]['prods_id'],
+                                prodsFav: 0,
                               );
                               prodsDb.updateFav(fav);
                             } else {
                               var fav = Prods(
-                                prods_id: dbSingle[0]['prods_id'],
-                                prods_fav: 1,
+                                prodsId: dbSingle[0]['prods_id'],
+                                prodsFav: 1,
                               );
                               prodsDb.updateFav(fav);
                             }

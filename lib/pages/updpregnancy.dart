@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+// @dart=2.9
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
@@ -6,12 +6,12 @@ import 'package:format_indonesia/format_indonesia.dart';
 import 'package:intl/intl.dart';
 import 'package:sahabat_bumil_v2/main.dart';
 
-class updPregnancy extends StatefulWidget {
+class UpdPregnancy extends StatefulWidget {
   @override
-  _updPregnancyState createState() => _updPregnancyState();
+  _UpdPregnancyState createState() => _UpdPregnancyState();
 }
 
-class _updPregnancyState extends State<updPregnancy> {
+class _UpdPregnancyState extends State<UpdPregnancy> {
   String babyname = prefs.getBabyName;
   String sextype;
   String hplPrefs = prefs.getHPL;
@@ -27,7 +27,6 @@ class _updPregnancyState extends State<updPregnancy> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     babyNameText.text = babyname;
@@ -68,7 +67,7 @@ class _updPregnancyState extends State<updPregnancy> {
       onWillPop: () async {
         return showDialog(
           context: context,
-          builder: (_) => alert(),
+          builder: (_) => Alert(),
           barrierDismissible: false,
         );
       },
@@ -549,7 +548,7 @@ class _updPregnancyState extends State<updPregnancy> {
                       onTap: () async {
                         return showDialog(
                           context: context,
-                          builder: (_) => alert(),
+                          builder: (_) => Alert(),
                           barrierDismissible: false,
                         );
                       },
@@ -648,18 +647,17 @@ class _updPregnancyState extends State<updPregnancy> {
   }
 }
 
-class alert extends StatefulWidget {
+class Alert extends StatefulWidget {
   @override
-  _alertState createState() => _alertState();
+  _AlertState createState() => _AlertState();
 }
 
-class _alertState extends State<alert> with SingleTickerProviderStateMixin {
+class _AlertState extends State<Alert> with SingleTickerProviderStateMixin {
   AnimationController controller;
   Animation<double> scaleAnimation;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     controller = AnimationController(

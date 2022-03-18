@@ -1,3 +1,4 @@
+// @dart=2.9
 import 'dart:async';
 import 'package:path/path.dart';
 import 'package:sahabat_bumil_v2/model/fav_model.dart';
@@ -10,18 +11,18 @@ class FavDb {
 
   final String dbName = 'sahabat_bumil.db';
   final String tableName = 'fav';
-  final String column_id = 'fav_id';
-  final String column_name = 'fav_name';
-  final String column_desc = 'fav_desc';
-  final String column_sex = 'fav_sex';
-  final String column_no_cat = 'fav_no_cat';
-  final String column_cat = 'fav_cat';
-  final String column_filter = 'fav_filter';
-  final String column_prefix = 'fav_prefix';
-  final String column_middle = 'fav_middle';
-  final String column_sufix = 'fav_sufix';
-  final String column_check = 'fav_check';
-  final String column_status = 'fav_status';
+  final String columnId = 'fav_id';
+  final String columnName = 'fav_name';
+  final String columnDesc = 'fav_desc';
+  final String columnSex = 'fav_sex';
+  final String columnNoCat = 'fav_no_cat';
+  final String columnCat = 'fav_cat';
+  final String columnFilter = 'fav_filter';
+  final String columnPrefix = 'fav_prefix';
+  final String columnMiddle = 'fav_middle';
+  final String columnSuffix = 'fav_sufix';
+  final String columnCheck = 'fav_check';
+  final String columnStatus = 'fav_status';
 
   static Database _db;
 
@@ -41,29 +42,29 @@ class FavDb {
     String path = join(dbPath, dbName);
     var db = await openDatabase(path, version: 1);
     await db.execute('create table IF NOT EXISTS $tableName('
-        '$column_id varchar(20) primary key, '
-        '$column_name varchar(20), '
-        '$column_desc varchar(200), '
-        '$column_sex varchar(20), '
-        '$column_no_cat int, '
-        '$column_cat varchar(20), '
-        '$column_filter varchar(20), '
-        '$column_prefix int DEFAULT 1, '
-        '$column_middle int DEFAULT 1, '
-        '$column_sufix int DEFAULT 1, '
-        '$column_check int DEFAULT 0, '
-        '$column_status varchar(20))');
+        '$columnId varchar(20) primary key, '
+        '$columnName varchar(20), '
+        '$columnDesc varchar(200), '
+        '$columnSex varchar(20), '
+        '$columnNoCat int, '
+        '$columnCat varchar(20), '
+        '$columnFilter varchar(20), '
+        '$columnPrefix int DEFAULT 1, '
+        '$columnMiddle int DEFAULT 1, '
+        '$columnSuffix int DEFAULT 1, '
+        '$columnCheck int DEFAULT 0, '
+        '$columnStatus varchar(20))');
     return db;
   }
 
-  Future<List> insert(String id, String name, String desc, String sex, int no_cat,
+  Future<List> insert(String id, String name, String desc, String sex, int noCat,
       String cat, String filter, int prefix, int middle, int sufix, String status) async {
     var dbClient = await db;
     var result = await dbClient.rawQuery('INSERT INTO $tableName '
-        '($column_id, $column_name, $column_desc, $column_sex, $column_no_cat, $column_cat, '
-        '$column_filter, $column_prefix, $column_middle, $column_sufix, $column_check, $column_status) '
+        '($columnId, $columnName, $columnDesc, $columnSex, $columnNoCat, $columnCat, '
+        '$columnFilter, $columnPrefix, $columnMiddle, $columnSuffix, $columnCheck, $columnStatus) '
         'VALUES ("' + id + '", "' + name + '", "' + desc + '", "' + sex + '", ' +
-        no_cat.toString() + ', "' + cat + '", "' + filter + '", ' + prefix.toString() +
+        noCat.toString() + ', "' + cat + '", "' + filter + '", ' + prefix.toString() +
         ', ' + middle.toString() + ', ' + sufix.toString() + ', 0, "' + status + '")');
     return result.toList();
   }
@@ -77,9 +78,9 @@ class FavDb {
   Future<List> list(String sex, String cap) async {
     var dbClient = await db;
     var result = await dbClient.rawQuery(
-        'SELECT * FROM $tableName WHERE $column_sex = "' + sex + '" AND '
-            'SUBSTR($column_name, 1, 1) = "' + cap + '" AND $column_desc != "" '
-            'AND $column_status != "delete" ORDER BY $column_name'
+        'SELECT * FROM $tableName WHERE $columnSex = "' + sex + '" AND '
+            'SUBSTR($columnName, 1, 1) = "' + cap + '" AND $columnDesc != "" '
+            'AND $columnStatus != "delete" ORDER BY $columnName'
     );
     return result.toList();
   }
@@ -87,9 +88,9 @@ class FavDb {
   Future<List> listwcat(String sex, String cat, String cap) async {
     var dbClient = await db;
     var result = await dbClient.rawQuery(
-        'SELECT * FROM $tableName WHERE $column_sex = "' + sex + '" AND $column_cat = "' + cat + '" AND '
-            'SUBSTR($column_name, 1, 1) = "' + cap + '" AND $column_desc != "" '
-            'AND $column_status != "delete" ORDER BY $column_name'
+        'SELECT * FROM $tableName WHERE $columnSex = "' + sex + '" AND $columnCat = "' + cat + '" AND '
+            'SUBSTR($columnName, 1, 1) = "' + cap + '" AND $columnDesc != "" '
+            'AND $columnStatus != "delete" ORDER BY $columnName'
     );
     return result.toList();
   }
@@ -97,8 +98,8 @@ class FavDb {
   Future<List> listwcat1cap(String sex, String cat) async {
     var dbClient = await db;
     var result = await dbClient.rawQuery(
-        'SELECT * FROM $tableName WHERE $column_sex = "' + sex + '" '
-            'AND $column_cat = "' + cat + '" AND $column_status != "delete"'
+        'SELECT * FROM $tableName WHERE $columnSex = "' + sex + '" '
+            'AND $columnCat = "' + cat + '" AND $columnStatus != "delete"'
     );
     return result.toList();
   }
@@ -106,8 +107,8 @@ class FavDb {
   Future<List> listfav() async {
     var dbClient = await db;
     var result = await dbClient.rawQuery(
-        'SELECT * FROM $tableName WHERE $column_check = 1 '
-            'AND $column_status != "delete" ORDER BY $column_name'
+        'SELECT * FROM $tableName WHERE $columnCheck = 1 '
+            'AND $columnStatus != "delete" ORDER BY $columnName'
     );
     return result.toList();
   }
@@ -115,8 +116,8 @@ class FavDb {
   Future<List> listCapsAll(String sex) async {
     var dbClient = await db;
     var result = await dbClient.rawQuery(
-        'SELECT *, SUBSTR($column_name,1,1) AS caps FROM $tableName '
-            'WHERE $column_sex = "' + sex + '" AND $column_desc != "" AND $column_status != "delete" '
+        'SELECT *, SUBSTR($columnName,1,1) AS caps FROM $tableName '
+            'WHERE $columnSex = "' + sex + '" AND $columnDesc != "" AND $columnStatus != "delete" '
             'GROUP BY caps ORDER BY caps'
     );
     return result.toList();
@@ -125,9 +126,9 @@ class FavDb {
   Future<List> listCapsWCat(String sex, String cat) async {
     var dbClient = await db;
     var result = await dbClient.rawQuery(
-        'SELECT *, SUBSTR($column_name,1,1) AS caps FROM $tableName '
-            'WHERE $column_sex = "' + sex + '" AND $column_cat = "' + cat + '" '
-            'AND $column_status != "delete" GROUP BY caps ORDER BY caps'
+        'SELECT *, SUBSTR($columnName,1,1) AS caps FROM $tableName '
+            'WHERE $columnSex = "' + sex + '" AND $columnCat = "' + cat + '" '
+            'AND $columnStatus != "delete" GROUP BY caps ORDER BY caps'
     );
     return result.toList();
   }
@@ -136,8 +137,8 @@ class FavDb {
     var dbClient = await db;
     var result = await dbClient.rawQuery(
         'SELECT * FROM $tableName '
-            'WHERE $column_filter <> "" AND $column_sex = "' + sex + '" AND '
-            '$column_status != "delete" GROUP BY $column_cat ORDER BY $column_no_cat'
+            'WHERE $columnFilter <> "" AND $columnSex = "' + sex + '" AND '
+            '$columnStatus != "delete" GROUP BY $columnCat ORDER BY $columnNoCat'
     );
     return result.toList();
   }
@@ -146,8 +147,8 @@ class FavDb {
     var dbClient = await db;
     var result = await dbClient.rawQuery(
         'SELECT * FROM $tableName '
-            'WHERE $column_sex = "' + sex + '" AND ' + col + ' = 1 AND '
-            '$column_status != "delete" GROUP BY $column_cat ORDER BY $column_no_cat'
+            'WHERE $columnSex = "' + sex + '" AND ' + col + ' = 1 AND '
+            '$columnStatus != "delete" GROUP BY $columnCat ORDER BY $columnNoCat'
     );
     return result.toList();
   }
@@ -155,7 +156,7 @@ class FavDb {
   Future<int> update(Fav name) async {
     var dbClient = await db;
     var result = await dbClient.update(
-      tableName, name.update(), where: '$column_id = ?', whereArgs: [name.fav_id],
+      tableName, name.update(), where: '$columnId = ?', whereArgs: [name.favId],
     );
     return result;
   }
@@ -163,7 +164,7 @@ class FavDb {
   Future<int> updateFav(Fav check) async {
     var dbClient = await db;
     var result = await dbClient.update(
-      tableName, check.updateFav(), where: '$column_id = ?', whereArgs: [check.fav_id],
+      tableName, check.updateFav(), where: '$columnId = ?', whereArgs: [check.favId],
     );
     return result;
   }

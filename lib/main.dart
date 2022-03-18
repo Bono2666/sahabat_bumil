@@ -1,3 +1,4 @@
+// @dart=2.9
 import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -44,7 +45,12 @@ Future<void> main() async {
   runApp(MyTheme());
 }
 
-class MyTheme extends StatelessWidget {
+class MyTheme extends StatefulWidget {
+  @override
+  State<MyTheme> createState() => _MyThemeState();
+}
+
+class _MyThemeState extends State<MyTheme> {
   var lat, long;
 
   Future<void> checkPermission() async {
@@ -152,17 +158,17 @@ class MyTheme extends StatelessWidget {
               nameupdate = snapshot.data.docs;
               for (int i=0; i < nameupdate.length; i++) {
                 var name = new Fav(
-                  fav_id: nameupdate[i].id,
-                  fav_name: nameupdate[i].get('name'),
-                  fav_sex: nameupdate[i].get('sex'),
-                  fav_desc: nameupdate[i].get('desc'),
-                  fav_no_cat: nameupdate[i].get('no_cat'),
-                  fav_cat: nameupdate[i].get('category'),
-                  fav_filter: nameupdate[i].get('filter'),
-                  fav_prefix: nameupdate[i].get('prefix') == true ? 1 : 0,
-                  fav_middle: nameupdate[i].get('middle') == true ? 1 : 0,
-                  fav_sufix: nameupdate[i].get('sufix') == true ? 1 : 0,
-                  fav_status: nameupdate[i].get('status'),
+                  favId: nameupdate[i].id,
+                  favName: nameupdate[i].get('name'),
+                  favSex: nameupdate[i].get('sex'),
+                  favDesc: nameupdate[i].get('desc'),
+                  favNoCat: nameupdate[i].get('no_cat'),
+                  favCat: nameupdate[i].get('category'),
+                  favFilter: nameupdate[i].get('filter'),
+                  favPrefix: nameupdate[i].get('prefix') == true ? 1 : 0,
+                  favMiddle: nameupdate[i].get('middle') == true ? 1 : 0,
+                  favSuffix: nameupdate[i].get('sufix') == true ? 1 : 0,
+                  favStatus: nameupdate[i].get('status'),
                 );
                 favDb.insert(nameupdate[i].id, nameupdate[i].get('name'),
                     nameupdate[i].get('desc'), nameupdate[i].get('sex'),
@@ -280,8 +286,8 @@ class MyTheme extends StatelessWidget {
                               dbFavProdsTmp = snapshot.data;
                               for (int i=0; i < dbFavProdsTmp.length; i++) {
                                 var fav = Prods(
-                                  prods_id: dbFavProdsTmp[i]['prods_id'],
-                                  prods_fav: 1,
+                                  prodsId: dbFavProdsTmp[i]['prods_id'],
+                                  prodsFav: 1,
                                 );
                                 prodsDb.updateFav(fav);
                               }
@@ -406,9 +412,9 @@ class MyTheme extends StatelessWidget {
                                               case '/':
                                                 return SlideLeftRoute(page: Onboarding());
                                               case '/addpregnancy':
-                                                return SlideUpRoute(page: addPregnancy());
+                                                return SlideUpRoute(page: AddPregnancy());
                                               case '/updpregnancy':
-                                                return SlideUpRoute(page: updPregnancy());
+                                                return SlideUpRoute(page: UpdPregnancy());
                                               case '/monitoring':
                                                 return SlideUpRoute(page: Monitoring());
                                               case '/viewarticle':
