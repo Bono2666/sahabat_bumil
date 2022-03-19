@@ -5,6 +5,7 @@ import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:format_indonesia/format_indonesia.dart';
 import 'package:intl/intl.dart';
 import 'package:sahabat_bumil_v2/main.dart';
+import 'package:keyboard_dismisser/keyboard_dismisser.dart';
 
 class UpdPregnancy extends StatefulWidget {
   @override
@@ -62,8 +63,12 @@ class _UpdPregnancyState extends State<UpdPregnancy> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return WillPopScope(
+  Widget build(BuildContext context) => KeyboardDismisser(
+    gestures: [
+      GestureType.onTap,
+      GestureType.onVerticalDragDown,
+    ],
+    child: WillPopScope(
       onWillPop: () async {
         return showDialog(
           context: context,
@@ -363,37 +368,37 @@ class _UpdPregnancyState extends State<UpdPregnancy> {
                           readOnly: true,
                           onTap: () {
                             DatePicker.showDatePicker(
-                                context,
-                                theme: DatePickerTheme(
-                                  itemStyle: TextStyle(
-                                    fontFamily: 'Ubuntu',
-                                    fontSize: 15.0.sp,
-                                    color: Theme.of(context).backgroundColor,
-                                  ),
-                                  doneStyle: TextStyle(
-                                    fontFamily: 'Ubuntu',
-                                    color: Theme.of(context).backgroundColor,
-                                  ),
-                                  cancelStyle: TextStyle(
-                                    fontFamily: 'Ubuntu',
-                                    color: Theme.of(context).primaryColor,
-                                  ),
+                              context,
+                              theme: DatePickerTheme(
+                                itemStyle: TextStyle(
+                                  fontFamily: 'Ubuntu',
+                                  fontSize: 15.0.sp,
+                                  color: Theme.of(context).backgroundColor,
                                 ),
-                                minTime: DateTime.now().subtract(Duration(days: 280)),
-                                maxTime: DateTime.now(),
-                                onConfirm: (date) {
-                                  setState(() {
-                                    hpht = date;
-                                    hpl = date.add(Duration(days: 280));
-                                    hplPrefs = f.format(hpl.day).toString() + f.format(hpl.month).toString() + hpl.year.toString();
-                                    hphtPrefs = f.format(hpht.day).toString() + f.format(hpht.month).toString() + hpht.year.toString();
-                                    basecount = 'hpht';
-                                    hplText.text = '';
-                                    hphtText.text = Waktu(hpht).yMMMMd();
-                                    hplResult.text = Waktu(hpl).yMMMMEEEEd();
-                                    aqiqahResult.text = Waktu(hpl.add(Duration(days: 6))).yMMMMEEEEd();
-                                  });
-                                },
+                                doneStyle: TextStyle(
+                                  fontFamily: 'Ubuntu',
+                                  color: Theme.of(context).backgroundColor,
+                                ),
+                                cancelStyle: TextStyle(
+                                  fontFamily: 'Ubuntu',
+                                  color: Theme.of(context).primaryColor,
+                                ),
+                              ),
+                              minTime: DateTime.now().subtract(Duration(days: 280)),
+                              maxTime: DateTime.now(),
+                              onConfirm: (date) {
+                                setState(() {
+                                  hpht = date;
+                                  hpl = date.add(Duration(days: 280));
+                                  hplPrefs = f.format(hpl.day).toString() + f.format(hpl.month).toString() + hpl.year.toString();
+                                  hphtPrefs = f.format(hpht.day).toString() + f.format(hpht.month).toString() + hpht.year.toString();
+                                  basecount = 'hpht';
+                                  hplText.text = '';
+                                  hphtText.text = Waktu(hpht).yMMMMd();
+                                  hplResult.text = Waktu(hpl).yMMMMEEEEd();
+                                  aqiqahResult.text = Waktu(hpl.add(Duration(days: 6))).yMMMMEEEEd();
+                                });
+                              },
                             );
                           },
                           decoration: InputDecoration(
@@ -468,8 +473,8 @@ class _UpdPregnancyState extends State<UpdPregnancy> {
                               enabled: false,
                               controller: hplResult,
                               style: TextStyle(
-                                fontSize: 15.0.sp,
-                                color: Colors.white
+                                  fontSize: 15.0.sp,
+                                  color: Colors.white
                               ),
                               decoration: InputDecoration(
                                 border: InputBorder.none,
@@ -533,13 +538,13 @@ class _UpdPregnancyState extends State<UpdPregnancy> {
                         Container(
                           height: 11.0.h,
                           decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              begin: Alignment.topCenter,
-                              end: Alignment.bottomCenter,
-                              colors: [
-                                Colors.white, Colors.white.withOpacity(0.0),
-                              ],
-                            )
+                              gradient: LinearGradient(
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter,
+                                colors: [
+                                  Colors.white, Colors.white.withOpacity(0.0),
+                                ],
+                              )
                           ),
                         ),
                       ],
@@ -633,8 +638,8 @@ class _UpdPregnancyState extends State<UpdPregnancy> {
           ],
         ),
       ),
-    );
-  }
+    ),
+  );
 
   saveProfile() async {
       await prefs.setBabyName(babyname);

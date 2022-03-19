@@ -6,6 +6,7 @@ import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:format_indonesia/format_indonesia.dart';
 import 'package:intl/intl.dart';
 import 'package:sahabat_bumil_v2/main.dart';
+import 'package:keyboard_dismisser/keyboard_dismisser.dart';
 
 class AddPregnancy extends StatefulWidget {
   @override
@@ -27,8 +28,12 @@ class _AddPregnancyState extends State<AddPregnancy> {
   bool isBunda = true;
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
+  Widget build(BuildContext context) => KeyboardDismisser(
+    gestures: [
+      GestureType.onTap,
+      GestureType.onVerticalDragDown,
+    ],
+    child: Scaffold(
       body: Stack(
         children: [
           SingleChildScrollView(
@@ -295,7 +300,7 @@ class _AddPregnancyState extends State<AddPregnancy> {
                   ),
                 ),
                 (hplText.text == '') && (hphtText.text == '') ? Container()
-                : Column(
+                    : Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBox(height: 3.0.h,),
@@ -323,8 +328,8 @@ class _AddPregnancyState extends State<AddPregnancy> {
                             enabled: false,
                             controller: hplResult,
                             style: TextStyle(
-                              fontSize: 15.0.sp,
-                              color: Colors.white
+                                fontSize: 15.0.sp,
+                                color: Colors.white
                             ),
                             decoration: InputDecoration(
                               border: InputBorder.none,
@@ -388,13 +393,13 @@ class _AddPregnancyState extends State<AddPregnancy> {
                       Container(
                         height: 11.0.h,
                         decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                            colors: [
-                              Colors.white, Colors.white.withOpacity(0.0),
-                            ],
-                          )
+                            gradient: LinearGradient(
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                              colors: [
+                                Colors.white, Colors.white.withOpacity(0.0),
+                              ],
+                            )
                         ),
                       ),
                     ],
@@ -483,8 +488,8 @@ class _AddPregnancyState extends State<AddPregnancy> {
           ),
         ],
       ),
-    );
-  }
+    ),
+  );
 
   saveProfile() async {
     if ((hplText.text == '') && (hphtText.text == '')) {

@@ -1,5 +1,5 @@
+// @dart=2.9
 import 'dart:convert';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -33,7 +33,10 @@ class _FavoritesState extends State<Favorites> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: WillPopScope(
-        onWillPop: () => Navigator.pushReplacementNamed(context, '/closetofavorites'),
+        onWillPop: () async {
+          Navigator.pushReplacementNamed(context, '/closetofavorites');
+          return false;
+        },
         child: FutureBuilder(
           future: prodsDb.favList(),
           builder: (context, snapshot) {
