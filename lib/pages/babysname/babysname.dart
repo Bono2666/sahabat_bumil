@@ -35,13 +35,13 @@ class _BabysNameState extends State<BabysName> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () {
+      onWillPop: () async {
         prefix = 'Acak';
         middle = 'Acak';
         sufix = 'Acak';
         sextype = prefs.getSextype.isNotEmpty ? prefs.getSextype : '';
-        Navigator.pushReplacementNamed(context, prefs.getRoute);
-        return;
+        Navigator.pop(context);
+        return false;
       },
       child: Scaffold(
         body: Stack(
@@ -511,7 +511,7 @@ class _BabysNameState extends State<BabysName> {
                         sufix = 'Acak';
                         sextype =
                             prefs.getSextype.isNotEmpty ? prefs.getSextype : '';
-                        Navigator.pushReplacementNamed(context, prefs.getRoute);
+                        Navigator.pop(context);
                       },
                       child: Container(
                         width: 19.0.w,
@@ -545,8 +545,8 @@ class _BabysNameState extends State<BabysName> {
                         onTap: () {
                           prefs.setRoute('/babysname');
                           oldSexType = prefs.getSextype;
-                          Navigator.pushReplacementNamed(
-                              context, '/updpregnancy');
+                          Navigator.pushNamed(
+                              context, '/features');
                         },
                         child: Stack(
                           alignment: AlignmentDirectional.center,

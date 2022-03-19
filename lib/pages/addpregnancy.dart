@@ -401,7 +401,7 @@ class _AddPregnancyState extends State<AddPregnancy> {
                   ),
                   InkWell(
                     onTap: () {
-                      Navigator.pushReplacementNamed(context, prefs.getRoute);
+                      Navigator.pop(context);
                     },
                     child: Container(
                       width: 19.0.w,
@@ -500,7 +500,7 @@ class _AddPregnancyState extends State<AddPregnancy> {
       await prefs.setHPHT(hphtPrefs);
       await prefs.setBasecount(basecount);
       await prefs.setFirstlaunch(false);
-      Navigator.pushReplacementNamed(context, prefs.getGoRoute);
+      Navigator.pushReplacementNamed(context, '/home');
     }
   }
 }

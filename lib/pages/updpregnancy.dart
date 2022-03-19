@@ -743,7 +743,7 @@ class _AlertState extends State<Alert> with SingleTickerProviderStateMixin {
                         Ink(
                           child: InkWell(
                             onTap: () {
-                              Navigator.pushReplacementNamed(context, prefs.getRoute);
+                              Navigator.pushReplacementNamed(context, '/home');
                             },
                             child: Container(
                               width: 14.8.w,

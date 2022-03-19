@@ -562,7 +562,7 @@ class _HomeState extends State<Home> {
                                                             InkWell(
                                                               onTap: () {
                                                                 prefs.setRoute('/home');
-                                                                Navigator.pushReplacementNamed(context, '/aqiqah');
+                                                                Navigator.pushNamed(context, '/aqiqah');
                                                               },
                                                               child: Stack(
                                                                 alignment: AlignmentDirectional.center,

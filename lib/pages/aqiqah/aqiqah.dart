@@ -105,7 +105,10 @@ class _AqiqahState extends State<Aqiqah> {
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
       body: WillPopScope(
-        onWillPop: () => Navigator.pushReplacementNamed(context, prefs.getRoute),
+        onWillPop: () async {
+          Navigator.pop(context);
+          return false;
+        },
         child: FutureBuilder(
           future: getBanner(),
           builder: (context, snapshot) {

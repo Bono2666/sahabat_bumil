@@ -50,7 +50,10 @@ class _MonitoringState extends State<Monitoring> {
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
       body: WillPopScope(
-        onWillPop: () => Navigator.pushReplacementNamed(context, prefs.getRoute),
+        onWillPop: () async {
+          Navigator.pop(context);
+          return false;
+        },
         child: FutureBuilder(
           future: FirebaseFirestore.instance.collection('timeline').get(),
           builder: (context, snapshot) {
@@ -1135,7 +1138,7 @@ class _MonitoringState extends State<Monitoring> {
                           children: [
                             InkWell(
                               onTap: () {
-                                Navigator.pushReplacementNamed(context, prefs.getRoute);
+                                Navigator.pop(context);
                               },
                               child: Container(
                                 width: 19.0.w,

@@ -44,10 +44,10 @@ class _FeaturesState extends State<Features> {
                                     prefs.setRoute('/home');
                                     if (prefs.getBasecount == '') {
                                       prefs.setGoRoute('/monitoring');
-                                      Navigator.pushNamed(context, '/addpregnancy');
+                                      Navigator.pushReplacementNamed(context, '/addpregnancy');
                                     }
                                     else
-                                      Navigator.pushNamed(context, '/monitoring');
+                                      Navigator.pushReplacementNamed(context, '/monitoring');
                                   },
                                   child: Stack(
                                     alignment: AlignmentDirectional.center,
@@ -94,7 +94,7 @@ class _FeaturesState extends State<Features> {
                                 InkWell(
                                   onTap: () {
                                     prefs.setRoute('/home');
-                                    Navigator.pushNamed(context, '/babysname');
+                                    Navigator.pushReplacementNamed(context, '/babysname');
                                   },
                                   child: Stack(
                                     alignment: AlignmentDirectional.center,
@@ -143,9 +143,9 @@ class _FeaturesState extends State<Features> {
                                     prefs.setRoute('/home');
                                     prefs.setGoRoute('/home');
                                     if (prefs.getBasecount == '')
-                                      Navigator.pushNamed(context, '/addpregnancy');
+                                      Navigator.pushReplacementNamed(context, '/addpregnancy');
                                     else
-                                      Navigator.pushNamed(context, '/updpregnancy');
+                                      Navigator.pushReplacementNamed(context, '/updpregnancy');
                                   },
                                   child: Stack(
                                     alignment: AlignmentDirectional.center,
@@ -192,7 +192,7 @@ class _FeaturesState extends State<Features> {
                                 InkWell(
                                   onTap: () {
                                     prefs.setRoute('/home');
-                                    Navigator.pushNamed(context, '/aqiqah');
+                                    Navigator.pushReplacementNamed(context, '/aqiqah');
                                   },
                                   child: Stack(
                                     alignment: AlignmentDirectional.center,
