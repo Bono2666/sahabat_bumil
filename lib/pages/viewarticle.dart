@@ -374,9 +374,9 @@ class _ViewArticleState extends State<ViewArticle> {
                                       width: 19.0.w,
                                       height: 19.0.w,
                                       child: Icon(
-                                        Icons.arrow_back_ios_rounded,
+                                        Icons.arrow_back_ios_new_rounded,
                                         color: Colors.white,
-                                        size: 7.0.w,
+                                        size: 5.2.w,
                                       ),
                                     ),
                                   ],
