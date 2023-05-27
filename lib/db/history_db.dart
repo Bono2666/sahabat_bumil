@@ -1,5 +1,5 @@
-// @dart=2.9
 import 'dart:async';
+import 'package:intl/intl.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -51,9 +51,10 @@ class HistoryDb {
     var dbClient = await db;
     var result = await dbClient.rawQuery('INSERT INTO $tableName '
         '($columnId, $columnName, $columnDesc, $columnPrice, $columnPackage, '
-        '$columnImage) '
+        '$columnImage, $columnDate) '
         'VALUES (' + id.toString() + ', "' + name + '", "' + desc + '", ' +
-        price.toString() + ', "' + package.toString() + '", "' + image + '")');
+        price.toString() + ', "' + package.toString() + '", "' + image + '", ' +
+        DateFormat('yyyy-MM-dd').format(DateTime.now()) + ')');
     return result.toList();
   }
 

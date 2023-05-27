@@ -1,4 +1,3 @@
-// @dart=2.9
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -74,7 +73,7 @@ class _FavNameState extends State<FavName> {
                   child: Text(
                     'Nama Favorit',
                     style: TextStyle(
-                      color: Theme.of(context).backgroundColor,
+                      color: Theme.of(context).colorScheme.background,
                       fontWeight: FontWeight.w700,
                       fontSize: 24.0.sp,
                     ),
@@ -115,7 +114,7 @@ class _FavNameState extends State<FavName> {
                       Text(
                         'Buat daftar nama favorit pertama Anda',
                         style: TextStyle(
-                          color: Theme.of(context).backgroundColor,
+                          color: Theme.of(context).colorScheme.background,
                           fontWeight: FontWeight.w700,
                           fontSize: 12.0.sp,
                         ),
@@ -166,7 +165,7 @@ class _FavNameState extends State<FavName> {
                                       favItem.favName,
                                       style: TextStyle(
                                         fontSize: 12.0.sp,
-                                        color: Theme.of(context).backgroundColor,
+                                        color: Theme.of(context).colorScheme.background,
                                       ),
                                     ),
                                     width: 26.0.w,
@@ -180,7 +179,7 @@ class _FavNameState extends State<FavName> {
                                       style: {
                                         'body': Style(
                                           fontSize: FontSize(12.0.sp),
-                                          color: Theme.of(context).backgroundColor,
+                                          color: Theme.of(context).colorScheme.background,
                                           lineHeight: LineHeight(1.0.sp),
                                         ),
                                       },

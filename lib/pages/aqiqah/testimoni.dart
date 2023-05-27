@@ -1,4 +1,3 @@
-// @dart=2.9
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
@@ -6,7 +5,6 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:sizer/sizer.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
-import 'package:format_indonesia/format_indonesia.dart';
 
 class Testimoni extends StatefulWidget {
   @override
@@ -56,7 +54,7 @@ class _TestimoniState extends State<Testimoni> {
                           Text(
                             'Testimoni',
                             style: TextStyle(
-                              color: Theme.of(context).backgroundColor,
+                              color: Theme.of(context).colorScheme.background,
                               fontWeight: FontWeight.w700,
                               fontSize: 24.0.sp,
                             ),
@@ -154,7 +152,7 @@ class _TestimoniState extends State<Testimoni> {
                                                       data: dbTestimoni[index]['description'] == '' ? _nm : _nm + _desc,
                                                       style: {
                                                         'body': Style(
-                                                          color: Theme.of(context).backgroundColor,
+                                                          color: Theme.of(context).colorScheme.background,
                                                           fontSize: FontSize(10.0.sp),
                                                           maxLines: 1,
                                                           textOverflow: TextOverflow.ellipsis,
@@ -167,7 +165,7 @@ class _TestimoniState extends State<Testimoni> {
                                               ),
                                               SizedBox(height: 2.2.w,),
                                               Text(
-                                                Waktu(_date).yMMMd() + ' ' + DateFormat.Hm().format(_date),
+                                                '${DateFormat('d MMM yyyy', 'id_ID').format(_date)} ${' '} ${DateFormat.Hm().format(_date)}',
                                                 style: TextStyle(
                                                   color: Theme.of(context).unselectedWidgetColor,
                                                   fontSize: 7.0.sp,
@@ -230,7 +228,7 @@ class _TestimoniState extends State<Testimoni> {
                       width: 19.0.w,
                       height: 15.0.h,
                       decoration: BoxDecoration(
-                        color: Theme.of(context).backgroundColor,
+                        color: Theme.of(context).colorScheme.background,
                         borderRadius: BorderRadius.only(
                           bottomRight: Radius.circular(40),
                         ),

@@ -1,4 +1,3 @@
-// @dart=2.9
 class Checklist {
   int clWeek, clIndex, clChecked;
   String clTitle, clImage, clId;

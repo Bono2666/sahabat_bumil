@@ -1,4 +1,3 @@
-// @dart=2.9
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
@@ -197,7 +196,7 @@ class _NameResultState extends State<NameResult> {
                                   Text(
                                     'Rekomendasi Nama',
                                     style: TextStyle(
-                                      color: Theme.of(context).backgroundColor,
+                                      color: Theme.of(context).colorScheme.background,
                                       fontWeight: FontWeight.w700,
                                       fontSize: 24.0.sp,
                                     ),
@@ -220,7 +219,7 @@ class _NameResultState extends State<NameResult> {
                                         style: TextStyle(
                                           fontSize: 10.0.sp,
                                           fontWeight: FontWeight.w700,
-                                          color: Theme.of(context).backgroundColor,
+                                          color: Theme.of(context).colorScheme.background,
                                         ),
                                       ),
                                     ],
@@ -256,7 +255,7 @@ class _NameResultState extends State<NameResult> {
                                     style: {
                                       'body': Style(
                                         fontSize: FontSize(13.0.sp),
-                                        color: Theme.of(context).backgroundColor,
+                                        color: Theme.of(context).colorScheme.background,
                                         lineHeight: LineHeight.em(1.1),
                                       ),
                                       'span': Style(
@@ -275,7 +274,7 @@ class _NameResultState extends State<NameResult> {
                                     style: {
                                       'body': Style(
                                         fontSize: FontSize(13.0.sp),
-                                        color: Theme.of(context).backgroundColor,
+                                        color: Theme.of(context).colorScheme.background,
                                         lineHeight: LineHeight.em(1.1),
                                       ),
                                       'span': Style(
@@ -294,7 +293,7 @@ class _NameResultState extends State<NameResult> {
                                     style: {
                                       'body': Style(
                                         fontSize: FontSize(13.0.sp),
-                                        color: Theme.of(context).backgroundColor,
+                                        color: Theme.of(context).colorScheme.background,
                                         lineHeight: LineHeight.em(1.1),
                                       ),
                                       'span': Style(
@@ -313,7 +312,7 @@ class _NameResultState extends State<NameResult> {
                                 style: {
                                   'body': Style(
                                     fontSize: FontSize(10.0.sp),
-                                    color: Theme.of(context).backgroundColor,
+                                    color: Theme.of(context).colorScheme.background,
                                     lineHeight: LineHeight.em(1.1),
                                   ),
                                   'span': Style(
@@ -451,7 +450,7 @@ class _NameResultState extends State<NameResult> {
                                         width: 43.0.w,
                                         height: 12.0.h,
                                         decoration: BoxDecoration(
-                                          color: Theme.of(context).backgroundColor,
+                                          color: Theme.of(context).colorScheme.background,
                                           borderRadius: BorderRadius.only(
                                             topLeft: Radius.circular(40),
                                             bottomRight: Radius.circular(40),

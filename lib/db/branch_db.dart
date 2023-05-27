@@ -1,4 +1,3 @@
-// @dart=2.9
 import 'dart:async';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
@@ -64,15 +63,15 @@ class BranchDb {
 
   Future<List> insert(int id, String name, String desc, String address_1, String address_2,
       String phone_1, String phone_2, String email_1, String email_2, String image,
-      String latitude, String longitude) async {
+      String latitude, String longitude, String direction) async {
     var dbClient = await db;
     var result = await dbClient.rawQuery('INSERT INTO $tableName '
         '($columnId, $columnName, $columnDesc, $columnAddress1, $columnAddress2, '
         '$columnPhone1, $columnPhone2, $columnEmail1, $columnEmail2, $columnImage, '
-        '$columnLatitude, $columnLongitude) '
+        '$columnLatitude, $columnLongitude, $columnDirection) '
         'VALUES (' + id.toString() + ', "' + name + '", "' + desc + '", "' + address_1 +
         '", "' + address_2 + '", "' + phone_1 + '", "' + phone_2 + '", "' + email_1 +
-        '", "' + email_2 + '", "' + image + '", "' + latitude + '", "' + longitude + '")');
+        '", "' + email_2 + '", "' + image + '", "' + latitude + '", "' + longitude + '", "' + direction + '")');
     return result.toList();
   }
 

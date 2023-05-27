@@ -1,4 +1,3 @@
-// @dart=2.9
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 import 'package:sahabat_bumil_v2/main.dart';
@@ -23,6 +22,174 @@ class _FeaturesState extends State<Features> {
                   children: [
                     SizedBox(height: 19.0.h,),
                     Text(
+                      'AKTIVITAS',
+                      style: TextStyle(
+                        fontSize: 12.0.sp,
+                        color: Theme.of(context).unselectedWidgetColor,
+                      ),
+                    ),
+                    SizedBox(height: 3.1.h,),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 5.2.w,),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          InkWell(
+                            onTap: () {
+                              if (!prefs.getIsSignIn) {
+                                prefs.setGoRoute('/questionsList');
+                                Navigator.pushReplacementNamed(context, '/register');
+                              } else {
+                                Navigator.pushReplacementNamed(context, '/questionsList');
+                              }
+                            },
+                            child: SizedBox(
+                              width: 16.7.w,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Stack(
+                                    alignment: AlignmentDirectional.center,
+                                    children: [
+                                      Container(
+                                        width: 11.1.w,
+                                        height: 11.1.w,
+                                        decoration: BoxDecoration(
+                                          borderRadius: const BorderRadius.all(Radius.circular(30)),
+                                          color: Theme.of(context).primaryColor,
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: 5.6.w,
+                                        height: 5.6.w,
+                                        child: FittedBox(
+                                          child: Image.asset(
+                                            'images/ic_forum.png',
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                  SizedBox(height: 2.0.w,),
+                                  Text(
+                                    'Forum Saya',
+                                    style: TextStyle(
+                                      fontSize: 10.0.sp,
+                                      color: Colors.black,
+                                      height: 1.2,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          const Spacer(),
+                          InkWell(
+                            onTap: () {
+                              if (!prefs.getIsSignIn) {
+                                prefs.setGoRoute('/schedule');
+                                Navigator.pushReplacementNamed(context, '/register');
+                              } else {
+                                Navigator.pushReplacementNamed(context, '/schedule');
+                              }
+                            },
+                            child: SizedBox(
+                              width: 16.7.w,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Stack(
+                                    alignment: AlignmentDirectional.center,
+                                    children: [
+                                      Container(
+                                        width: 11.1.w,
+                                        height: 11.1.w,
+                                        decoration: BoxDecoration(
+                                          borderRadius: const BorderRadius.all(Radius.circular(30)),
+                                          color: Theme.of(context).primaryColor,
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: 5.6.w,
+                                        height: 5.6.w,
+                                        child: FittedBox(
+                                          child: Image.asset(
+                                            'images/ic_schedule.png',
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                  SizedBox(height: 2.0.w,),
+                                  Text(
+                                    'Jadwal Kontrol',
+                                    style: TextStyle(
+                                      fontSize: 10.0.sp,
+                                      color: Colors.black,
+                                      height: 1.2,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          const Spacer(),
+                          InkWell(
+                            onTap: () {
+                              if (!prefs.getIsSignIn) {
+                                prefs.setGoRoute('/todo');
+                                Navigator.pushReplacementNamed(context, '/register');
+                              } else {
+                                Navigator.pushReplacementNamed(context, '/todo');
+                              }
+                            },
+                            child: SizedBox(
+                              width: 16.7.w,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Stack(
+                                    alignment: AlignmentDirectional.center,
+                                    children: [
+                                      Container(
+                                        width: 11.1.w,
+                                        height: 11.1.w,
+                                        decoration: BoxDecoration(
+                                          borderRadius: const BorderRadius.all(Radius.circular(30)),
+                                          color: Theme.of(context).primaryColor,
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: 5.6.w,
+                                        height: 5.6.w,
+                                        child: FittedBox(
+                                          child: Image.asset(
+                                            'images/ic_todo.png',
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                  SizedBox(height: 2.5.w,),
+                                  Text(
+                                    'To Do List',
+                                    style: TextStyle(
+                                      fontSize: 10.0.sp,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          const Spacer(flex: 7),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 4.1.h,),
+                    Text(
                       'SEMUA FITUR',
                       style: TextStyle(
                         color: Theme.of(context).unselectedWidgetColor,
@@ -33,6 +200,7 @@ class _FeaturesState extends State<Features> {
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 5.2.w),
                       child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           SizedBox(
                             width: 16.7.w,
@@ -42,12 +210,17 @@ class _FeaturesState extends State<Features> {
                                 InkWell(
                                   onTap: () {
                                     prefs.setRoute('/home');
-                                    if (prefs.getBasecount == '') {
+                                    if (!prefs.getIsSignIn) {
                                       prefs.setGoRoute('/monitoring');
-                                      Navigator.pushReplacementNamed(context, '/addpregnancy');
+                                      Navigator.pushReplacementNamed(context, '/register');
+                                    } else {
+                                      if (prefs.getBasecount == '') {
+                                        prefs.setGoRoute('/monitoring');
+                                        Navigator.pushReplacementNamed(context, '/updpregnancy');
+                                      } else {
+                                        Navigator.pushReplacementNamed(context, '/monitoring');
+                                      }
                                     }
-                                    else
-                                      Navigator.pushReplacementNamed(context, '/monitoring');
                                   },
                                   child: Stack(
                                     alignment: AlignmentDirectional.center,
@@ -78,7 +251,7 @@ class _FeaturesState extends State<Features> {
                                 Text(
                                     'Pemantau',
                                   style: TextStyle(
-                                    color: Theme.of(context).backgroundColor,
+                                    color: Theme.of(context).colorScheme.background,
                                     fontSize: 10.0.sp,
                                   ),
                                 ),
@@ -93,8 +266,12 @@ class _FeaturesState extends State<Features> {
                               children: [
                                 InkWell(
                                   onTap: () {
-                                    prefs.setRoute('/home');
-                                    Navigator.pushReplacementNamed(context, '/babysname');
+                                    if (!prefs.getIsSignIn) {
+                                      prefs.setGoRoute('/newquestion');
+                                      Navigator.pushReplacementNamed(context, '/register');
+                                    } else {
+                                      Navigator.pushReplacementNamed(context, '/newquestion');
+                                    }
                                   },
                                   child: Stack(
                                     alignment: AlignmentDirectional.center,
@@ -114,7 +291,7 @@ class _FeaturesState extends State<Features> {
                                         height: 5.6.w,
                                         child: FittedBox(
                                           child: Image.asset(
-                                            'images/ic_baby_white.png',
+                                            'images/ic_forum.png',
                                           ),
                                         ),
                                       ),
@@ -123,11 +300,12 @@ class _FeaturesState extends State<Features> {
                                 ),
                                 SizedBox(height: 2.5.w,),
                                 Text(
-                                  'Nama Bayi',
+                                  'Tanya ke Forum',
                                   style: TextStyle(
-                                    color: Theme.of(context).backgroundColor,
+                                    color: Theme.of(context).colorScheme.background,
                                     fontSize: 10.0.sp,
                                   ),
+                                  textAlign: TextAlign.center,
                                 ),
                               ],
                             ),
@@ -140,12 +318,7 @@ class _FeaturesState extends State<Features> {
                               children: [
                                 InkWell(
                                   onTap: () {
-                                    prefs.setRoute('/home');
-                                    prefs.setGoRoute('/home');
-                                    if (prefs.getBasecount == '')
-                                      Navigator.pushReplacementNamed(context, '/addpregnancy');
-                                    else
-                                      Navigator.pushReplacementNamed(context, '/updpregnancy');
+                                    Navigator.pushReplacementNamed(context, '/articles');
                                   },
                                   child: Stack(
                                     alignment: AlignmentDirectional.center,
@@ -154,9 +327,7 @@ class _FeaturesState extends State<Features> {
                                         width: 11.1.w,
                                         height: 11.1.w,
                                         decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.all(
-                                            Radius.circular(30),
-                                          ),
+                                          borderRadius: BorderRadius.all(Radius.circular(30)),
                                           color: Theme.of(context).primaryColor,
                                         ),
                                       ),
@@ -165,19 +336,19 @@ class _FeaturesState extends State<Features> {
                                         height: 5.6.w,
                                         child: FittedBox(
                                           child: Image.asset(
-                                            'images/ic_profil.png',
+                                            'images/ic_white_article.png',
                                           ),
                                         ),
-                                      ),
+                                      )
                                     ],
                                   ),
                                 ),
                                 SizedBox(height: 2.5.w,),
                                 Text(
-                                  'Profil',
+                                  'Artikel',
                                   style: TextStyle(
-                                    color: Theme.of(context).backgroundColor,
                                     fontSize: 10.0.sp,
+                                    color: Colors.black,
                                   ),
                                 ),
                               ],
@@ -223,11 +394,217 @@ class _FeaturesState extends State<Features> {
                                 Text(
                                   'Aqiqah',
                                   style: TextStyle(
-                                    color: Theme.of(context).backgroundColor,
+                                    color: Theme.of(context).colorScheme.background,
                                     fontSize: 10.0.sp,
                                   ),
                                 ),
                               ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 4.4.h,),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 5.2.w),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(
+                            width: 16.7.w,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                InkWell(
+                                  onTap: () {
+                                    prefs.setRoute('/home');
+                                    Navigator.pushReplacementNamed(context, '/babysname');
+                                  },
+                                  child: Stack(
+                                    alignment: AlignmentDirectional.center,
+                                    children: [
+                                      Container(
+                                        width: 11.1.w,
+                                        height: 11.1.w,
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.all(
+                                            Radius.circular(30),
+                                          ),
+                                          color: Theme.of(context).primaryColor,
+                                        ),
+                                      ),
+                                      Container(
+                                        width: 5.6.w,
+                                        height: 5.6.w,
+                                        child: FittedBox(
+                                          child: Image.asset(
+                                            'images/ic_baby_white.png',
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(height: 2.5.w,),
+                                Text(
+                                  'Nama Bayi',
+                                  style: TextStyle(
+                                    color: Theme.of(context).colorScheme.background,
+                                    fontSize: 10.0.sp,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Spacer(),
+                          SizedBox(
+                            width: 16.7.w,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                InkWell(
+                                  onTap: () {
+                                    prefs.setRoute('/home');
+                                    if (!prefs.getIsSignIn) {
+                                      prefs.setGoRoute('/profile');
+                                      Navigator.pushReplacementNamed(context, '/register');
+                                    } else {
+                                      Navigator.pushReplacementNamed(context, '/profile');
+                                    }
+                                  },
+                                  child: Stack(
+                                    alignment: AlignmentDirectional.center,
+                                    children: [
+                                      Container(
+                                        width: 11.1.w,
+                                        height: 11.1.w,
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.all(
+                                            Radius.circular(30),
+                                          ),
+                                          color: Theme.of(context).primaryColor,
+                                        ),
+                                      ),
+                                      Container(
+                                        width: 5.6.w,
+                                        height: 5.6.w,
+                                        child: FittedBox(
+                                          child: Image.asset(
+                                            'images/ic_profil.png',
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(height: 2.5.w,),
+                                Text(
+                                  'Profil',
+                                  style: TextStyle(
+                                    color: Theme.of(context).colorScheme.background,
+                                    fontSize: 10.0.sp,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Spacer(),
+                          SizedBox(
+                            width: 16.7.w,
+                            child: Visibility(
+                              visible: false,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  InkWell(
+                                    onTap: () {
+
+                                    },
+                                    child: Stack(
+                                      alignment: AlignmentDirectional.center,
+                                      children: [
+                                        Container(
+                                          width: 11.1.w,
+                                          height: 11.1.w,
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.all(
+                                              Radius.circular(30),
+                                            ),
+                                            color: Theme.of(context).primaryColor,
+                                          ),
+                                        ),
+                                        Container(
+                                          width: 5.6.w,
+                                          height: 5.6.w,
+                                          child: FittedBox(
+                                            child: Image.asset(
+                                              'images/ic_profil.png',
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  SizedBox(height: 2.5.w,),
+                                  Text(
+                                    'Profil',
+                                    style: TextStyle(
+                                      color: Theme.of(context).colorScheme.background,
+                                      fontSize: 10.0.sp,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          Spacer(),
+                          SizedBox(
+                            width: 16.7.w,
+                            child: Visibility(
+                              visible: false,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  InkWell(
+                                    onTap: () {
+                                      prefs.setRoute('/home');
+                                      Navigator.pushReplacementNamed(context, '/aqiqah');
+                                    },
+                                    child: Stack(
+                                      alignment: AlignmentDirectional.center,
+                                      children: [
+                                        Container(
+                                          width: 11.1.w,
+                                          height: 11.1.w,
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.all(
+                                              Radius.circular(30),
+                                            ),
+                                            color: Theme.of(context).primaryColor,
+                                          ),
+                                        ),
+                                        Container(
+                                          width: 5.6.w,
+                                          height: 5.6.w,
+                                          child: FittedBox(
+                                            child: Image.asset(
+                                              'images/ic_aqiqah.png',
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  SizedBox(height: 2.5.w,),
+                                  Text(
+                                    'Aqiqah',
+                                    style: TextStyle(
+                                      color: Theme.of(context).colorScheme.background,
+                                      fontSize: 10.0.sp,
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ],
@@ -271,7 +648,7 @@ class _FeaturesState extends State<Features> {
                       width: 19.0.w,
                       height: 15.0.h,
                       decoration: BoxDecoration(
-                        color: Theme.of(context).primaryColor,
+                        color: Theme.of(context).colorScheme.background,
                         borderRadius: BorderRadius.only(
                           bottomRight: Radius.circular(40),
                         ),

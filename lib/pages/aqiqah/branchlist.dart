@@ -1,4 +1,3 @@
-// @dart=2.9
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -54,7 +53,7 @@ class _BranchListState extends State<BranchList> {
                           Text(
                             'Cabang',
                             style: TextStyle(
-                              color: Theme.of(context).backgroundColor,
+                              color: Theme.of(context).colorScheme.background,
                               fontWeight: FontWeight.w700,
                               fontSize: 24.0.sp,
                             ),
@@ -110,7 +109,7 @@ class _BranchListState extends State<BranchList> {
                                                     style: TextStyle(
                                                       fontSize: 13.0.sp,
                                                       fontWeight: FontWeight.w700,
-                                                      color: Theme.of(context).backgroundColor,
+                                                      color: Theme.of(context).colorScheme.background,
                                                     ),
                                                     maxLines: 1,
                                                     overflow: TextOverflow.ellipsis,
@@ -208,7 +207,7 @@ class _BranchListState extends State<BranchList> {
                       width: 19.0.w,
                       height: 15.0.h,
                       decoration: BoxDecoration(
-                        color: Theme.of(context).backgroundColor,
+                        color: Theme.of(context).colorScheme.background,
                         borderRadius: BorderRadius.only(
                           bottomRight: Radius.circular(40),
                         ),

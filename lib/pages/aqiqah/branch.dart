@@ -1,4 +1,3 @@
-// @dart=2.9
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
@@ -119,7 +118,7 @@ class _BranchState extends State<Branch> {
                             style: TextStyle(
                               fontSize: 20.0.sp,
                               fontWeight: FontWeight.w700,
-                              color: Theme.of(context).backgroundColor,
+                              color: Theme.of(context).colorScheme.background,
                             ),
                           ),
                           SizedBox(height: 2.5.h,),
@@ -266,6 +265,7 @@ class _BranchState extends State<Branch> {
                       InkWell(
                         onTap: () {
                           if (dbSingle[0]['direction'] != '')
+                          // ignore: deprecated_member_use
                           launch(dbSingle[0]['direction']);
                         },
                         child: Stack(
@@ -297,7 +297,8 @@ class _BranchState extends State<Branch> {
                         child: InkWell(
                           onTap: () {
                             String phone = dbSingle[0]['phone_1'].toString();
-                            String waNumber = '+62' + phone.substring(1, phone.length);
+                            String waNumber = '62' + phone.substring(1, phone.length);
+                            // ignore: deprecated_member_use
                             launch('https://api.whatsapp.com/send?phone=' + waNumber +
                                 '&text=Assalamualaikum%2C+saya+dapat+info+dari+aplikasi+'
                                     '*Sahabat+Bumil*%2C+dan+ingin+bertanya+tentang+Aqiqah+anak+saya');
@@ -306,7 +307,7 @@ class _BranchState extends State<Branch> {
                             width: 41.7.w,
                             height: 20.8.w,
                             decoration: BoxDecoration(
-                              color: Theme.of(context).backgroundColor,
+                              color: Theme.of(context).colorScheme.background,
                               borderRadius: BorderRadius.only(
                                 topLeft: Radius.circular(40),
                                 bottomRight: Radius.circular(40),

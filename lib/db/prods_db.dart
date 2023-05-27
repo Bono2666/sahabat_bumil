@@ -1,4 +1,3 @@
-// @dart=2.9
 import 'dart:async';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
@@ -114,9 +113,7 @@ class ProdsDb {
 
   Future<List> favList() async {
     var dbClient = await db;
-    var result = await dbClient.rawQuery('SELECT products.*, packages.packages_name AS prods_package '
-        'FROM $tableName INNER JOIN packages ON $columnCategory = packages.packages_id '
-        'WHERE $columnFav = 1');
+    var result = await dbClient.rawQuery('SELECT products.* FROM $tableName WHERE $columnFav = 1');
     return result.toList();
   }
 

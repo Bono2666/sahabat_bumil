@@ -1,4 +1,3 @@
-// @dart=2.9
 class Fav {
   String favId, favName, favSex, favDesc, favCat, favFilter, favStatus;
   int favNoCat, favPrefix, favMiddle, favSuffix, favCheck;

@@ -1,6 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -12,7 +10,6 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:http/http.dart' as http;
 import '../../db/prods_db.dart';
 import '../../model/prods_model.dart';
-import 'package:format_indonesia/format_indonesia.dart';
 
 int prodId = 1;
 String waNumber;
@@ -26,9 +23,16 @@ class History extends StatefulWidget {
 class _HistoryState extends State<History> {
   List dbHistory, dbSetup;
   var historyDb = HistoryDb();
+  DateTime orderDate;
 
   Future getSetup() async {
     var url = Uri.parse('https://sahabataqiqah.co.id/sahabat_bumil/api/get_setup.php');
+    var response = await http.get(url);
+    return json.decode(response.body);
+  }
+
+  Future getHistory() async {
+    var url = Uri.parse('https://sahabataqiqah.co.id/sahabat_bumil/api/get_history.php?phone=${prefs.getPhone}');
     var response = await http.get(url);
     return json.decode(response.body);
   }
@@ -37,7 +41,7 @@ class _HistoryState extends State<History> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: FutureBuilder(
-        future: historyDb.list(),
+        future: getHistory(),
         builder: (context, snapshot) {
           if (!snapshot.hasData || snapshot.data == null || snapshot.hasError) {
             return Column(
@@ -83,7 +87,7 @@ class _HistoryState extends State<History> {
                               Text(
                                 'Histori',
                                 style: TextStyle(
-                                  color: Theme.of(context).backgroundColor,
+                                  color: Theme.of(context).colorScheme.background,
                                   fontWeight: FontWeight.w700,
                                   fontSize: 24.0.sp,
                                 ),
@@ -97,6 +101,11 @@ class _HistoryState extends State<History> {
                                   shrinkWrap: true,
                                   padding: EdgeInsets.only(top: 0),
                                   itemBuilder: (context, index) {
+                                    orderDate = DateTime(
+                                        int.parse(dbHistory[index]['date'].substring(0, 4)),
+                                        int.parse(dbHistory[index]['date'].substring(5, 7)),
+                                        int.parse(dbHistory[index]['date'].substring(8, 10))
+                                    );
                                     return Padding(
                                       padding: EdgeInsets.only(bottom: 6.7.w,),
                                       child: Stack(
@@ -113,8 +122,8 @@ class _HistoryState extends State<History> {
                                                 child: Container(
                                                   width: 31.1.w,
                                                   height: 32.0.w,
-                                                  child: Image.file(
-                                                    File(dbHistory[index]['prods_image']),
+                                                  child: Image.network(
+                                                    dbHistory[index]['img'],
                                                     fit: BoxFit.cover,
                                                   ),
                                                 ),
@@ -126,7 +135,7 @@ class _HistoryState extends State<History> {
                                                     crossAxisAlignment: CrossAxisAlignment.start,
                                                     children: [
                                                       Text(
-                                                        Waktu(dbHistory[index]['prods_date']).yMMMMd(),
+                                                        DateFormat('d MMMM yyyy', 'id_ID').format(orderDate),
                                                         style: TextStyle(
                                                           fontSize: 8.0.sp,
                                                           color: Theme.of(context).primaryColor,
@@ -134,17 +143,17 @@ class _HistoryState extends State<History> {
                                                       ),
                                                       SizedBox(height: 1.1.w,),
                                                       Text(
-                                                        dbHistory[index]['prods_package'] + ' - ' +
-                                                            dbHistory[index]['prods_name'],
+                                                        dbHistory[index]['package'] + ' - ' +
+                                                            dbHistory[index]['title'],
                                                         style: TextStyle(
                                                           fontSize: 13.0.sp,
                                                           fontWeight: FontWeight.w700,
-                                                          color: Theme.of(context).backgroundColor,
+                                                          color: Theme.of(context).colorScheme.background,
                                                         ),
                                                       ),
                                                       SizedBox(height: 1.1.w,),
                                                       Html(
-                                                        data: dbHistory[index]['prods_desc'],
+                                                        data: dbHistory[index]['description'],
                                                         style: {
                                                           'body': Style(
                                                             color: Colors.black,
@@ -163,10 +172,10 @@ class _HistoryState extends State<History> {
                                                               locale: 'id',
                                                               symbol: 'Rp ',
                                                               decimalDigits: 0,
-                                                            ).format(dbHistory[index]['prods_price']),
+                                                            ).format(int.parse(dbHistory[index]['price'])),
                                                             style: TextStyle(
                                                               fontSize: 10.0.sp,
-                                                              color: Theme.of(context).backgroundColor,
+                                                              color: Theme.of(context).colorScheme.background,
                                                             ),
                                                           ),
                                                           Expanded(child: SizedBox(),),
@@ -191,10 +200,10 @@ class _HistoryState extends State<History> {
                                                               ),
                                                             ),
                                                             onTap: () async {
-                                                              prodId = dbHistory[index]['prods_id'];
+                                                              prodId = int.parse(dbHistory[index]['history_id']);
                                                               waNumber = dbSetup[0]['wa_number'];
 
-                                                              if ((await prodsDb.count(prodId)) > 0) {
+                                                              // if ((await prodsDb.count(prodId)) > 0) {
                                                                 showModalBottomSheet(
                                                                   shape: RoundedRectangleBorder(
                                                                     borderRadius: BorderRadius.only(
@@ -212,13 +221,13 @@ class _HistoryState extends State<History> {
                                                                   isDismissible: false,
                                                                   builder: (context) => ViewProduct(),
                                                                 );
-                                                              } else {
-                                                                showDialog(
-                                                                  context: context,
-                                                                  builder: (_) => alert(),
-                                                                  barrierDismissible: false,
-                                                                );
-                                                              }
+                                                              // } else {
+                                                              //   showDialog(
+                                                              //     context: context,
+                                                              //     builder: (_) => Alert(),
+                                                              //     barrierDismissible: false,
+                                                              //   );
+                                                              // }
                                                             },
                                                           ),
                                                         ],
@@ -250,7 +259,7 @@ class _HistoryState extends State<History> {
                                       Text(
                                         'Belum ada paket aqiqah yang dipesan!',
                                         style: TextStyle(
-                                          color: Theme.of(context).backgroundColor,
+                                          color: Theme.of(context).colorScheme.background,
                                           fontWeight: FontWeight.w700,
                                           fontSize: 12.0.sp,
                                         ),
@@ -483,7 +492,7 @@ class _ViewProductState extends State<ViewProduct> {
                             style: TextStyle(
                               fontSize: 23.0.sp,
                               fontWeight: FontWeight.w700,
-                              color: Theme.of(context).backgroundColor,
+                              color: Theme.of(context).colorScheme.background,
                             ),
                           ),
                           SizedBox(height: 6.7.w,),
@@ -499,7 +508,7 @@ class _ViewProductState extends State<ViewProduct> {
                                 style: TextStyle(
                                   fontSize: 16.0.sp,
                                   fontWeight: FontWeight.w700,
-                                  color: Theme.of(context).backgroundColor,
+                                  color: Theme.of(context).colorScheme.background,
                                 ),
                               ),
                               Expanded(child: SizedBox(),),
@@ -605,15 +614,16 @@ class _ViewProductState extends State<ViewProduct> {
                           padding: EdgeInsets.only(right: 42.8.w),
                           child: InkWell(
                             onTap: () {
-                              launch('https://api.whatsapp.com/send?phone=' + waNumber +
+                              // ignore: deprecated_member_use
+                              launch('https://api.whatsapp.com/send?phone=$waNumber'
                                   '&text=Assalamualaikum%2C+saya+dapat+info+dari+aplikasi+'
-                                      '*Sahabat+Bumil*%2C+dan+ingin+bertanya+tentang+Aqiqah+anak+saya');
+                                  '*Sahabat+Bumil*%2C+dan+ingin+bertanya+tentang+Aqiqah+anak+saya');
                             },
                             child: Container(
                               width: 40.5.w,
                               height: 20.8.w,
                               decoration: BoxDecoration(
-                                color: Theme.of(context).backgroundColor,
+                                color: Theme.of(context).colorScheme.background,
                                 borderRadius: BorderRadius.only(
                                   topLeft: Radius.circular(40),
                                   bottomRight: Radius.circular(40),
@@ -645,12 +655,12 @@ class _ViewProductState extends State<ViewProduct> {
   }
 }
 
-class alert extends StatefulWidget {
+class Alert extends StatefulWidget {
   @override
-  _alertState createState() => _alertState();
+  _AlertState createState() => _AlertState();
 }
 
-class _alertState extends State<alert> with SingleTickerProviderStateMixin {
+class _AlertState extends State<Alert> with SingleTickerProviderStateMixin {
   AnimationController controller;
   Animation<double> scaleAnimation;
 
@@ -712,7 +722,7 @@ class _alertState extends State<alert> with SingleTickerProviderStateMixin {
                       'Maaf ya Ayah/Bunda, paket aqiqah ini sudah tidak tersedia lagi.',
                       textAlign: TextAlign.left,
                       style: TextStyle(
-                        color: Theme.of(context).backgroundColor,
+                        color: Theme.of(context).colorScheme.background,
                         fontFamily: 'Ubuntu',
                         fontWeight: FontWeight.w400,
                         fontSize: 13.0.sp,

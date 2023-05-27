@@ -1,4 +1,3 @@
-// @dart=2.9
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
@@ -84,7 +83,7 @@ class _FavoritesState extends State<Favorites> {
                                 Text(
                                   'Aqiqah Favorit',
                                   style: TextStyle(
-                                    color: Theme.of(context).backgroundColor,
+                                    color: Theme.of(context).colorScheme.background,
                                     fontWeight: FontWeight.w700,
                                     fontSize: 24.0.sp,
                                   ),
@@ -120,7 +119,7 @@ class _FavoritesState extends State<Favorites> {
                                                             style: TextStyle(
                                                               fontSize: 13.0.sp,
                                                               fontWeight: FontWeight.w700,
-                                                              color: Theme.of(context).backgroundColor,
+                                                              color: Theme.of(context).colorScheme.background,
                                                             ),
                                                           ),
                                                           SizedBox(height: 1.1.w,),
@@ -170,7 +169,7 @@ class _FavoritesState extends State<Favorites> {
                                                                 textAlign: TextAlign.right,
                                                                 style: TextStyle(
                                                                   fontSize: 10.0.sp,
-                                                                  color: Theme.of(context).backgroundColor,
+                                                                  color: Theme.of(context).colorScheme.background,
                                                                 ),
                                                               ),
                                                             ],
@@ -272,7 +271,7 @@ class _FavoritesState extends State<Favorites> {
                                         Text(
                                           'Buat daftar aqiqah favorit pertama Anda',
                                           style: TextStyle(
-                                            color: Theme.of(context).backgroundColor,
+                                            color: Theme.of(context).colorScheme.background,
                                             fontWeight: FontWeight.w700,
                                             fontSize: 12.0.sp,
                                           ),
@@ -509,7 +508,7 @@ class _ViewProductState extends State<ViewProduct> {
                               style: TextStyle(
                                 fontSize: 23.0.sp,
                                 fontWeight: FontWeight.w700,
-                                color: Theme.of(context).backgroundColor,
+                                color: Theme.of(context).colorScheme.background,
                               ),
                             ),
                             SizedBox(height: 6.7.w,),
@@ -525,7 +524,7 @@ class _ViewProductState extends State<ViewProduct> {
                                   style: TextStyle(
                                     fontSize: 16.0.sp,
                                     fontWeight: FontWeight.w700,
-                                    color: Theme.of(context).backgroundColor,
+                                    color: Theme.of(context).colorScheme.background,
                                   ),
                                 ),
                                 Expanded(child: SizedBox(),),
@@ -631,6 +630,7 @@ class _ViewProductState extends State<ViewProduct> {
                             padding: EdgeInsets.only(right: 42.8.w),
                             child: InkWell(
                               onTap: () {
+                                // ignore: deprecated_member_use
                                 launch('https://api.whatsapp.com/send?phone=' + waNumber +
                                     '&text=Assalamualaikum%2C+saya+dapat+info+dari+aplikasi+'
                                         '*Sahabat+Bumil*%2C+dan+ingin+bertanya+tentang+Aqiqah+anak+saya');
@@ -639,7 +639,7 @@ class _ViewProductState extends State<ViewProduct> {
                                 width: 40.5.w,
                                 height: 20.8.w,
                                 decoration: BoxDecoration(
-                                  color: Theme.of(context).backgroundColor,
+                                  color: Theme.of(context).colorScheme.background,
                                   borderRadius: BorderRadius.only(
                                     topLeft: Radius.circular(40),
                                     bottomRight: Radius.circular(40),

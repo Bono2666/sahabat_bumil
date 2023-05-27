@@ -1,4 +1,3 @@
-// @dart=2.9
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:sahabat_bumil_v2/db/fav_db.dart';
@@ -40,7 +39,7 @@ class _BabysNameState extends State<BabysName> {
         middle = 'Acak';
         sufix = 'Acak';
         sextype = prefs.getSextype.isNotEmpty ? prefs.getSextype : '';
-        Navigator.pop(context);
+        Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => true);
         return false;
       },
       child: Scaffold(
@@ -56,7 +55,7 @@ class _BabysNameState extends State<BabysName> {
                       Text(
                         'Generator Nama',
                         style: TextStyle(
-                          color: Theme.of(context).backgroundColor,
+                          color: Theme.of(context).colorScheme.background,
                           fontWeight: FontWeight.w700,
                           fontSize: 24.0.sp,
                         ),
@@ -78,24 +77,20 @@ class _BabysNameState extends State<BabysName> {
                             style: TextStyle(
                               fontSize: 10.0.sp,
                               fontWeight: FontWeight.w700,
-                              color: Theme.of(context).backgroundColor,
+                              color: Theme.of(context).colorScheme.background,
                             ),
                           ),
                         ],
                       ),
-                      SizedBox(
-                        height: 4.4.h,
-                      ),
+                      SizedBox(height: 4.4.h,),
                       Text(
                         'Jenis Kelamin',
                         style: TextStyle(
                           fontSize: 13.0.sp,
-                          color: Theme.of(context).backgroundColor,
+                          color: Theme.of(context).colorScheme.background,
                         ),
                       ),
-                      SizedBox(
-                        height: 1.0.h,
-                      ),
+                      SizedBox(height: 1.0.h,),
                       InkWell(
                         onTap: () {
                           showModalBottomSheet(
@@ -136,7 +131,7 @@ class _BabysNameState extends State<BabysName> {
                                             style: TextStyle(
                                               fontSize: 17.0.sp,
                                               color: Theme.of(context)
-                                                  .backgroundColor,
+                                                  .colorScheme.background,
                                             ),
                                           ),
                                         ],
@@ -252,14 +247,12 @@ class _BabysNameState extends State<BabysName> {
                           ),
                         ),
                       ),
-                      SizedBox(
-                        height: 3.3.h,
-                      ),
+                      SizedBox(height: 3.3.h,),
                       Text(
                         'Kriteria Nama Depan',
                         style: TextStyle(
                           fontSize: 13.0.sp,
-                          color: Theme.of(context).backgroundColor,
+                          color: Theme.of(context).colorScheme.background,
                         ),
                       ),
                       SizedBox(
@@ -345,7 +338,7 @@ class _BabysNameState extends State<BabysName> {
                           'Kriteria Nama Tengah',
                           style: TextStyle(
                             fontSize: 13.0.sp,
-                            color: Theme.of(context).backgroundColor,
+                            color: Theme.of(context).colorScheme.background,
                           ),
                         ),
                       ),
@@ -424,7 +417,7 @@ class _BabysNameState extends State<BabysName> {
                           'Kriteria Nama Belakang',
                           style: TextStyle(
                             fontSize: 13.0.sp,
-                            color: Theme.of(context).backgroundColor,
+                            color: Theme.of(context).colorScheme.background,
                           ),
                         ),
                       ),
@@ -509,9 +502,8 @@ class _BabysNameState extends State<BabysName> {
                         prefix = 'Acak';
                         middle = 'Acak';
                         sufix = 'Acak';
-                        sextype =
-                            prefs.getSextype.isNotEmpty ? prefs.getSextype : '';
-                        Navigator.pop(context);
+                        sextype = prefs.getSextype.isNotEmpty ? prefs.getSextype : '';
+                        Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => true);
                       },
                       child: Container(
                         width: 19.0.w,
@@ -643,7 +635,7 @@ class _BabysNameState extends State<BabysName> {
                               width: 43.0.w,
                               height: 12.0.h,
                               decoration: BoxDecoration(
-                                color: Theme.of(context).backgroundColor,
+                                color: Theme.of(context).colorScheme.background,
                                 borderRadius: BorderRadius.only(
                                   topLeft: Radius.circular(40),
                                   bottomRight: Radius.circular(40),
@@ -800,7 +792,7 @@ class _CriteriaState extends State<Criteria>
                                 Text(
                                   'Pilih Kriteria',
                                   style: TextStyle(
-                                    color: Theme.of(context).backgroundColor,
+                                    color: Theme.of(context).colorScheme.background,
                                     fontWeight: FontWeight.w700,
                                     fontSize: 24.0.sp,
                                   ),
@@ -890,7 +882,7 @@ class _CriteriaState extends State<Criteria>
                                                           style: {
                                                             'body': Style(
                                                               fontSize: FontSize(17.0.sp),
-                                                              color: Theme.of(context).backgroundColor,
+                                                              color: Theme.of(context).colorScheme.background,
                                                               padding: EdgeInsets.all(0),
                                                             ),
                                                           },
@@ -1019,7 +1011,7 @@ class _CriteriaState extends State<Criteria>
                                   width: 37.0.w,
                                   height: 12.0.h,
                                   decoration: BoxDecoration(
-                                    color: Theme.of(context).backgroundColor,
+                                    color: Theme.of(context).colorScheme.background,
                                     borderRadius: BorderRadius.only(
                                       topLeft: Radius.circular(40),
                                       bottomRight: Radius.circular(40),
@@ -1119,7 +1111,7 @@ class _AlertState extends State<Alert> with SingleTickerProviderStateMixin {
                       'Ayah/Bunda belum memilih Jenis Kelamin, silahkan pilih Jenis Kelaminnya dulu ya',
                       textAlign: TextAlign.left,
                       style: TextStyle(
-                        color: Theme.of(context).backgroundColor,
+                        color: Theme.of(context).colorScheme.background,
                         fontFamily: 'Ubuntu',
                         fontWeight: FontWeight.w400,
                         fontSize: 13.0.sp,

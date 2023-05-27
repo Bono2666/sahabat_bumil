@@ -1,4 +1,3 @@
-// @dart=2.9
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -129,7 +128,7 @@ class _NameCollectionState extends State<NameCollection> {
                                   width: 19.0.w,
                                   height: 15.0.h,
                                   decoration: BoxDecoration(
-                                    color: Theme.of(context).backgroundColor,
+                                    color: Theme.of(context).colorScheme.background,
                                     borderRadius: BorderRadius.only(
                                       bottomRight: Radius.circular(40),
                                     ),
@@ -291,7 +290,7 @@ class _NameCollectionState extends State<NameCollection> {
                                               style: TextStyle(
                                                 fontSize: 12.0.sp,
                                                 color: selectedIndex == index
-                                                    ? Colors.white : Theme.of(context).backgroundColor,
+                                                    ? Colors.white : Theme.of(context).colorScheme.background,
                                               ),
                                             ),
                                           ),
@@ -324,7 +323,7 @@ class _NameCollectionState extends State<NameCollection> {
                               ),
                               child: Container(
                                 width: 9.2.w,
-                                color: Theme.of(context).backgroundColor,
+                                color: Theme.of(context).colorScheme.background,
                                 constraints: BoxConstraints(minHeight: 70.6.h,),
                                 child: ListView.builder(
                                   itemCount: dbCap.data.length,
@@ -422,7 +421,7 @@ class _NameCollectionState extends State<NameCollection> {
                                                 nameItem.favName,
                                                 style: TextStyle(
                                                   fontSize: 12.0.sp,
-                                                  color: Theme.of(context).backgroundColor,
+                                                  color: Theme.of(context).colorScheme.background,
                                                 ),
                                               ),
                                               width: 26.0.w,
@@ -436,7 +435,7 @@ class _NameCollectionState extends State<NameCollection> {
                                                 style: {
                                                   'body': Style(
                                                     fontSize: FontSize(12.0.sp),
-                                                    color: Theme.of(context).backgroundColor,
+                                                    color: Theme.of(context).colorScheme.background,
                                                     lineHeight: LineHeight(1.0.sp),
                                                   ),
                                                 },

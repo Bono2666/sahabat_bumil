@@ -1,4 +1,3 @@
-// @dart=2.9
 import 'dart:async';
 import 'package:path/path.dart';
 import 'package:sahabat_bumil_v2/model/fav_model.dart';

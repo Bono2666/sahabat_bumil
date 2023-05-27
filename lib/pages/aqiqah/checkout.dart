@@ -1,10 +1,9 @@
-// @dart=2.9
 import 'dart:convert';
-import 'dart:io';
+// import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:http/http.dart';
+// import 'package:http/http.dart';
 import 'package:sahabat_bumil_v2/db/prods_db.dart';
 import 'package:sizer/sizer.dart';
 import 'package:intl/intl.dart';
@@ -12,9 +11,24 @@ import 'package:sahabat_bumil_v2/main.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:http/http.dart' as http;
 import '../../db/history_db.dart';
-import 'package:path_provider/path_provider.dart';
 
 class Checkout extends StatefulWidget {
+  Future updTotalOrder(int total) async {
+    var url = 'https://sahabataqiqah.co.id/sahabat_bumil/api/post_total_order.php?id=' +
+        prefs.getIdProduct + '&order=' + total.toString();
+    await http.post(Uri.parse(url));
+  }
+
+  Future addOrder(String date, String product, String qty, String customer) async {
+    var url = 'https://sahabataqiqah.co.id/sahabat_bumil/api/add_order.php';
+    await http.post(Uri.parse(url), body: {
+      'date': date,
+      'product': product,
+      'qty': qty,
+      'customer': customer,
+    });
+  }
+
   @override
   _CheckoutState createState() => _CheckoutState();
 }
@@ -39,10 +53,14 @@ class _CheckoutState extends State<Checkout> {
     return json.decode(response.body);
   }
 
-  Future updTotalOrder() async {
-    var url = 'https://sahabataqiqah.co.id/sahabat_bumil/api/post_total_order.php?id=' +
-        prefs.getIdProduct + '&order=' + totOrder.toString();
-    await http.post(Uri.parse(url));
+  Future getProdSingle(int id) async {
+    var url;
+    if (prefs.getIsSignIn)
+      url = Uri.parse('https://sahabataqiqah.co.id/sahabat_bumil/api/get_prod_single.php?id=$id&phone=${prefs.getPhone}');
+    else
+      url = Uri.parse('https://sahabataqiqah.co.id/sahabat_bumil/api/get_prod_single.php?id=$id');
+    var response = await http.get(url);
+    return json.decode(response.body);
   }
 
   @override
@@ -65,7 +83,7 @@ class _CheckoutState extends State<Checkout> {
             dbSetup = snapshot.data;
           }
           return FutureBuilder(
-            future: prodsDb.single(int.parse(prefs.getIdProduct)),
+            future: getProdSingle(int.parse(prefs.getIdProduct)),
             builder: (context, snapshot) {
               if (!snapshot.hasData || snapshot.data == null || snapshot.hasError) {
                 return Column(
@@ -109,7 +127,7 @@ class _CheckoutState extends State<Checkout> {
                                 Text(
                                   'Jumlah Paket',
                                   style: TextStyle(
-                                    color: Theme.of(context).backgroundColor,
+                                    color: Theme.of(context).colorScheme.background,
                                     fontWeight: FontWeight.w700,
                                     fontSize: 24.0.sp,
                                   ),
@@ -126,17 +144,17 @@ class _CheckoutState extends State<Checkout> {
                                           children: [
                                             Text(
                                               dbProduct[0]['prods_package'] + ' - ' +
-                                                  dbProduct[0]['prods_name'],
+                                                  dbProduct[0]['name'],
                                               textAlign: TextAlign.right,
                                               style: TextStyle(
                                                 fontSize: 13.0.sp,
                                                 fontWeight: FontWeight.w700,
-                                                color: Theme.of(context).backgroundColor,
+                                                color: Theme.of(context).colorScheme.background,
                                               ),
                                             ),
                                             SizedBox(height: 1.1.w,),
                                             Html(
-                                              data: dbProduct[0]['prods_desc'],
+                                              data: dbProduct[0]['description'],
                                               style: {
                                                 'body': Style(
                                                   color: Colors.black,
@@ -151,13 +169,13 @@ class _CheckoutState extends State<Checkout> {
                                             SizedBox(height: 6.7.w,),
                                             Row(
                                               children: [
-                                                dbProduct[0]['prods_promo'] == ''
+                                                dbProduct[0]['promo'] == ''
                                                     ? Container() : Container(
                                                   child: Padding(
                                                     padding: EdgeInsets.symmetric(
                                                       horizontal: 4.4.w, vertical: 1.4.w,),
                                                     child: Text(
-                                                      dbProduct[0]['prods_promo'],
+                                                      dbProduct[0]['promo'],
                                                       style: TextStyle(
                                                         fontSize: 8.0.sp,
                                                         color: Colors.white,
@@ -177,11 +195,11 @@ class _CheckoutState extends State<Checkout> {
                                                     locale: 'id',
                                                     symbol: 'Rp ',
                                                     decimalDigits: 0,
-                                                  ).format(dbProduct[0]['prods_price']),
+                                                  ).format(int.parse(dbProduct[0]['price'])),
                                                   textAlign: TextAlign.right,
                                                   style: TextStyle(
                                                     fontSize: 10.0.sp,
-                                                    color: Theme.of(context).backgroundColor,
+                                                    color: Theme.of(context).colorScheme.background,
                                                   ),
                                                 ),
                                               ],
@@ -200,7 +218,7 @@ class _CheckoutState extends State<Checkout> {
                                         width: 31.1.w,
                                         height: 32.0.w,
                                         child: Image.network(
-                                          dbProduct[0]['prods_image'],
+                                          dbProduct[0]['image'],
                                           fit: BoxFit.cover,
                                           loadingBuilder: (context, child, loadingProgress) {
                                             if (loadingProgress == null) return child;
@@ -225,7 +243,7 @@ class _CheckoutState extends State<Checkout> {
                                       'Jumlah Paket',
                                       style: TextStyle(
                                         fontSize: 13.0.sp,
-                                        color: Theme.of(context).backgroundColor,
+                                        color: Theme.of(context).colorScheme.background,
                                       ),
                                     ),
                                     Expanded(child: SizedBox(),),
@@ -251,7 +269,7 @@ class _CheckoutState extends State<Checkout> {
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                           fontSize: 13.0.sp,
-                                          color: Theme.of(context).backgroundColor,
+                                          color: Theme.of(context).colorScheme.background,
                                         ),
                                       ),
                                     ),
@@ -329,20 +347,15 @@ class _CheckoutState extends State<Checkout> {
                               ),
                               InkWell(
                                 onTap: () async {
+                                  prefs.setGoRoute('/checkout');
+
                                   // Simpan ke History
-                                  var response = await get(Uri.parse(dbProduct[0]['prods_image']));
-                                  var docDir = await getApplicationDocumentsDirectory();
-                                  var path = docDir.path + '/img';
-                                  var pathAndName = docDir.path + '/img/' + dbProduct[0]['prods_id'].toString() +
-                                      '.' + dbProduct[0]['prods_image'].toString()
-                                      .substring(dbProduct[0]['prods_image'].toString().length - 3);
-
-                                  await Directory(path).create(recursive: true);
-                                  File file = new File(pathAndName);
-                                  file.writeAsBytesSync(response.bodyBytes);
-
-                                  historyDb.insert(dbProduct[0]['prods_id'], dbProduct[0]['prods_name'], dbProduct[0]['prods_desc'],
-                                      dbProduct[0]['prods_price'], dbProduct[0]['prods_package'], pathAndName);
+                                  // var response = await get(Uri.parse(dbProduct[0]['prods_image']));
+                                  // var docDir = await getApplicationDocumentsDirectory();
+                                  // var path = docDir.path + '/img';
+                                  // var pathAndName = docDir.path + '/img/' + dbProduct[0]['prods_id'].toString() +
+                                  //     '.' + dbProduct[0]['prods_image'].toString()
+                                  //     .substring(dbProduct[0]['prods_image'].toString().length - 3);
 
                                   // Pesan Sekarang via WA
                                   String hrg =
@@ -350,21 +363,41 @@ class _CheckoutState extends State<Checkout> {
                                     locale: 'id',
                                     symbol: 'Rp ',
                                     decimalDigits: 0,
-                                  ).format(dbProduct[0]['prods_price']);
+                                  ).format(int.parse(dbProduct[0]['price']));
 
                                   String msg = 'https://api.whatsapp.com/send?phone=' + dbSetup[0]['wa_number'] +
-                                  '&text=Assalamualaikum%2C%0D%0A%0D%0ASaya+melihat+di+aplikasi+Sahabat+Bumil%2C+'
-                                      'dan+tertarik+dengan%0D%0A%0D%0A*' + dbProduct[0]['prods_package'] + ' - ' +
-                                      dbProduct[0]['prods_name'] + '*%0D%0A*Harga:*+' + hrg + '%0D%0A*Jumlah+Paket:*+' +
-                                      jmlPesan.toString() + '%0D%0A%0D%0ATerima+kasih!' + '%0D%0A%0D%0A' + dbProduct[0]['prods_link'];
-                                  launch('$msg', forceSafariVC: false);
+                                      '&text=Assalamualaikum%2C%0D%0A%0D%0ASaya+melihat+di+aplikasi+Sahabat+Bumil%2C+'
+                                          'dan+tertarik+dengan%0D%0A%0D%0A*' + dbProduct[0]['prods_package'] + ' - ' +
+                                      dbProduct[0]['name'] + '*%0D%0A*Harga:*+' + hrg + '%0D%0A*Jumlah+Paket:*+' +
+                                      jmlPesan.toString() + '%0D%0A%0D%0ATerima+kasih!' + '%0D%0A%0D%0A' + dbProduct[0]['link'];
 
                                   totOrder = int.parse(dbTotalOrder[0]['total_order']) + jmlPesan;
-                                  updTotalOrder();
 
-                                  Navigator.pop(context);
-                                  Navigator.pop(context);
-                                  Navigator.pushReplacementNamed(context, '/aqiqah');
+                                  if (!prefs.getIsSignIn) {
+                                    // prefs.setPathAndName(pathAndName);
+                                    prefs.setQty(jmlPesan);
+                                    prefs.setMsg(msg);
+                                    prefs.setTotOrder(totOrder);
+                                    Navigator.pushNamed(context, '/register');
+                                  } else {
+                                    // Simpan ke History
+                                    Checkout().addOrder(DateFormat('yyyy-MM-dd', 'id_ID').format(DateTime.now()), prefs.getIdProduct, jmlPesan.toString(), prefs.getPhone);
+                                    // await Directory(path).create(recursive: true);
+                                    // File file = new File(pathAndName);
+                                    // file.writeAsBytesSync(response.bodyBytes);
+                                    //
+                                    // historyDb.insert(dbProduct[0]['prods_id'], dbProduct[0]['prods_name'], dbProduct[0]['prods_desc'],
+                                    //     dbProduct[0]['prods_price'], dbProduct[0]['prods_package'], pathAndName);
+
+                                    // Pesan Sekarang via WA
+                                    // ignore: deprecated_member_use
+                                    launch('$msg');
+                                    Checkout().updTotalOrder(totOrder);
+
+                                    // Navigator.pop(context);
+                                    // Navigator.pop(context);
+                                    Navigator.pushNamedAndRemoveUntil(context, '/aqiqah', (route) => true);
+                                  }
                                 },
                                 child: Container(
                                   width: 74.0.w,
